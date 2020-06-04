@@ -1,0 +1,21 @@
+# git
+.git
+
+# Terrform
+terraform.tfstate*
+.terraform
+*.log
+terraform-provider-todo/bin/
+terraform-provider-todo/pkg/
+
+# Binaries
+terraform-provider-todo
+terraform-provider-todo_v*
+todo-list-server
+
+# System Files
+.DS_Store
+
+# Don't ignore these
+!/terraform-provider-todo/
+
