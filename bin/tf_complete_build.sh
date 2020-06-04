@@ -18,8 +18,11 @@ DIR="$( cd -P "$( dirname "$SOURCE" )/.." && pwd )"
 # Just force this for now...
 if [ "${app}" == "provider" ]; then
   DIR1="${PWD}/terraform-provider-todo"
-else
+elif [ "${app}" == "server" ]; then
   DIR1="${PWD}/cmd/todo-list-server"
+else
+  echo "[WARN] Not building anything"
+  exit 0
 fi
 declare -a DIRS=("${DIR1}")
 

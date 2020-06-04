@@ -10,13 +10,13 @@
 ### Quick Start
 
 ```shell
-docker run --name todo-list -p 8080:80 myuser/todo-list-server:latest
+docker run --name todo-list -p 8080:80 spkane/todo-list-server:latest
 ```
 
-### Build
+### Build Server
 
 ```shell
-./bin/build.sh
+./bin/build.sh server
 ```
 
 ### Usage
@@ -37,7 +37,7 @@ curl -i http://127.0.0.1:8080
 ### Build & Test
 
 ```shell
-./bin/build.sh
+./bin/build.sh provider
 ```
 
 The build script runs the Integration tests. If you want to run real local terraform tests, you can run this script:

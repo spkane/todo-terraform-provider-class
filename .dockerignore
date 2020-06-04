@@ -2,11 +2,15 @@
 .git
 
 # Terrform
+tf-code/
 terraform.tfstate*
 .terraform
 *.log
 terraform-provider-todo/bin/
 terraform-provider-todo/pkg/
+cmd/todo-list-server/pkg/
+cmd/todo-list-server/bin/
+class-terraform-provider.md
 
 # Binaries
 terraform-provider-todo
@@ -18,4 +22,4 @@ todo-list-server
 
 # Don't ignore these
 !/terraform-provider-todo/
-
+!/cmd/todo-list-server/
