@@ -8,7 +8,6 @@ bin/
 pkg/
 
 # Don't ignore these directories
-!/terraform-provider-todo/
 !/cmd/todo-list-server/
 !/bin/
 

@@ -5,10 +5,6 @@ provider "todo" {
   schema = "http"
 }
 
-data "todo" "foreign" {
-  id = 1
-}
-
 resource "todo" "test1" {
   count = 5
   description = "${count.index}-1 ${var.purpose} todo"
@@ -17,6 +13,6 @@ resource "todo" "test1" {
 
 resource "todo" "test2" {
   count = 5
-  description = "${count.index}-2 ${var.purpose} todo (linked to ${data.todo.foreign.id})"
+  description = "${count.index}-2 ${var.purpose} todo"
   completed = false
 }
