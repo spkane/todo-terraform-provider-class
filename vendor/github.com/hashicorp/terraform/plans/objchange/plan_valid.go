@@ -23,7 +23,7 @@ import (
 // null (unset) in the configuration and are marked as "computed" in the
 // resource type schema, in order to insert any default values the provider
 // may know about. If the default value cannot be determined until apply time,
-// the provider can return an myuser value. Providers are forbidden from
+// the provider can return an unknown value. Providers are forbidden from
 // planning a change that disagrees with any non-null argument in the
 // configuration.
 //
@@ -78,7 +78,7 @@ func assertPlanValid(schema *configschema.Block, priorState, config, plannedStat
 			continue
 		}
 		if !plannedV.IsKnown() {
-			errs = append(errs, path.NewErrorf("attribute representing nested block must not be myuser itself; set nested attribute values to myuser instead"))
+			errs = append(errs, path.NewErrorf("attribute representing nested block must not be unknown itself; set nested attribute values to unknown instead"))
 			continue
 		}
 
@@ -106,7 +106,7 @@ func assertPlanValid(schema *configschema.Block, priorState, config, plannedStat
 				idx, plannedEV := it.Element()
 				path := append(path, cty.IndexStep{Key: idx})
 				if !plannedEV.IsKnown() {
-					errs = append(errs, path.NewErrorf("element representing nested block must not be myuser itself; set nested attribute values to myuser instead"))
+					errs = append(errs, path.NewErrorf("element representing nested block must not be unknown itself; set nested attribute values to unknown instead"))
 					continue
 				}
 				if !configV.HasIndex(idx).True() {
@@ -143,7 +143,7 @@ func assertPlanValid(schema *configschema.Block, priorState, config, plannedStat
 
 					plannedEV := plannedV.GetAttr(k)
 					if !plannedEV.IsKnown() {
-						errs = append(errs, path.NewErrorf("element representing nested block must not be myuser itself; set nested attribute values to myuser instead"))
+						errs = append(errs, path.NewErrorf("element representing nested block must not be unknown itself; set nested attribute values to unknown instead"))
 						continue
 					}
 					configEV := configV.GetAttr(k)
@@ -171,7 +171,7 @@ func assertPlanValid(schema *configschema.Block, priorState, config, plannedStat
 					idx, plannedEV := it.Element()
 					path := append(path, cty.IndexStep{Key: idx})
 					if !plannedEV.IsKnown() {
-						errs = append(errs, path.NewErrorf("element representing nested block must not be myuser itself; set nested attribute values to myuser instead"))
+						errs = append(errs, path.NewErrorf("element representing nested block must not be unknown itself; set nested attribute values to unknown instead"))
 						continue
 					}
 					k := idx.AsString()
@@ -216,7 +216,7 @@ func assertPlanValid(schema *configschema.Block, priorState, config, plannedStat
 				idx, plannedEV := it.Element()
 				path := append(path, cty.IndexStep{Key: idx})
 				if !plannedEV.IsKnown() {
-					errs = append(errs, path.NewErrorf("element representing nested block must not be myuser itself; set nested attribute values to myuser instead"))
+					errs = append(errs, path.NewErrorf("element representing nested block must not be unknown itself; set nested attribute values to unknown instead"))
 					continue
 				}
 			}

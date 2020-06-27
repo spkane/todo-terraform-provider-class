@@ -333,7 +333,7 @@ func (q *Query) toProto(dst *pb.Query, appID string) error {
 			Property: []*pb.Property{p},
 		}
 		if xf.Op == nil {
-			return errors.New("datastore: myuser query filter operator")
+			return errors.New("datastore: unknown query filter operator")
 		}
 		dst.Filter = append(dst.Filter, xf)
 	}
@@ -346,7 +346,7 @@ func (q *Query) toProto(dst *pb.Query, appID string) error {
 			Direction: sortDirectionToProto[qo.Direction],
 		}
 		if xo.Direction == nil {
-			return errors.New("datastore: myuser query order direction")
+			return errors.New("datastore: unknown query order direction")
 		}
 		dst.Order = append(dst.Order, xo)
 	}

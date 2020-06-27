@@ -13,7 +13,7 @@ const (
 	_Type_name_5 = "TypeFloat"
 	_Type_name_6 = "TypeList"
 	_Type_name_7 = "TypeMap"
-	_Type_name_8 = "Typemyuser"
+	_Type_name_8 = "TypeUnknown"
 )
 
 var (

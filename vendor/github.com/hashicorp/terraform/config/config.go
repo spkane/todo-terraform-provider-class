@@ -39,7 +39,7 @@ type Config struct {
 
 	// The fields below can be filled in by loaders for validation
 	// purposes.
-	myuserKeys []string
+	unknownKeys []string
 }
 
 // AtlasConfig is the configuration for building in HashiCorp's Atlas.
@@ -181,7 +181,7 @@ type Output struct {
 type VariableType byte
 
 const (
-	VariableTypemyuser VariableType = iota
+	VariableTypeUnknown VariableType = iota
 	VariableTypeString
 	VariableTypeList
 	VariableTypeMap
@@ -196,7 +196,7 @@ func (v VariableType) Printable() string {
 	case VariableTypeList:
 		return "list"
 	default:
-		return "myuser"
+		return "unknown"
 	}
 }
 
@@ -248,7 +248,7 @@ func (r *Resource) Id() string {
 	case DataResourceMode:
 		return fmt.Sprintf("data.%s.%s", r.Type, r.Name)
 	default:
-		panic(fmt.Errorf("myuser resource mode %s", r.Mode))
+		panic(fmt.Errorf("unknown resource mode %s", r.Mode))
 	}
 }
 
@@ -260,9 +260,9 @@ func (c *Config) Validate() tfdiags.Diagnostics {
 
 	var diags tfdiags.Diagnostics
 
-	for _, k := range c.myuserKeys {
+	for _, k := range c.unknownKeys {
 		diags = diags.Append(
-			fmt.Errorf("myuser root level key: %s", k),
+			fmt.Errorf("Unknown root level key: %s", k),
 		)
 	}
 
@@ -297,7 +297,7 @@ func (c *Config) Validate() tfdiags.Diagnostics {
 	}
 
 	for _, v := range c.Variables {
-		if v.Type() == VariableTypemyuser {
+		if v.Type() == VariableTypeUnknown {
 			diags = diags.Append(fmt.Errorf(
 				"Variable '%s': must be a string or a map",
 				v.Name,
@@ -342,7 +342,7 @@ func (c *Config) Validate() tfdiags.Diagnostics {
 
 			if _, ok := varMap[uv.Name]; !ok {
 				diags = diags.Append(fmt.Errorf(
-					"%s: myuser variable referenced: '%s'; define it with a 'variable' block",
+					"%s: unknown variable referenced: '%s'; define it with a 'variable' block",
 					source,
 					uv.Name,
 				))
@@ -528,7 +528,7 @@ func (c *Config) Validate() tfdiags.Diagnostics {
 
 			if _, ok := modules[mv.Name]; !ok {
 				diags = diags.Append(fmt.Errorf(
-					"%s: myuser module referenced: %s",
+					"%s: unknown module referenced: %s",
 					source, mv.Name,
 				))
 			}
@@ -579,7 +579,7 @@ func (c *Config) Validate() tfdiags.Diagnostics {
 
 			default:
 				diags = diags.Append(fmt.Errorf(
-					"Internal error. myuser type in count var in %s: %T",
+					"Internal error. Unknown type in count var in %s: %T",
 					n, v,
 				))
 			}
@@ -693,7 +693,7 @@ func (c *Config) Validate() tfdiags.Diagnostics {
 			id := rv.ResourceId()
 			if _, ok := resources[id]; !ok {
 				diags = diags.Append(fmt.Errorf(
-					"%s: myuser resource '%s' referenced in variable %s",
+					"%s: unknown resource '%s' referenced in variable %s",
 					source,
 					id,
 					rv.FullKey(),
@@ -1076,7 +1076,7 @@ func (v *Variable) Type() VariableType {
 	if v.DeclaredType != "" {
 		declaredType, ok := typeStringMap[v.DeclaredType]
 		if !ok {
-			return VariableTypemyuser
+			return VariableTypeUnknown
 		}
 
 		return declaredType
@@ -1156,7 +1156,7 @@ func (v *Variable) inferTypeFromDefault() VariableType {
 		return VariableTypeList
 	}
 
-	return VariableTypemyuser
+	return VariableTypeUnknown
 }
 
 func (m ResourceMode) Taintable() bool {

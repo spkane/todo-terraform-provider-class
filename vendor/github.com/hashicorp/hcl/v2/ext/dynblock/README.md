@@ -58,13 +58,13 @@ toplevel {
 }
 ```
 
-Since HCL block syntax is not normally exposed to the possibility of myuser
+Since HCL block syntax is not normally exposed to the possibility of unknown
 values, this extension must make some compromises when asked to iterate over
-an myuser collection. If the length of the collection cannot be statically
-recognized (because it is an myuser value of list, map, or set type) then
+an unknown collection. If the length of the collection cannot be statically
+recognized (because it is an unknown value of list, map, or set type) then
 the `dynamic` construct will generate a _single_ dynamic block whose iterator
-key and value are both myuser values of the dynamic pseudo-type, thus causing
-any attribute values derived from iteration to appear as myuser values. There
+key and value are both unknown values of the dynamic pseudo-type, thus causing
+any attribute values derived from iteration to appear as unknown values. There
 is no explicit representation of the fact that the length of the collection may
 eventually be different than one.
 
@@ -131,7 +131,7 @@ func walkVariables(node dynblock.WalkVariablesNode, schema *hcl.BodySchema) []hc
 		default:
 			// Should never happen, because the above cases should be exhaustive
 			// for the application's configuration format.
-			panic(fmt.Errorf("can't find schema for myuser block type %q", child.BlockTypeName))
+			panic(fmt.Errorf("can't find schema for unknown block type %q", child.BlockTypeName))
 		}
 
 		vars = append(vars, testWalkAndAccumVars(child.Node, childSchema)...)

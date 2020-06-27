@@ -109,7 +109,7 @@ func (d *decoder) decode(name string, node ast.Node, result reflect.Value) error
 	default:
 		return &parser.PosError{
 			Pos: node.Pos(),
-			Err: fmt.Errorf("%s: myuser kind to decode into: %s", name, k.Kind()),
+			Err: fmt.Errorf("%s: unknown kind to decode into: %s", name, k.Kind()),
 		}
 	}
 }
@@ -130,7 +130,7 @@ func (d *decoder) decodeBool(name string, node ast.Node, result reflect.Value) e
 
 	return &parser.PosError{
 		Pos: node.Pos(),
-		Err: fmt.Errorf("%s: myuser type %T", name, node),
+		Err: fmt.Errorf("%s: unknown type %T", name, node),
 	}
 }
 
@@ -150,7 +150,7 @@ func (d *decoder) decodeFloat(name string, node ast.Node, result reflect.Value) 
 
 	return &parser.PosError{
 		Pos: node.Pos(),
-		Err: fmt.Errorf("%s: myuser type %T", name, node),
+		Err: fmt.Errorf("%s: unknown type %T", name, node),
 	}
 }
 
@@ -187,7 +187,7 @@ func (d *decoder) decodeInt(name string, node ast.Node, result reflect.Value) er
 
 	return &parser.PosError{
 		Pos: node.Pos(),
-		Err: fmt.Errorf("%s: myuser type %T", name, node),
+		Err: fmt.Errorf("%s: unknown type %T", name, node),
 	}
 }
 
@@ -441,7 +441,7 @@ func (d *decoder) decodeSlice(name string, node ast.Node, result reflect.Value) 
 	default:
 		return &parser.PosError{
 			Pos: node.Pos(),
-			Err: fmt.Errorf("myuser slice type: %T", node),
+			Err: fmt.Errorf("unknown slice type: %T", node),
 		}
 	}
 
@@ -534,7 +534,7 @@ func (d *decoder) decodeString(name string, node ast.Node, result reflect.Value)
 
 	return &parser.PosError{
 		Pos: node.Pos(),
-		Err: fmt.Errorf("%s: myuser type for string %T", name, node),
+		Err: fmt.Errorf("%s: unknown type for string %T", name, node),
 	}
 }
 

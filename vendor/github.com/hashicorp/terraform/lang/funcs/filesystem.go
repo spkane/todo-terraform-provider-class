@@ -32,7 +32,7 @@ func MakeFileFunc(baseDir string, encBase64 bool) function.Function {
 			path := args[0].AsString()
 			src, err := readFileBytes(baseDir, path)
 			if err != nil {
-				return cty.myuserVal(cty.String), err
+				return cty.UnknownVal(cty.String), err
 			}
 
 			switch {
@@ -41,7 +41,7 @@ func MakeFileFunc(baseDir string, encBase64 bool) function.Function {
 				return cty.StringVal(enc), nil
 			default:
 				if !utf8.Valid(src) {
-					return cty.myuserVal(cty.String), fmt.Errorf("contents of %s are not valid UTF-8; use the filebase64 function to obtain the Base64 encoded contents or the other file functions (e.g. filemd5, filesha256) to obtain file hashing results instead", path)
+					return cty.UnknownVal(cty.String), fmt.Errorf("contents of %s are not valid UTF-8; use the filebase64 function to obtain the Base64 encoded contents or the other file functions (e.g. filemd5, filesha256) to obtain file hashing results instead", path)
 				}
 				return cty.StringVal(string(src)), nil
 			}
@@ -149,7 +149,7 @@ func MakeTemplateFileFunc(baseDir string, funcsCb func() map[string]function.Fun
 				return cty.DynamicPseudoType, err
 			}
 
-			// This is safe even if args[1] contains myusers because the HCL
+			// This is safe even if args[1] contains unknowns because the HCL
 			// template renderer itself knows how to short-circuit those.
 			val, err := renderTmpl(expr, args[1])
 			return val.Type(), err
@@ -180,7 +180,7 @@ func MakeFileExistsFunc(baseDir string) function.Function {
 			path := args[0].AsString()
 			path, err := homedir.Expand(path)
 			if err != nil {
-				return cty.myuserVal(cty.Bool), fmt.Errorf("failed to expand ~: %s", err)
+				return cty.UnknownVal(cty.Bool), fmt.Errorf("failed to expand ~: %s", err)
 			}
 
 			if !filepath.IsAbs(path) {
@@ -195,7 +195,7 @@ func MakeFileExistsFunc(baseDir string) function.Function {
 				if os.IsNotExist(err) {
 					return cty.False, nil
 				}
-				return cty.myuserVal(cty.Bool), fmt.Errorf("failed to stat %s", path)
+				return cty.UnknownVal(cty.Bool), fmt.Errorf("failed to stat %s", path)
 			}
 
 			if fi.Mode().IsRegular() {
@@ -238,7 +238,7 @@ func MakeFileSetFunc(baseDir string) function.Function {
 
 			matches, err := doublestar.Glob(pattern)
 			if err != nil {
-				return cty.myuserVal(cty.Set(cty.String)), fmt.Errorf("failed to glob pattern (%s): %s", pattern, err)
+				return cty.UnknownVal(cty.Set(cty.String)), fmt.Errorf("failed to glob pattern (%s): %s", pattern, err)
 			}
 
 			var matchVals []cty.Value
@@ -246,7 +246,7 @@ func MakeFileSetFunc(baseDir string) function.Function {
 				fi, err := os.Stat(match)
 
 				if err != nil {
-					return cty.myuserVal(cty.Set(cty.String)), fmt.Errorf("failed to stat (%s): %s", match, err)
+					return cty.UnknownVal(cty.Set(cty.String)), fmt.Errorf("failed to stat (%s): %s", match, err)
 				}
 
 				if !fi.Mode().IsRegular() {
@@ -257,7 +257,7 @@ func MakeFileSetFunc(baseDir string) function.Function {
 				match, err = filepath.Rel(path, match)
 
 				if err != nil {
-					return cty.myuserVal(cty.Set(cty.String)), fmt.Errorf("failed to trim path of match (%s): %s", match, err)
+					return cty.UnknownVal(cty.Set(cty.String)), fmt.Errorf("failed to trim path of match (%s): %s", match, err)
 				}
 
 				// Replace any remaining file separators with forward slash (/)

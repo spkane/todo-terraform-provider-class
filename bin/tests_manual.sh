@@ -2,10 +2,10 @@
 
 set -eu
 
-export TF="terraform12"
+export TF="terraform"
 
-cd "${GOPATH}/src/github.com/myuser/todo-for-terraform"
-./bin/build.sh
+./bin/build.sh provider
+docker-compose build
 docker-compose up -d
 # Add something to import as a data source
 curl -i http://127.0.0.1:8080/ -X POST -H 'Content-Type: application/spkane.todo-list.v1+json' -d '{"description":"go shopping","completed":false}'
@@ -17,4 +17,3 @@ TF_LOG=debug ${TF} apply
 curl -i http://127.0.0.1:8080/
 docker-compose down
 rm -f terraform-provider-todo
-

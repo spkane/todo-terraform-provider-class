@@ -702,7 +702,7 @@ func (s *GRPCProviderServer) PlanResourceChange(_ context.Context, req *proto.Pl
 	// if this was creating the resource, we need to set any remaining computed
 	// fields
 	if create {
-		plannedStateVal = Setmyusers(plannedStateVal, schemaBlock)
+		plannedStateVal = SetUnknowns(plannedStateVal, schemaBlock)
 	}
 
 	plannedMP, err := msgpack.Marshal(plannedStateVal, schemaBlock.ImpliedType())
@@ -1118,7 +1118,7 @@ func copyTimeoutValues(to cty.Value, from cty.Value) cty.Value {
 	fromAttrs := from.AsValueMap()
 	timeouts, ok = fromAttrs[schema.TimeoutsConfigKey]
 
-	// timeouts shouldn't be myuser, but don't copy possibly invalid values either
+	// timeouts shouldn't be unknown, but don't copy possibly invalid values either
 	if !ok || timeouts.IsNull() || !timeouts.IsWhollyKnown() {
 		// no timeouts block to copy
 		return cty.ObjectVal(toAttrs)
@@ -1178,16 +1178,16 @@ func stripSchema(s *schema.Schema) *schema.Schema {
 // was wholly known we assume the value was correctly applied and copy that
 // entirely to the new value.
 // While apply prefers the src value, during plan we prefer dst whenever there
-// is an myuser or a set is involved, since the plan can alter the value
+// is an unknown or a set is involved, since the plan can alter the value
 // however it sees fit. This however means that a CustomizeDiffFunction may not
 // be able to change a null to an empty value or vice versa, but that should be
 // very uncommon nor was it reliable before 0.12 either.
 func normalizeNullValues(dst, src cty.Value, apply bool) cty.Value {
 	ty := dst.Type()
 	if !src.IsNull() && !src.IsKnown() {
-		// Return src during plan to retain myuser interpolated placeholders,
+		// Return src during plan to retain unknown interpolated placeholders,
 		// which could be lost if we're only updating a resource. If this is a
-		// read scenario, then there shouldn't be any myusers at all.
+		// read scenario, then there shouldn't be any unknowns at all.
 		if dst.IsNull() && !apply {
 			return src
 		}
@@ -1253,9 +1253,9 @@ func normalizeNullValues(dst, src cty.Value, apply bool) cty.Value {
 
 		if ty.IsMapType() {
 			// helper/schema will populate an optional+computed map with
-			// myusers which we have to fixup here.
+			// unknowns which we have to fixup here.
 			// It would be preferable to simply prevent any known value from
-			// becoming myuser, but concessions have to be made to retain the
+			// becoming unknown, but concessions have to be made to retain the
 			// broken legacy behavior when possible.
 			for k, srcVal := range srcMap {
 				if !srcVal.IsNull() && srcVal.IsKnown() {
@@ -1291,17 +1291,17 @@ func normalizeNullValues(dst, src cty.Value, apply bool) cty.Value {
 				return src
 			}
 
-			// if dst is null and src only contains myuser values, then we lost
+			// if dst is null and src only contains unknown values, then we lost
 			// those during a read or plan.
 			if !apply && !src.IsNull() {
-				allmyuser := true
+				allUnknown := true
 				for _, v := range src.AsValueSlice() {
 					if v.IsKnown() {
-						allmyuser = false
+						allUnknown = false
 						break
 					}
 				}
-				if allmyuser {
+				if allUnknown {
 					return src
 				}
 			}

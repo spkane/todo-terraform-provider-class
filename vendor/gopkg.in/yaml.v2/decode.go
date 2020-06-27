@@ -127,7 +127,7 @@ func (p *parser) fail() {
 	if len(p.parser.problem) > 0 {
 		msg = p.parser.problem
 	} else {
-		msg = "myuser problem parsing YAML content"
+		msg = "unknown problem parsing YAML content"
 	}
 	failf("%s%s", where, msg)
 }
@@ -155,7 +155,7 @@ func (p *parser) parse() *node {
 		// Happens when attempting to decode an empty buffer.
 		return nil
 	default:
-		panic("attempted to parse myuser event: " + p.event.typ.String())
+		panic("attempted to parse unknown event: " + p.event.typ.String())
 	}
 }
 
@@ -182,7 +182,7 @@ func (p *parser) alias() *node {
 	n.value = string(p.event.anchor)
 	n.alias = p.doc.anchors[n.value]
 	if n.alias == nil {
-		failf("myuser anchor '%s' referenced", n.value)
+		failf("unknown anchor '%s' referenced", n.value)
 	}
 	p.expect(yaml_ALIAS_EVENT)
 	return n
@@ -319,10 +319,14 @@ func (d *decoder) prepare(n *node, out reflect.Value) (newout reflect.Value, unm
 }
 
 const (
-	// 400,000 decode operations is ~500kb of dense object declarations, or ~5kb of dense object declarations with 10000% alias expansion
+	// 400,000 decode operations is ~500kb of dense object declarations, or
+	// ~5kb of dense object declarations with 10000% alias expansion
 	alias_ratio_range_low = 400000
-	// 4,000,000 decode operations is ~5MB of dense object declarations, or ~4.5MB of dense object declarations with 10% alias expansion
+
+	// 4,000,000 decode operations is ~5MB of dense object declarations, or
+	// ~4.5MB of dense object declarations with 10% alias expansion
 	alias_ratio_range_high = 4000000
+
 	// alias_ratio_range is the range over which we scale allowed alias ratios
 	alias_ratio_range = float64(alias_ratio_range_high - alias_ratio_range_low)
 )
@@ -369,7 +373,7 @@ func (d *decoder) unmarshal(n *node, out reflect.Value) (good bool) {
 	case sequenceNode:
 		good = d.sequence(n, out)
 	default:
-		panic("internal error: myuser node kind: " + strconv.Itoa(n.kind))
+		panic("internal error: unknown node kind: " + strconv.Itoa(n.kind))
 	}
 	return good
 }
@@ -784,8 +788,7 @@ func (d *decoder) merge(n *node, out reflect.Value) {
 	case mappingNode:
 		d.unmarshal(n, out)
 	case aliasNode:
-		an, ok := d.doc.anchors[n.value]
-		if ok && an.kind != mappingNode {
+		if n.alias != nil && n.alias.kind != mappingNode {
 			failWantMap()
 		}
 		d.unmarshal(n, out)
@@ -794,8 +797,7 @@ func (d *decoder) merge(n *node, out reflect.Value) {
 		for i := len(n.children) - 1; i >= 0; i-- {
 			ni := n.children[i]
 			if ni.kind == aliasNode {
-				an, ok := d.doc.anchors[ni.value]
-				if ok && an.kind != mappingNode {
+				if ni.alias != nil && ni.alias.kind != mappingNode {
 					failWantMap()
 				}
 			} else if ni.kind != mappingNode {

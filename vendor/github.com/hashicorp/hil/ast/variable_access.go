@@ -29,7 +29,7 @@ func (n *VariableAccess) String() string {
 func (n *VariableAccess) Type(s Scope) (Type, error) {
 	v, ok := s.LookupVar(n.Name)
 	if !ok {
-		return TypeInvalid, fmt.Errorf("myuser variable: %s", n.Name)
+		return TypeInvalid, fmt.Errorf("unknown variable: %s", n.Name)
 	}
 
 	return v.Type, nil

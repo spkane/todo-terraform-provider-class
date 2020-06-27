@@ -73,7 +73,7 @@ func (t typeObject) GoString() string {
 // easily talk about the empty object type.
 var EmptyObject Type
 
-// EmptyObjectVal is the only possible non-null, non-myuser value of type
+// EmptyObjectVal is the only possible non-null, non-unknown value of type
 // EmptyObject.
 var EmptyObjectVal Value
 

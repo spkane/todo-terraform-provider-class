@@ -123,6 +123,6 @@ func (f *CLI) action() string {
 	case f.uninstall:
 		return "Uninstall"
 	default:
-		return "myuser"
+		return "unknown"
 	}
 }

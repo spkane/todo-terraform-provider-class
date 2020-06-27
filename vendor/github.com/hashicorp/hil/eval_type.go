@@ -12,5 +12,5 @@ const (
 	TypeBool
 	TypeList
 	TypeMap
-	Typemyuser
+	TypeUnknown
 )

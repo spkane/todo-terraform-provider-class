@@ -15,7 +15,7 @@ import (
 //
 // Each method returns a suitable value and optionally some diagnostics. If the
 // returned diagnostics contains errors then the type of the returned value is
-// used to construct an myuser value of the same type which is then used in
+// used to construct an unknown value of the same type which is then used in
 // place of the requested object so that type checking can still proceed. In
 // cases where it's not possible to even determine a suitable result type,
 // cty.DynamicVal is returned along with errors describing the problem.

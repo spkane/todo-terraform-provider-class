@@ -43,7 +43,7 @@ func (b *Backend) Hash(schema *configschema.Block) int {
 	spec := schema.DecoderSpec()
 	val, _ := hcldec.Decode(b.Config, spec, nil)
 	if val == cty.NilVal {
-		val = cty.myuserVal(schema.ImpliedType())
+		val = cty.UnknownVal(schema.ImpliedType())
 	}
 
 	toHash := cty.TupleVal([]cty.Value{

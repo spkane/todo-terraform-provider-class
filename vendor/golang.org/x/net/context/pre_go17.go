@@ -40,7 +40,7 @@ func (e *emptyCtx) String() string {
 	case todo:
 		return "context.TODO"
 	}
-	return "myuser empty Context"
+	return "unknown empty Context"
 }
 
 var (

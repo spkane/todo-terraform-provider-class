@@ -157,7 +157,7 @@ func unmarshalSet(buf []byte, ety cty.Type, path cty.Path) (cty.Value, error) {
 
 		for dec.More() {
 			path[len(path)-1] = cty.IndexStep{
-				Key: cty.myuserVal(ety),
+				Key: cty.UnknownVal(ety),
 			}
 
 			rawVal, err := readRawValue(dec)
@@ -198,7 +198,7 @@ func unmarshalMap(buf []byte, ety cty.Type, path cty.Path) (cty.Value, error) {
 
 		for dec.More() {
 			path[len(path)-1] = cty.IndexStep{
-				Key: cty.myuserVal(cty.String),
+				Key: cty.UnknownVal(cty.String),
 			}
 
 			var err error

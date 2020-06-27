@@ -41,7 +41,7 @@ func put_break(emitter *yaml_emitter_t) bool {
 		emitter.buffer[emitter.buffer_pos+1] = '\n'
 		emitter.buffer_pos += 2
 	default:
-		panic("myuser line break setting")
+		panic("unknown line break setting")
 	}
 	emitter.column = 0
 	emitter.line++
@@ -68,7 +68,7 @@ func write(emitter *yaml_emitter_t, s []byte, i *int) bool {
 	case 1:
 		emitter.buffer[p+0] = s[*i+0]
 	default:
-		panic("myuser character width")
+		panic("unknown character width")
 	}
 	emitter.column++
 	emitter.buffer_pos += w
@@ -905,7 +905,7 @@ func yaml_emitter_process_scalar(emitter *yaml_emitter_t) bool {
 	case yaml_FOLDED_SCALAR_STYLE:
 		return yaml_emitter_write_folded_scalar(emitter, emitter.scalar_data.value)
 	}
-	panic("myuser scalar style")
+	panic("unknown scalar style")
 }
 
 // Check if a %YAML directive is valid.

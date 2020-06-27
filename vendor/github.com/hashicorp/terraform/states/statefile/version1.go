@@ -126,7 +126,7 @@ type resourceStateV1 struct {
 	Primary *instanceStateV1 `json:"primary"`
 
 	// Tainted is used to track any underlying instances that
-	// have been created but are in a bad or myuser state and
+	// have been created but are in a bad or unknown state and
 	// need to be cleaned up subsequently.  In the
 	// standard case, there is only at most a single instance.
 	// However, in pathological cases, it is possible for the number

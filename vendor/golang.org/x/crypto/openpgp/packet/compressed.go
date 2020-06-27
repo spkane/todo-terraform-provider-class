@@ -8,10 +8,9 @@ import (
 	"compress/bzip2"
 	"compress/flate"
 	"compress/zlib"
+	"golang.org/x/crypto/openpgp/errors"
 	"io"
 	"strconv"
-
-	"golang.org/x/crypto/openpgp/errors"
 )
 
 // Compressed represents a compressed OpenPGP packet. The decompressed contents
@@ -55,7 +54,7 @@ func (c *Compressed) parse(r io.Reader) error {
 	case 3:
 		c.Body = bzip2.NewReader(r)
 	default:
-		err = errors.UnsupportedError("myuser compression algorithm: " + strconv.Itoa(int(buf[0])))
+		err = errors.UnsupportedError("unknown compression algorithm: " + strconv.Itoa(int(buf[0])))
 	}
 
 	return err

@@ -5,7 +5,7 @@ import (
 )
 
 // Unpredictable wraps a given function such that it retains the same arguments
-// and type checking behavior but will return an myuser value when called.
+// and type checking behavior but will return an unknown value when called.
 //
 // It is recommended that most functions be "pure", which is to say that they
 // will always produce the same value given particular input. However,
@@ -27,5 +27,5 @@ func Unpredictable(f Function) Function {
 }
 
 func unpredictableImpl(args []cty.Value, retType cty.Type) (cty.Value, error) {
-	return cty.myuserVal(retType), nil
+	return cty.UnknownVal(retType), nil
 }

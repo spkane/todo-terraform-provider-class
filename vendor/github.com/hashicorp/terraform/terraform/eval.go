@@ -45,7 +45,7 @@ func Eval(n EvalNode, ctx EvalContext) (interface{}, error) {
 // EvalRaw is like Eval except that it returns all errors, even if they
 // signal something normal such as EvalEarlyExitError.
 func EvalRaw(n EvalNode, ctx EvalContext) (interface{}, error) {
-	path := "myuser"
+	path := "unknown"
 	if ctx != nil {
 		path = ctx.Path().String()
 	}

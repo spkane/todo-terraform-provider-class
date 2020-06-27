@@ -67,8 +67,8 @@ func (m *Expr) XXX_Merge(src proto.Message) {
 func (m *Expr) XXX_Size() int {
 	return xxx_messageInfo_Expr.Size(m)
 }
-func (m *Expr) XXX_Discardmyuser() {
-	xxx_messageInfo_Expr.Discardmyuser(m)
+func (m *Expr) XXX_DiscardUnknown() {
+	xxx_messageInfo_Expr.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Expr proto.InternalMessageInfo
@@ -105,7 +105,9 @@ func init() {
 	proto.RegisterType((*Expr)(nil), "google.type.Expr")
 }
 
-func init() { proto.RegisterFile("google/type/expr.proto", fileDescriptor_d7920f1ae7a2722f) }
+func init() {
+	proto.RegisterFile("google/type/expr.proto", fileDescriptor_d7920f1ae7a2722f)
+}
 
 var fileDescriptor_d7920f1ae7a2722f = []byte{
 	// 195 bytes of a gzipped FileDescriptorProto

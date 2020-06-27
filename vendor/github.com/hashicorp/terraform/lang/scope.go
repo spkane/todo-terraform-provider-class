@@ -24,7 +24,7 @@ type Scope struct {
 	BaseDir string
 
 	// PureOnly can be set to true to request that any non-pure functions
-	// produce myuser value results rather than actually executing. This is
+	// produce unknown value results rather than actually executing. This is
 	// important during a plan phase to avoid generating results that could
 	// then differ during apply.
 	PureOnly bool

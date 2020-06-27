@@ -11,7 +11,7 @@ import (
 )
 
 // AssertObjectCompatible checks whether the given "actual" value is a valid
-// completion of the possibly-partially-myuser "planned" value.
+// completion of the possibly-partially-unknown "planned" value.
 //
 // This means that any known leaf value in "planned" must be equal to the
 // corresponding value in "actual", and various other similar constraints.
@@ -62,19 +62,19 @@ func assertObjectCompatible(schema *configschema.Block, planned, actual cty.Valu
 		actualV := actual.GetAttr(name)
 
 		// As a special case, if there were any blocks whose leaf attributes
-		// are all myuser then we assume (possibly incorrectly) that the
-		// HCL dynamic block extension is in use with an myuser for_each
+		// are all unknown then we assume (possibly incorrectly) that the
+		// HCL dynamic block extension is in use with an unknown for_each
 		// argument, and so we will do looser validation here that allows
 		// for those blocks to have expanded into a different number of blocks
 		// if the for_each value is now known.
-		maybemyuserBlocks := couldHavemyuserBlockPlaceholder(plannedV, blockS, false)
+		maybeUnknownBlocks := couldHaveUnknownBlockPlaceholder(plannedV, blockS, false)
 
 		path := append(path, cty.GetAttrStep{Name: name})
 		switch blockS.Nesting {
 		case configschema.NestingSingle, configschema.NestingGroup:
-			// If an myuser block placeholder was present then the placeholder
+			// If an unknown block placeholder was present then the placeholder
 			// may have expanded out into zero blocks, which is okay.
-			if maybemyuserBlocks && actualV.IsNull() {
+			if maybeUnknownBlocks && actualV.IsNull() {
 				continue
 			}
 			moreErrs := assertObjectCompatible(&blockS.Block, plannedV, actualV, path)
@@ -88,8 +88,8 @@ func assertObjectCompatible(schema *configschema.Block, planned, actual cty.Valu
 				continue
 			}
 
-			if maybemyuserBlocks {
-				// When myuser blocks are present the final blocks may be
+			if maybeUnknownBlocks {
+				// When unknown blocks are present the final blocks may be
 				// at different indices than the planned blocks, so unfortunately
 				// we can't do our usual checks in this case without generating
 				// false negatives.
@@ -130,7 +130,7 @@ func assertObjectCompatible(schema *configschema.Block, planned, actual cty.Valu
 					moreErrs := assertObjectCompatible(&blockS.Block, plannedEV, actualEV, append(path, cty.GetAttrStep{Name: k}))
 					errs = append(errs, moreErrs...)
 				}
-				if !maybemyuserBlocks { // new blocks may appear if myuser blocks were present in the plan
+				if !maybeUnknownBlocks { // new blocks may appear if unknown blocks were present in the plan
 					for k := range actualAtys {
 						if _, ok := plannedAtys[k]; !ok {
 							errs = append(errs, path.NewErrorf("new block key %q has appeared", k))
@@ -144,7 +144,7 @@ func assertObjectCompatible(schema *configschema.Block, planned, actual cty.Valu
 				}
 				plannedL := plannedV.LengthInt()
 				actualL := actualV.LengthInt()
-				if plannedL != actualL && !maybemyuserBlocks { // new blocks may appear if myuser blocks were persent in the plan
+				if plannedL != actualL && !maybeUnknownBlocks { // new blocks may appear if unknown blocks were persent in the plan
 					errs = append(errs, path.NewErrorf("block count changed from %d to %d", plannedL, actualL))
 					continue
 				}
@@ -169,10 +169,10 @@ func assertObjectCompatible(schema *configschema.Block, planned, actual cty.Valu
 			})
 			errs = append(errs, setErrs...)
 
-			if maybemyuserBlocks {
-				// When myuser blocks are present the final number of blocks
-				// may be different, either because the myuser set values
-				// become equal and are collapsed, or the count is myuser due
+			if maybeUnknownBlocks {
+				// When unknown blocks are present the final number of blocks
+				// may be different, either because the unknown set values
+				// become equal and are collapsed, or the count is unknown due
 				// a dynamic block. Unfortunately this means we can't do our
 				// usual checks in this case without generating false
 				// negatives.
@@ -234,7 +234,7 @@ func assertValueCompatible(planned, actual cty.Value, path cty.Path) []error {
 	switch {
 
 	case !actual.IsKnown():
-		errs = append(errs, path.NewErrorf("was known, but now myuser"))
+		errs = append(errs, path.NewErrorf("was known, but now unknown"))
 
 	case ty.IsPrimitiveType():
 		if !actual.Equals(planned).True() {
@@ -275,7 +275,7 @@ func assertValueCompatible(planned, actual cty.Value, path cty.Path) []error {
 
 	case ty.IsSetType():
 		// We can't really do anything useful for sets here because changing
-		// an myuser element to known changes the identity of the element, and
+		// an unknown element to known changes the identity of the element, and
 		// so we can't correlate them properly. However, we will at least check
 		// to ensure that the number of elements is consistent, along with
 		// the general type-match checks we ran earlier in this function.
@@ -314,23 +314,23 @@ func indexStrForErrors(v cty.Value) string {
 	}
 }
 
-// couldHavemyuserBlockPlaceholder is a heuristic that recognizes how the
+// couldHaveUnknownBlockPlaceholder is a heuristic that recognizes how the
 // HCL dynamic block extension behaves when it's asked to expand a block whose
-// for_each argument is myuser. In such cases, it generates a single placeholder
-// block with all leaf attribute values myuser, and once the for_each
+// for_each argument is unknown. In such cases, it generates a single placeholder
+// block with all leaf attribute values unknown, and once the for_each
 // expression becomes known the placeholder may be replaced with any number
 // of blocks, so object compatibility checks would need to be more liberal.
 //
 // Set "nested" if testing a block that is nested inside a candidate block
 // placeholder; this changes the interpretation of there being no blocks of
 // a type to allow for there being zero nested blocks.
-func couldHavemyuserBlockPlaceholder(v cty.Value, blockS *configschema.NestedBlock, nested bool) bool {
+func couldHaveUnknownBlockPlaceholder(v cty.Value, blockS *configschema.NestedBlock, nested bool) bool {
 	switch blockS.Nesting {
 	case configschema.NestingSingle, configschema.NestingGroup:
 		if nested && v.IsNull() {
-			return true // for nested blocks, a single block being unset doesn't disqualify from being an myuser block placeholder
+			return true // for nested blocks, a single block being unset doesn't disqualify from being an unknown block placeholder
 		}
-		return couldBemyuserBlockPlaceholderElement(v, &blockS.Block)
+		return couldBeUnknownBlockPlaceholderElement(v, &blockS.Block)
 	default:
 		// These situations should be impossible for correct providers, but
 		// we permit the legacy SDK to produce some incorrect outcomes
@@ -346,7 +346,7 @@ func couldHavemyuserBlockPlaceholder(v cty.Value, blockS *configschema.NestedBlo
 		// For all other nesting modes, our value should be something iterable.
 		for it := v.ElementIterator(); it.Next(); {
 			_, ev := it.Element()
-			if couldBemyuserBlockPlaceholderElement(ev, &blockS.Block) {
+			if couldBeUnknownBlockPlaceholderElement(ev, &blockS.Block) {
 				return true
 			}
 		}
@@ -360,7 +360,7 @@ func couldHavemyuserBlockPlaceholder(v cty.Value, blockS *configschema.NestedBlo
 	}
 }
 
-func couldBemyuserBlockPlaceholderElement(v cty.Value, schema *configschema.Block) bool {
+func couldBeUnknownBlockPlaceholderElement(v cty.Value, schema *configschema.Block) bool {
 	if v.IsNull() {
 		return false // null value can never be a placeholder element
 	}
@@ -370,7 +370,7 @@ func couldBemyuserBlockPlaceholderElement(v cty.Value, schema *configschema.Bloc
 	for name := range schema.Attributes {
 		av := v.GetAttr(name)
 
-		// myuser block placeholders contain only myuser or null attribute
+		// Unknown block placeholders contain only unknown or null attribute
 		// values, depending on whether or not a particular attribute was set
 		// explicitly inside the content block. Note that this is imprecise:
 		// non-placeholders can also match this, so this function can generate
@@ -380,7 +380,7 @@ func couldBemyuserBlockPlaceholderElement(v cty.Value, schema *configschema.Bloc
 		}
 	}
 	for name, blockS := range schema.BlockTypes {
-		if !couldHavemyuserBlockPlaceholder(v.GetAttr(name), blockS, true) {
+		if !couldHaveUnknownBlockPlaceholder(v.GetAttr(name), blockS, true) {
 			return false
 		}
 	}
@@ -393,7 +393,7 @@ func couldBemyuserBlockPlaceholderElement(v cty.Value, schema *configschema.Bloc
 //
 // This allows the number of elements in the sets to change as long as all
 // elements in both sets can be correlated, making this function safe to use
-// with sets that may contain myuser values as long as the myuser case is
+// with sets that may contain unknown values as long as the unknown case is
 // addressed in some reasonable way in the callback function.
 //
 // The callback always recieves values from set a as its first argument and

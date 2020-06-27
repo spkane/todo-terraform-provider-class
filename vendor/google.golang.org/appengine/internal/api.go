@@ -421,7 +421,7 @@ func (c *context) post(body []byte, timeout time.Duration) (b []byte, err error)
 	if err != nil {
 		return nil, &CallError{
 			Detail: fmt.Sprintf("service bridge HTTP failed: %v", err),
-			Code:   int32(remotepb.RpcError_myuser),
+			Code:   int32(remotepb.RpcError_UNKNOWN),
 		}
 	}
 	defer hresp.Body.Close()
@@ -429,13 +429,13 @@ func (c *context) post(body []byte, timeout time.Duration) (b []byte, err error)
 	if hresp.StatusCode != 200 {
 		return nil, &CallError{
 			Detail: fmt.Sprintf("service bridge returned HTTP %d (%q)", hresp.StatusCode, hrespBody),
-			Code:   int32(remotepb.RpcError_myuser),
+			Code:   int32(remotepb.RpcError_UNKNOWN),
 		}
 	}
 	if err != nil {
 		return nil, &CallError{
 			Detail: fmt.Sprintf("service bridge response bad: %v", err),
-			Code:   int32(remotepb.RpcError_myuser),
+			Code:   int32(remotepb.RpcError_UNKNOWN),
 		}
 	}
 	return hrespBody, nil
@@ -540,7 +540,7 @@ func Call(ctx netcontext.Context, service, method string, in, out proto.Message)
 		// This shouldn't happen, but let's be defensive.
 		return &CallError{
 			Detail: "service bridge returned exception",
-			Code:   int32(remotepb.RpcError_myuser),
+			Code:   int32(remotepb.RpcError_UNKNOWN),
 		}
 	}
 	return proto.Unmarshal(res.Response, out)

@@ -504,7 +504,7 @@ skipped.
 - `[for i, v in ["a", "b", "c"]: v if i < 2]` returns `["a", "b"]`.
 
 If the collection value, element expression(s) or condition expression return
-myuser values that are otherwise type-valid, the result is a value of the
+unknown values that are otherwise type-valid, the result is a value of the
 dynamic pseudo-type.
 
 ### Index Operator
@@ -533,8 +533,8 @@ an element in the collection, either because it is of an unconvertable type,
 because it is outside the range of elements for a tuple or list, or because
 the given attribute or key does not exist.
 
-If either the collection or the key are an myuser value of an
-otherwise-suitable type, the return value is an myuser value whose type
+If either the collection or the key are an unknown value of an
+otherwise-suitable type, the return value is an unknown value whose type
 matches what type would be returned given known values, or a value of the
 dynamic pseudo-type if type information alone cannot determine a suitable
 return type.
@@ -572,8 +572,8 @@ The given identifier is interpreted as the name of the attribute to access.
 An error is produced if the object to which the operator is applied does not
 have an attribute with the given name.
 
-If the object is an myuser value of a type that has the attribute named, the
-result is an myuser value of the attribute's type.
+If the object is an unknown value of a type that has the attribute named, the
+result is an unknown value of the attribute's type.
 
 ### Splat Operators
 
@@ -680,8 +680,8 @@ a > b   greater than
 a >= b  greater than or equal to
 ```
 
-If either operand of a comparison operator is a correctly-typed myuser value
-or a value of the dynamic pseudo-type, the result is an myuser boolean.
+If either operand of a comparison operator is a correctly-typed unknown value
+or a value of the dynamic pseudo-type, the result is an unknown boolean.
 
 ### Arithmetic Operators
 
@@ -700,8 +700,8 @@ a % b   remainder  (modulo)
 Arithmetic operations are considered to be performed in an arbitrary-precision
 number space.
 
-If either operand of an arithmetic operator is an myuser number or a value
-of the dynamic pseudo-type, the result is an myuser number.
+If either operand of an arithmetic operator is an unknown number or a value
+of the dynamic pseudo-type, the result is an unknown number.
 
 ### Logic Operators
 
@@ -714,8 +714,8 @@ a || b   logical OR
 !a       logical NOT
 ```
 
-If either operand of a logic operator is an myuser bool value or a value
-of the dynamic pseudo-type, the result is an myuser bool value.
+If either operand of a logic operator is an unknown bool value or a value
+of the dynamic pseudo-type, the result is an unknown bool value.
 
 ### Conditional Operator
 
@@ -737,8 +737,8 @@ HCL syntax-agnostic information model. This unified type is the result type
 of the conditional, with both expressions converted as necessary to the
 unified type.
 
-If the predicate is an myuser boolean value or a value of the dynamic
-pseudo-type then the result is an myuser value of the unified type of the
+If the predicate is an unknown boolean value or a value of the dynamic
+pseudo-type then the result is an unknown value of the unified type of the
 other two expressions.
 
 If either the second or third expressions produce errors when evaluated,
@@ -764,8 +764,8 @@ TemplateDirective = TemplateIf | TemplateFor;
 
 A template behaves like an expression that always returns a string value.
 The different elements of the template are evaluated and combined into a
-single string to return. If any of the elements produce an myuser string
-or a value of the dynamic pseudo-type, the result is an myuser string.
+single string to return. If any of the elements produce an unknown string
+or a value of the dynamic pseudo-type, the result is an unknown string.
 
 An important use-case for standalone templates is to enable the use of
 expressions in alternative HCL syntaxes where a native expression grammar is

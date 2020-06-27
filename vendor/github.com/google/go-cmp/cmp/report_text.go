@@ -27,7 +27,7 @@ func (n indentMode) appendIndent(b []byte, d diffMode) []byte {
 	if flags.Deterministic || randBool {
 		// Use regular spaces (U+0020).
 		switch d {
-		case diffmyuser, diffIdentical:
+		case diffUnknown, diffIdentical:
 			b = append(b, "  "...)
 		case diffRemoved:
 			b = append(b, "- "...)
@@ -37,7 +37,7 @@ func (n indentMode) appendIndent(b []byte, d diffMode) []byte {
 	} else {
 		// Use non-breaking spaces (U+00a0).
 		switch d {
-		case diffmyuser, diffIdentical:
+		case diffUnknown, diffIdentical:
 			b = append(b, "  "...)
 		case diffRemoved:
 			b = append(b, "- "...)

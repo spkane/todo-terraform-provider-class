@@ -3,17 +3,11 @@
 
 package grpc_binarylog_v1 // import "google.golang.org/grpc/binarylog/grpc_binarylog_v1"
 
-import (
-	fmt "fmt"
-
-	proto "github.com/golang/protobuf/proto"
-
-	math "math"
-
-	duration "github.com/golang/protobuf/ptypes/duration"
-
-	timestamp "github.com/golang/protobuf/ptypes/timestamp"
-)
+import proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import duration "github.com/golang/protobuf/ptypes/duration"
+import timestamp "github.com/golang/protobuf/ptypes/timestamp"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -32,7 +26,7 @@ const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 type GrpcLogEntry_EventType int32
 
 const (
-	GrpcLogEntry_EVENT_TYPE_myuser GrpcLogEntry_EventType = 0
+	GrpcLogEntry_EVENT_TYPE_UNKNOWN GrpcLogEntry_EventType = 0
 	// Header sent from client to server
 	GrpcLogEntry_EVENT_TYPE_CLIENT_HEADER GrpcLogEntry_EventType = 1
 	// Header sent from server to client
@@ -61,7 +55,7 @@ const (
 )
 
 var GrpcLogEntry_EventType_name = map[int32]string{
-	0: "EVENT_TYPE_myuser",
+	0: "EVENT_TYPE_UNKNOWN",
 	1: "EVENT_TYPE_CLIENT_HEADER",
 	2: "EVENT_TYPE_SERVER_HEADER",
 	3: "EVENT_TYPE_CLIENT_MESSAGE",
@@ -71,7 +65,7 @@ var GrpcLogEntry_EventType_name = map[int32]string{
 	7: "EVENT_TYPE_CANCEL",
 }
 var GrpcLogEntry_EventType_value = map[string]int32{
-	"EVENT_TYPE_myuser":            0,
+	"EVENT_TYPE_UNKNOWN":           0,
 	"EVENT_TYPE_CLIENT_HEADER":     1,
 	"EVENT_TYPE_SERVER_HEADER":     2,
 	"EVENT_TYPE_CLIENT_MESSAGE":    3,
@@ -92,20 +86,20 @@ func (GrpcLogEntry_EventType) EnumDescriptor() ([]byte, []int) {
 type GrpcLogEntry_Logger int32
 
 const (
-	GrpcLogEntry_LOGGER_myuser GrpcLogEntry_Logger = 0
-	GrpcLogEntry_LOGGER_CLIENT GrpcLogEntry_Logger = 1
-	GrpcLogEntry_LOGGER_SERVER GrpcLogEntry_Logger = 2
+	GrpcLogEntry_LOGGER_UNKNOWN GrpcLogEntry_Logger = 0
+	GrpcLogEntry_LOGGER_CLIENT  GrpcLogEntry_Logger = 1
+	GrpcLogEntry_LOGGER_SERVER  GrpcLogEntry_Logger = 2
 )
 
 var GrpcLogEntry_Logger_name = map[int32]string{
-	0: "LOGGER_myuser",
+	0: "LOGGER_UNKNOWN",
 	1: "LOGGER_CLIENT",
 	2: "LOGGER_SERVER",
 }
 var GrpcLogEntry_Logger_value = map[string]int32{
-	"LOGGER_myuser": 0,
-	"LOGGER_CLIENT": 1,
-	"LOGGER_SERVER": 2,
+	"LOGGER_UNKNOWN": 0,
+	"LOGGER_CLIENT":  1,
+	"LOGGER_SERVER":  2,
 }
 
 func (x GrpcLogEntry_Logger) String() string {
@@ -118,7 +112,7 @@ func (GrpcLogEntry_Logger) EnumDescriptor() ([]byte, []int) {
 type Address_Type int32
 
 const (
-	Address_TYPE_myuser Address_Type = 0
+	Address_TYPE_UNKNOWN Address_Type = 0
 	// address is in 1.2.3.4 form
 	Address_TYPE_IPV4 Address_Type = 1
 	// address is in IPv6 canonical form (RFC5952 section 4)
@@ -129,16 +123,16 @@ const (
 )
 
 var Address_Type_name = map[int32]string{
-	0: "TYPE_myuser",
+	0: "TYPE_UNKNOWN",
 	1: "TYPE_IPV4",
 	2: "TYPE_IPV6",
 	3: "TYPE_UNIX",
 }
 var Address_Type_value = map[string]int32{
-	"TYPE_myuser": 0,
-	"TYPE_IPV4":   1,
-	"TYPE_IPV6":   2,
-	"TYPE_UNIX":   3,
+	"TYPE_UNKNOWN": 0,
+	"TYPE_IPV4":    1,
+	"TYPE_IPV6":    2,
+	"TYPE_UNIX":    3,
 }
 
 func (x Address_Type) String() string {
@@ -205,8 +199,8 @@ func (dst *GrpcLogEntry) XXX_Merge(src proto.Message) {
 func (m *GrpcLogEntry) XXX_Size() int {
 	return xxx_messageInfo_GrpcLogEntry.Size(m)
 }
-func (m *GrpcLogEntry) XXX_Discardmyuser() {
-	xxx_messageInfo_GrpcLogEntry.Discardmyuser(m)
+func (m *GrpcLogEntry) XXX_DiscardUnknown() {
+	xxx_messageInfo_GrpcLogEntry.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GrpcLogEntry proto.InternalMessageInfo
@@ -236,14 +230,14 @@ func (m *GrpcLogEntry) GetType() GrpcLogEntry_EventType {
 	if m != nil {
 		return m.Type
 	}
-	return GrpcLogEntry_EVENT_TYPE_myuser
+	return GrpcLogEntry_EVENT_TYPE_UNKNOWN
 }
 
 func (m *GrpcLogEntry) GetLogger() GrpcLogEntry_Logger {
 	if m != nil {
 		return m.Logger
 	}
-	return GrpcLogEntry_LOGGER_myuser
+	return GrpcLogEntry_LOGGER_UNKNOWN
 }
 
 type isGrpcLogEntry_Payload interface {
@@ -473,8 +467,8 @@ func (dst *ClientHeader) XXX_Merge(src proto.Message) {
 func (m *ClientHeader) XXX_Size() int {
 	return xxx_messageInfo_ClientHeader.Size(m)
 }
-func (m *ClientHeader) XXX_Discardmyuser() {
-	xxx_messageInfo_ClientHeader.Discardmyuser(m)
+func (m *ClientHeader) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClientHeader.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ClientHeader proto.InternalMessageInfo
@@ -533,8 +527,8 @@ func (dst *ServerHeader) XXX_Merge(src proto.Message) {
 func (m *ServerHeader) XXX_Size() int {
 	return xxx_messageInfo_ServerHeader.Size(m)
 }
-func (m *ServerHeader) XXX_Discardmyuser() {
-	xxx_messageInfo_ServerHeader.Discardmyuser(m)
+func (m *ServerHeader) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServerHeader.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ServerHeader proto.InternalMessageInfo
@@ -580,8 +574,8 @@ func (dst *Trailer) XXX_Merge(src proto.Message) {
 func (m *Trailer) XXX_Size() int {
 	return xxx_messageInfo_Trailer.Size(m)
 }
-func (m *Trailer) XXX_Discardmyuser() {
-	xxx_messageInfo_Trailer.Discardmyuser(m)
+func (m *Trailer) XXX_DiscardUnknown() {
+	xxx_messageInfo_Trailer.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Trailer proto.InternalMessageInfo
@@ -644,8 +638,8 @@ func (dst *Message) XXX_Merge(src proto.Message) {
 func (m *Message) XXX_Size() int {
 	return xxx_messageInfo_Message.Size(m)
 }
-func (m *Message) XXX_Discardmyuser() {
-	xxx_messageInfo_Message.Discardmyuser(m)
+func (m *Message) XXX_DiscardUnknown() {
+	xxx_messageInfo_Message.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Message proto.InternalMessageInfo
@@ -710,8 +704,8 @@ func (dst *Metadata) XXX_Merge(src proto.Message) {
 func (m *Metadata) XXX_Size() int {
 	return xxx_messageInfo_Metadata.Size(m)
 }
-func (m *Metadata) XXX_Discardmyuser() {
-	xxx_messageInfo_Metadata.Discardmyuser(m)
+func (m *Metadata) XXX_DiscardUnknown() {
+	xxx_messageInfo_Metadata.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Metadata proto.InternalMessageInfo
@@ -750,8 +744,8 @@ func (dst *MetadataEntry) XXX_Merge(src proto.Message) {
 func (m *MetadataEntry) XXX_Size() int {
 	return xxx_messageInfo_MetadataEntry.Size(m)
 }
-func (m *MetadataEntry) XXX_Discardmyuser() {
-	xxx_messageInfo_MetadataEntry.Discardmyuser(m)
+func (m *MetadataEntry) XXX_DiscardUnknown() {
+	xxx_messageInfo_MetadataEntry.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_MetadataEntry proto.InternalMessageInfo
@@ -799,8 +793,8 @@ func (dst *Address) XXX_Merge(src proto.Message) {
 func (m *Address) XXX_Size() int {
 	return xxx_messageInfo_Address.Size(m)
 }
-func (m *Address) XXX_Discardmyuser() {
-	xxx_messageInfo_Address.Discardmyuser(m)
+func (m *Address) XXX_DiscardUnknown() {
+	xxx_messageInfo_Address.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Address proto.InternalMessageInfo
@@ -809,7 +803,7 @@ func (m *Address) GetType() Address_Type {
 	if m != nil {
 		return m.Type
 	}
-	return Address_TYPE_myuser
+	return Address_TYPE_UNKNOWN
 }
 
 func (m *Address) GetAddress() string {

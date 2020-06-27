@@ -314,7 +314,7 @@ func unescape(s string) (ch string, tail string, err error) {
 		}
 		return string(i), s, nil
 	}
-	return "", "", fmt.Errorf(`myuser escape \%c`, r)
+	return "", "", fmt.Errorf(`unknown escape \%c`, r)
 }
 
 // Back off the parser by one token. Can only be done between calls to next().
@@ -378,7 +378,7 @@ func (p *textParser) missingRequiredFieldError(sv reflect.Value) *RequiredNotSet
 			return &RequiredNotSetError{fmt.Sprintf("%v.%v", st, props.OrigName)}
 		}
 	}
-	return &RequiredNotSetError{fmt.Sprintf("%v.<myuser field name>", st)} // should not happen
+	return &RequiredNotSetError{fmt.Sprintf("%v.<unknown field name>", st)} // should not happen
 }
 
 // Returns the index in the struct for the named field, as well as the parsed tag properties.
@@ -585,7 +585,7 @@ func (p *textParser) readStruct(sv reflect.Value, terminator string) error {
 			field.Set(nv)
 		}
 		if !dst.IsValid() {
-			return p.errorf("myuser field name %q in %v", name, st)
+			return p.errorf("unknown field name %q in %v", name, st)
 		}
 
 		if dst.Kind() == reflect.Map {

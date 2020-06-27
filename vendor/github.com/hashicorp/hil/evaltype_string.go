@@ -10,7 +10,7 @@ const (
 	_EvalType_name_2 = "TypeBool"
 	_EvalType_name_3 = "TypeList"
 	_EvalType_name_4 = "TypeMap"
-	_EvalType_name_5 = "Typemyuser"
+	_EvalType_name_5 = "TypeUnknown"
 )
 
 var (

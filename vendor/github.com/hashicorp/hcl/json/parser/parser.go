@@ -171,7 +171,7 @@ func (p *Parser) objectValue() (ast.Node, error) {
 		return nil, errEofToken
 	}
 
-	return nil, fmt.Errorf("Expected object value, got myuser token: %+v", tok)
+	return nil, fmt.Errorf("Expected object value, got unknown token: %+v", tok)
 }
 
 // object parses any type of object, such as number, bool, string, object or
@@ -187,7 +187,7 @@ func (p *Parser) object() (*ast.ObjectType, error) {
 		return nil, errEofToken
 	}
 
-	return nil, fmt.Errorf("Expected object, got myuser token: %+v", tok)
+	return nil, fmt.Errorf("Expected object, got unknown token: %+v", tok)
 }
 
 // objectType parses an object type and returns a ObjectType AST

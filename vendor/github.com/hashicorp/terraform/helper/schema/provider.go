@@ -283,7 +283,7 @@ func (p *Provider) Apply(
 	d *terraform.InstanceDiff) (*terraform.InstanceState, error) {
 	r, ok := p.ResourcesMap[info.Type]
 	if !ok {
-		return nil, fmt.Errorf("myuser resource type: %s", info.Type)
+		return nil, fmt.Errorf("unknown resource type: %s", info.Type)
 	}
 
 	return r.Apply(s, d, p.meta)
@@ -296,7 +296,7 @@ func (p *Provider) Diff(
 	c *terraform.ResourceConfig) (*terraform.InstanceDiff, error) {
 	r, ok := p.ResourcesMap[info.Type]
 	if !ok {
-		return nil, fmt.Errorf("myuser resource type: %s", info.Type)
+		return nil, fmt.Errorf("unknown resource type: %s", info.Type)
 	}
 
 	return r.Diff(s, c, p.meta)
@@ -310,7 +310,7 @@ func (p *Provider) SimpleDiff(
 	c *terraform.ResourceConfig) (*terraform.InstanceDiff, error) {
 	r, ok := p.ResourcesMap[info.Type]
 	if !ok {
-		return nil, fmt.Errorf("myuser resource type: %s", info.Type)
+		return nil, fmt.Errorf("unknown resource type: %s", info.Type)
 	}
 
 	return r.simpleDiff(s, c, p.meta)
@@ -322,7 +322,7 @@ func (p *Provider) Refresh(
 	s *terraform.InstanceState) (*terraform.InstanceState, error) {
 	r, ok := p.ResourcesMap[info.Type]
 	if !ok {
-		return nil, fmt.Errorf("myuser resource type: %s", info.Type)
+		return nil, fmt.Errorf("unknown resource type: %s", info.Type)
 	}
 
 	return r.Refresh(s, p.meta)
@@ -365,7 +365,7 @@ func (p *Provider) ImportState(
 	// Find the resource
 	r, ok := p.ResourcesMap[info.Type]
 	if !ok {
-		return nil, fmt.Errorf("myuser resource type: %s", info.Type)
+		return nil, fmt.Errorf("unknown resource type: %s", info.Type)
 	}
 
 	// If it doesn't support import, error
@@ -427,7 +427,7 @@ func (p *Provider) ReadDataDiff(
 
 	r, ok := p.DataSourcesMap[info.Type]
 	if !ok {
-		return nil, fmt.Errorf("myuser data source: %s", info.Type)
+		return nil, fmt.Errorf("unknown data source: %s", info.Type)
 	}
 
 	return r.Diff(nil, c, p.meta)
@@ -440,7 +440,7 @@ func (p *Provider) ReadDataApply(
 
 	r, ok := p.DataSourcesMap[info.Type]
 	if !ok {
-		return nil, fmt.Errorf("myuser data source: %s", info.Type)
+		return nil, fmt.Errorf("unknown data source: %s", info.Type)
 	}
 
 	return r.ReadDataApply(d, p.meta)

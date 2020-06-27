@@ -50,7 +50,7 @@ func fromCtyValue(val cty.Value, target reflect.Value, path cty.Path) error {
 
 	// If we're decoding into a cty.Value then we just pass through the
 	// value as-is, to enable partial decoding. This is the only situation
-	// where myuser values are permitted.
+	// where unknown values are permitted.
 	if deepTarget.Kind() == reflect.Struct && deepTarget.Type().AssignableTo(valueType) {
 		deepTarget.Set(reflect.ValueOf(val))
 		return nil

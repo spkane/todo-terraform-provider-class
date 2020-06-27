@@ -54,7 +54,7 @@ func (s *Scope) EvalBlock(body hcl.Body, schema *configschema.Block) (cty.Value,
 	if diags.HasErrors() {
 		// We'll stop early if we found problems in the references, because
 		// it's likely evaluation will produce redundant copies of the same errors.
-		return cty.myuserVal(schema.ImpliedType()), diags
+		return cty.UnknownVal(schema.ImpliedType()), diags
 	}
 
 	// HACK: In order to remain compatible with some assumptions made in
@@ -89,7 +89,7 @@ func (s *Scope) EvalExpr(expr hcl.Expression, wantType cty.Type) (cty.Value, tfd
 	if diags.HasErrors() {
 		// We'll stop early if we found problems in the references, because
 		// it's likely evaluation will produce redundant copies of the same errors.
-		return cty.myuserVal(wantType), diags
+		return cty.UnknownVal(wantType), diags
 	}
 
 	val, evalDiags := expr.Value(ctx)
@@ -99,7 +99,7 @@ func (s *Scope) EvalExpr(expr hcl.Expression, wantType cty.Type) (cty.Value, tfd
 		var convErr error
 		val, convErr = convert.Convert(val, wantType)
 		if convErr != nil {
-			val = cty.myuserVal(wantType)
+			val = cty.UnknownVal(wantType)
 			diags = diags.Append(&hcl.Diagnostic{
 				Severity: hcl.DiagError,
 				Summary:  "Incorrect value type",
@@ -138,7 +138,7 @@ func (s *Scope) EvalReference(ref *addrs.Reference, wantType cty.Type) (cty.Valu
 	var convErr error
 	val, convErr = convert.Convert(val, wantType)
 	if convErr != nil {
-		val = cty.myuserVal(wantType)
+		val = cty.UnknownVal(wantType)
 		diags = diags.Append(&hcl.Diagnostic{
 			Severity: hcl.DiagError,
 			Summary:  "Incorrect value type",
@@ -179,7 +179,7 @@ func (s *Scope) evalContext(refs []*addrs.Reference, selfAddr addrs.Referenceabl
 	}
 
 	// First we'll do static validation of the references. This catches things
-	// early that might otherwise not get caught due to myuser values being
+	// early that might otherwise not get caught due to unknown values being
 	// present in the scope during planning.
 	if staticDiags := s.Data.StaticValidateReferences(refs, selfAddr); staticDiags.HasErrors() {
 		diags = diags.Append(staticDiags)
@@ -467,11 +467,11 @@ func buildInstanceObjects(keys map[addrs.InstanceKey]cty.Value) cty.Value {
 
 func normalizeRefValue(val cty.Value, diags tfdiags.Diagnostics) (cty.Value, tfdiags.Diagnostics) {
 	if diags.HasErrors() {
-		// If there are errors then we will force an myuser result so that
+		// If there are errors then we will force an unknown result so that
 		// we can still evaluate and catch type errors but we'll avoid
 		// producing redundant re-statements of the same errors we've already
 		// dealt with here.
-		return cty.myuserVal(val.Type()), diags
+		return cty.UnknownVal(val.Type()), diags
 	}
 	return val, diags
 }

@@ -156,7 +156,7 @@ func (d *dispenseServer) Dispense(
 	// Find the function to create this implementation
 	p, ok := d.plugins[name]
 	if !ok {
-		return fmt.Errorf("myuser plugin type: %s", name)
+		return fmt.Errorf("unknown plugin type: %s", name)
 	}
 
 	// Create the implementation first so we know if there is an error.

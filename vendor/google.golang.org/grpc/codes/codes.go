@@ -35,12 +35,12 @@ const (
 	// Canceled indicates the operation was canceled (typically by the caller).
 	Canceled Code = 1
 
-	// myuser error. An example of where this error may be returned is
+	// Unknown error. An example of where this error may be returned is
 	// if a Status value received from another address space belongs to
 	// an error-space that is not known in this address space. Also
 	// errors raised by APIs that do not return enough error information
 	// may be converted to this error.
-	myuser Code = 2
+	Unknown Code = 2
 
 	// InvalidArgument indicates client specified an invalid argument.
 	// Note that this differs from FailedPrecondition. It indicates arguments
@@ -152,7 +152,7 @@ const (
 var strToCode = map[string]Code{
 	`"OK"`: OK,
 	`"CANCELLED"`:/* [sic] */ Canceled,
-	`"myuser"`:              myuser,
+	`"UNKNOWN"`:             Unknown,
 	`"INVALID_ARGUMENT"`:    InvalidArgument,
 	`"DEADLINE_EXCEEDED"`:   DeadlineExceeded,
 	`"NOT_FOUND"`:           NotFound,

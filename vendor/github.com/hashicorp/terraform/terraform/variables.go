@@ -28,8 +28,8 @@ type InputValue struct {
 type ValueSourceType rune
 
 const (
-	// ValueFrommyuser is the zero value of ValueSourceType and is not valid.
-	ValueFrommyuser ValueSourceType = 0
+	// ValueFromUnknown is the zero value of ValueSourceType and is not valid.
+	ValueFromUnknown ValueSourceType = 0
 
 	// ValueFromConfig indicates that a value came from a .tf or .tf.json file,
 	// e.g. the default value defined for a variable.
@@ -150,7 +150,7 @@ func DefaultVariableValues(configs map[string]*configs.Variable) InputValues {
 // the receiever, disregarding the source types and source ranges.
 //
 // Values are compared using the cty "RawEquals" method, which means that
-// myuser values can be considered equal to one another if they are of the
+// unknown values can be considered equal to one another if they are of the
 // same type.
 func (vv InputValues) SameValues(other InputValues) bool {
 	if len(vv) != len(other) {
@@ -174,7 +174,7 @@ func (vv InputValues) SameValues(other InputValues) bool {
 // map, disregarding the source types and source ranges.
 //
 // Values are compared using the cty "RawEquals" method, which means that
-// myuser values can be considered equal to one another if they are of the
+// unknown values can be considered equal to one another if they are of the
 // same type.
 func (vv InputValues) HasValues(vals map[string]cty.Value) bool {
 	if len(vv) != len(vals) {
@@ -198,7 +198,7 @@ func (vv InputValues) HasValues(vals map[string]cty.Value) bool {
 // source types, and source ranges as the receiver.
 //
 // Values are compared using the cty "RawEquals" method, which means that
-// myuser values can be considered equal to one another if they are of the
+// unknown values can be considered equal to one another if they are of the
 // same type.
 //
 // This method is primarily for testing. For most practical purposes, it's

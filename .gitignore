@@ -1,22 +1,32 @@
-# Terrform
-tf-code/
-terraform.tfstate*
-.terraform
-*.log
-terraform-provider-todo/bin/
-terraform-provider-todo/pkg/
-cmd/todo-list-server/pkg/
-cmd/todo-list-server/bin/
-class-terraform-provider.md
-
-# Binaries
+# Ignore these binaries
 terraform-provider-todo
 terraform-provider-todo_v*
 todo-list-server
 
-# System Files
-.DS_Store
+# Ignore these directories
+bin/
+pkg/
 
-# Don't ignore these
+# Don't ignore these directories
 !/terraform-provider-todo/
 !/cmd/todo-list-server/
+!/bin/
+
+# Terrform
+plan.out
+tf-code/
+*.tfstate*
+.terraform
+*.log
+class-terraform-provider.md
+
+# Ignore the staging area for class
+terraform-provider-todo/todo/
+terraform-provider-todo/*.tf
+terraform-provider-todo/*.go
+terraform-provider-todo/*.md
+terraform-provider-todo/Makefile
+terraform-provider-todo/terraform-provider-todo
+
+# System Files
+.DS_Store

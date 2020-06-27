@@ -32,7 +32,7 @@ var ErrCorruptedDocument = errors.New("invalid DocumentSequence: corrupted docum
 // ErrNonDocument is returned when a DocumentSequence contains a non-document BSON value.
 var ErrNonDocument = errors.New("invalid DocumentSequence: a non-document value was found in sequence")
 
-// ErrInvalidDocumentSequenceStyle is returned when an myuser DocumentSequenceStyle is set on a
+// ErrInvalidDocumentSequenceStyle is returned when an unknown DocumentSequenceStyle is set on a
 // DocumentSequence.
 var ErrInvalidDocumentSequenceStyle = errors.New("invalid DocumentSequenceStyle")
 
@@ -74,7 +74,7 @@ func (ds *DocumentSequence) DocumentCount() int {
 	}
 }
 
-// Empty returns true if the sequence is empty. It always returns true for myuser sequence styles.
+// Empty returns true if the sequence is empty. It always returns true for unknown sequence styles.
 func (ds *DocumentSequence) Empty() bool {
 	if ds == nil {
 		return true

@@ -349,7 +349,7 @@ func (u *marshalInfo) computeMarshalInfo() {
 		case "XXX_NoUnkeyedLiteral":
 			// nothing to do
 		default:
-			panic("myuser XXX field: " + f.Name)
+			panic("unknown XXX field: " + f.Name)
 		}
 		n--
 	}
@@ -503,7 +503,7 @@ func wiretype(encoding string) uint64 {
 	case "group":
 		return WireStartGroup
 	}
-	panic("myuser wire type " + encoding)
+	panic("unknown wire type " + encoding)
 }
 
 // setTag fills up the tag (in wire format) and its size in the info of a field.
@@ -805,7 +805,7 @@ func typeMarshaler(t reflect.Type, tags []string, nozero, oneof bool) (sizer, ma
 			return makeMessageMarshaler(getMarshalInfo(t))
 		}
 	}
-	panic(fmt.Sprintf("myuser or mismatched type: type: %v, wire type: %v", t, encoding))
+	panic(fmt.Sprintf("unknown or mismatched type: type: %v, wire type: %v", t, encoding))
 }
 
 // Below are functions to size/marshal a specific type of a field.

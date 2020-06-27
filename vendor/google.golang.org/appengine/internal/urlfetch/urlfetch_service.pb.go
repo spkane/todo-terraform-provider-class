@@ -3,13 +3,9 @@
 
 package urlfetch
 
-import (
-	fmt "fmt"
-
-	proto "github.com/golang/protobuf/proto"
-
-	math "math"
-)
+import proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -163,8 +159,8 @@ func (dst *URLFetchServiceError) XXX_Merge(src proto.Message) {
 func (m *URLFetchServiceError) XXX_Size() int {
 	return xxx_messageInfo_URLFetchServiceError.Size(m)
 }
-func (m *URLFetchServiceError) XXX_Discardmyuser() {
-	xxx_messageInfo_URLFetchServiceError.Discardmyuser(m)
+func (m *URLFetchServiceError) XXX_DiscardUnknown() {
+	xxx_messageInfo_URLFetchServiceError.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_URLFetchServiceError proto.InternalMessageInfo
@@ -200,8 +196,8 @@ func (dst *URLFetchRequest) XXX_Merge(src proto.Message) {
 func (m *URLFetchRequest) XXX_Size() int {
 	return xxx_messageInfo_URLFetchRequest.Size(m)
 }
-func (m *URLFetchRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_URLFetchRequest.Discardmyuser(m)
+func (m *URLFetchRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_URLFetchRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_URLFetchRequest proto.InternalMessageInfo
@@ -284,8 +280,8 @@ func (dst *URLFetchRequest_Header) XXX_Merge(src proto.Message) {
 func (m *URLFetchRequest_Header) XXX_Size() int {
 	return xxx_messageInfo_URLFetchRequest_Header.Size(m)
 }
-func (m *URLFetchRequest_Header) XXX_Discardmyuser() {
-	xxx_messageInfo_URLFetchRequest_Header.Discardmyuser(m)
+func (m *URLFetchRequest_Header) XXX_DiscardUnknown() {
+	xxx_messageInfo_URLFetchRequest_Header.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_URLFetchRequest_Header proto.InternalMessageInfo
@@ -338,8 +334,8 @@ func (dst *URLFetchResponse) XXX_Merge(src proto.Message) {
 func (m *URLFetchResponse) XXX_Size() int {
 	return xxx_messageInfo_URLFetchResponse.Size(m)
 }
-func (m *URLFetchResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_URLFetchResponse.Discardmyuser(m)
+func (m *URLFetchResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_URLFetchResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_URLFetchResponse proto.InternalMessageInfo
@@ -445,8 +441,8 @@ func (dst *URLFetchResponse_Header) XXX_Merge(src proto.Message) {
 func (m *URLFetchResponse_Header) XXX_Size() int {
 	return xxx_messageInfo_URLFetchResponse_Header.Size(m)
 }
-func (m *URLFetchResponse_Header) XXX_Discardmyuser() {
-	xxx_messageInfo_URLFetchResponse_Header.Discardmyuser(m)
+func (m *URLFetchResponse_Header) XXX_DiscardUnknown() {
+	xxx_messageInfo_URLFetchResponse_Header.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_URLFetchResponse_Header proto.InternalMessageInfo

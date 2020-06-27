@@ -39,7 +39,7 @@ func RegisterTimeoutErrorCode(service string, code int32) {
 
 // APIError is the type returned by appengine.Context's Call method
 // when an API call fails in an API-specific way. This may be, for instance,
-// a taskqueue API call failing with TaskQueueServiceError::myuser_QUEUE.
+// a taskqueue API call failing with TaskQueueServiceError::UNKNOWN_QUEUE.
 type APIError struct {
 	Service string
 	Detail  string
@@ -82,7 +82,7 @@ type CallError struct {
 func (e *CallError) Error() string {
 	var msg string
 	switch remotepb.RpcError_ErrorCode(e.Code) {
-	case remotepb.RpcError_myuser:
+	case remotepb.RpcError_UNKNOWN:
 		return e.Detail
 	case remotepb.RpcError_OVER_QUOTA:
 		msg = "Over quota"

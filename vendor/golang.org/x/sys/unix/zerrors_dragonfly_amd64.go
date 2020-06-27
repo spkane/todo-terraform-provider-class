@@ -293,7 +293,7 @@ const (
 	DT_LNK                            = 0xa
 	DT_REG                            = 0x8
 	DT_SOCK                           = 0xc
-	DT_myuser                         = 0x0
+	DT_UNKNOWN                        = 0x0
 	DT_WHT                            = 0xe
 	ECHO                              = 0x8
 	ECHOCTL                           = 0x40
@@ -718,7 +718,7 @@ const (
 	IPPROTO_TRUNK2                    = 0x18
 	IPPROTO_TTP                       = 0x54
 	IPPROTO_UDP                       = 0x11
-	IPPROTO_myuser                    = 0x102
+	IPPROTO_UNKNOWN                   = 0x102
 	IPPROTO_VINES                     = 0x53
 	IPPROTO_VISA                      = 0x46
 	IPPROTO_VMTP                      = 0x51
@@ -938,6 +938,7 @@ const (
 	NET_RT_FLAGS                      = 0x2
 	NET_RT_IFLIST                     = 0x3
 	NET_RT_MAXID                      = 0x4
+	NFDBITS                           = 0x40
 	NOFLSH                            = 0x80000000
 	NOKERNINFO                        = 0x2000000
 	NOTE_ATTRIB                       = 0x8
@@ -1599,12 +1600,12 @@ var errorList = [...]struct {
 	{91, "ENOLINK", "link has been severed"},
 	{92, "EPROTO", "protocol error"},
 	{93, "ENOMEDIUM", "no medium found"},
-	{94, "EUNUSED94", "myuser error: 94"},
-	{95, "EUNUSED95", "myuser error: 95"},
-	{96, "EUNUSED96", "myuser error: 96"},
-	{97, "EUNUSED97", "myuser error: 97"},
-	{98, "EUNUSED98", "myuser error: 98"},
-	{99, "ELAST", "myuser error: 99"},
+	{94, "EUNUSED94", "unknown error: 94"},
+	{95, "EUNUSED95", "unknown error: 95"},
+	{96, "EUNUSED96", "unknown error: 96"},
+	{97, "EUNUSED97", "unknown error: 97"},
+	{98, "EUNUSED98", "unknown error: 98"},
+	{99, "ELAST", "unknown error: 99"},
 }
 
 // Signal table

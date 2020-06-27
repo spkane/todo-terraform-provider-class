@@ -89,7 +89,7 @@ func (p *GRPCProvider) getResourceSchema(name string) providers.Schema {
 	schema := p.getSchema()
 	resSchema, ok := schema.ResourceTypes[name]
 	if !ok {
-		panic("myuser resource type " + name)
+		panic("unknown resource type " + name)
 	}
 	return resSchema
 }
@@ -100,7 +100,7 @@ func (p *GRPCProvider) getDatasourceSchema(name string) providers.Schema {
 	schema := p.getSchema()
 	dataSchema, ok := schema.DataSources[name]
 	if !ok {
-		panic("myuser data source " + name)
+		panic("unknown data source " + name)
 	}
 	return dataSchema
 }

@@ -46,7 +46,7 @@ var YAMLEncodeFunc = function.New(&function.Spec{
 	Type: function.StaticReturnType(cty.String),
 	Impl: func(args []cty.Value, retType cty.Type) (cty.Value, error) {
 		if !args[0].IsWhollyKnown() {
-			return cty.myuserVal(retType), nil
+			return cty.UnknownVal(retType), nil
 		}
 		raw, err := Standard.Marshal(args[0])
 		if err != nil {

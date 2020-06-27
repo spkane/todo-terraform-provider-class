@@ -36,7 +36,7 @@ func (n *Call) String() string {
 func (n *Call) Type(s Scope) (Type, error) {
 	f, ok := s.LookupFunc(n.Func)
 	if !ok {
-		return TypeInvalid, fmt.Errorf("myuser function: %s", n.Func)
+		return TypeInvalid, fmt.Errorf("unknown function: %s", n.Func)
 	}
 
 	return f.ReturnType, nil

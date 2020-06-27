@@ -3,6 +3,7 @@ package endpoints
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws/awserr"
 )
@@ -35,8 +36,8 @@ type Options struct {
 	//
 	// If resolving an endpoint on the partition list the provided region will
 	// be used to determine which partition's domain name pattern to the service
-	// endpoint ID with. If both the service and region are myuser and resolving
-	// the endpoint on partition list an myuserEndpointError error will be returned.
+	// endpoint ID with. If both the service and region are unknown and resolving
+	// the endpoint on partition list an UnknownEndpointError error will be returned.
 	//
 	// If resolving and endpoint on a partition specific resolver that partition's
 	// domain name pattern will be used with the service endpoint ID. If both
@@ -45,7 +46,109 @@ type Options struct {
 	// endpoint and region together.
 	//
 	// This option is ignored if StrictMatching is enabled.
-	ResolvemyuserService bool
+	ResolveUnknownService bool
+
+	// STS Regional Endpoint flag helps with resolving the STS endpoint
+	STSRegionalEndpoint STSRegionalEndpoint
+
+	// S3 Regional Endpoint flag helps with resolving the S3 endpoint
+	S3UsEast1RegionalEndpoint S3UsEast1RegionalEndpoint
+}
+
+// STSRegionalEndpoint is an enum for the states of the STS Regional Endpoint
+// options.
+type STSRegionalEndpoint int
+
+func (e STSRegionalEndpoint) String() string {
+	switch e {
+	case LegacySTSEndpoint:
+		return "legacy"
+	case RegionalSTSEndpoint:
+		return "regional"
+	case UnsetSTSEndpoint:
+		return ""
+	default:
+		return "unknown"
+	}
+}
+
+const (
+
+	// UnsetSTSEndpoint represents that STS Regional Endpoint flag is not specified.
+	UnsetSTSEndpoint STSRegionalEndpoint = iota
+
+	// LegacySTSEndpoint represents when STS Regional Endpoint flag is specified
+	// to use legacy endpoints.
+	LegacySTSEndpoint
+
+	// RegionalSTSEndpoint represents when STS Regional Endpoint flag is specified
+	// to use regional endpoints.
+	RegionalSTSEndpoint
+)
+
+// GetSTSRegionalEndpoint function returns the STSRegionalEndpointFlag based
+// on the input string provided in env config or shared config by the user.
+//
+// `legacy`, `regional` are the only case-insensitive valid strings for
+// resolving the STS regional Endpoint flag.
+func GetSTSRegionalEndpoint(s string) (STSRegionalEndpoint, error) {
+	switch {
+	case strings.EqualFold(s, "legacy"):
+		return LegacySTSEndpoint, nil
+	case strings.EqualFold(s, "regional"):
+		return RegionalSTSEndpoint, nil
+	default:
+		return UnsetSTSEndpoint, fmt.Errorf("unable to resolve the value of STSRegionalEndpoint for %v", s)
+	}
+}
+
+// S3UsEast1RegionalEndpoint is an enum for the states of the S3 us-east-1
+// Regional Endpoint options.
+type S3UsEast1RegionalEndpoint int
+
+func (e S3UsEast1RegionalEndpoint) String() string {
+	switch e {
+	case LegacyS3UsEast1Endpoint:
+		return "legacy"
+	case RegionalS3UsEast1Endpoint:
+		return "regional"
+	case UnsetS3UsEast1Endpoint:
+		return ""
+	default:
+		return "unknown"
+	}
+}
+
+const (
+
+	// UnsetS3UsEast1Endpoint represents that S3 Regional Endpoint flag is not
+	// specified.
+	UnsetS3UsEast1Endpoint S3UsEast1RegionalEndpoint = iota
+
+	// LegacyS3UsEast1Endpoint represents when S3 Regional Endpoint flag is
+	// specified to use legacy endpoints.
+	LegacyS3UsEast1Endpoint
+
+	// RegionalS3UsEast1Endpoint represents when S3 Regional Endpoint flag is
+	// specified to use regional endpoints.
+	RegionalS3UsEast1Endpoint
+)
+
+// GetS3UsEast1RegionalEndpoint function returns the S3UsEast1RegionalEndpointFlag based
+// on the input string provided in env config or shared config by the user.
+//
+// `legacy`, `regional` are the only case-insensitive valid strings for
+// resolving the S3 regional Endpoint flag.
+func GetS3UsEast1RegionalEndpoint(s string) (S3UsEast1RegionalEndpoint, error) {
+	switch {
+	case strings.EqualFold(s, "legacy"):
+		return LegacyS3UsEast1Endpoint, nil
+	case strings.EqualFold(s, "regional"):
+		return RegionalS3UsEast1Endpoint, nil
+	default:
+		return UnsetS3UsEast1Endpoint,
+			fmt.Errorf("unable to resolve the value of S3UsEast1RegionalEndpoint for %v", s)
+	}
 }
 
 // Set combines all of the option functions together.
@@ -73,10 +176,16 @@ func StrictMatchingOption(o *Options) {
 	o.StrictMatching = true
 }
 
-// ResolvemyuserServiceOption sets the ResolvemyuserService option. Can be used
+// ResolveUnknownServiceOption sets the ResolveUnknownService option. Can be used
 // as a functional option when resolving endpoints.
-func ResolvemyuserServiceOption(o *Options) {
-	o.ResolvemyuserService = true
+func ResolveUnknownServiceOption(o *Options) {
+	o.ResolveUnknownService = true
+}
+
+// STSRegionalEndpointOption enables the STS endpoint resolver behavior to resolve
+// STS endpoint to their regional endpoint, instead of the global endpoint.
+func STSRegionalEndpointOption(o *Options) {
+	o.STSRegionalEndpoint = RegionalSTSEndpoint
 }
 
 // A Resolver provides the interface for functionality to resolve endpoints.
@@ -183,10 +292,10 @@ func (p Partition) ID() string { return p.id }
 // EndpointFor attempts to resolve the endpoint based on service and region.
 // See Options for information on configuring how the endpoint is resolved.
 //
-// If the service cannot be found in the metadata the myuserServiceError
+// If the service cannot be found in the metadata the UnknownServiceError
 // error will be returned. This validation will occur regardless if
-// StrictMatching is enabled. To enable resolving myuser services set the
-// "ResolvemyuserService" option to true. When StrictMatching is disabled
+// StrictMatching is enabled. To enable resolving unknown services set the
+// "ResolveUnknownService" option to true. When StrictMatching is disabled
 // this option allows the partition resolver to resolve a endpoint based on
 // the service endpoint ID provided.
 //
@@ -194,13 +303,13 @@ func (p Partition) ID() string { return p.id }
 // require the provided service and region to be known by the partition.
 // If the endpoint cannot be strictly resolved an error will be returned. This
 // mode is useful to ensure the endpoint resolved is valid. Without
-// StrictMatching enabled the endpoint returned my look valid but may not work.
+// StrictMatching enabled the endpoint returned may look valid but may not work.
 // StrictMatching requires the SDK to be updated if you want to take advantage
 // of new regions and services expansions.
 //
 // Errors that can be returned.
-//   * myuserServiceError
-//   * myuserEndpointError
+//   * UnknownServiceError
+//   * UnknownEndpointError
 func (p Partition) EndpointFor(service, region string, opts ...func(*Options)) (ResolvedEndpoint, error) {
 	return p.p.EndpointFor(service, region, opts...)
 }
@@ -208,7 +317,7 @@ func (p Partition) EndpointFor(service, region string, opts ...func(*Options)) (
 // Regions returns a map of Regions indexed by their ID. This is useful for
 // enumerating over the regions in a partition.
 func (p Partition) Regions() map[string]Region {
-	rs := map[string]Region{}
+	rs := make(map[string]Region, len(p.p.Regions))
 	for id, r := range p.p.Regions {
 		rs[id] = Region{
 			id:   id,
@@ -223,7 +332,7 @@ func (p Partition) Regions() map[string]Region {
 // Services returns a map of Service indexed by their ID. This is useful for
 // enumerating over the services in a partition.
 func (p Partition) Services() map[string]Service {
-	ss := map[string]Service{}
+	ss := make(map[string]Service, len(p.p.Services))
 	for id := range p.p.Services {
 		ss[id] = Service{
 			id: id,
@@ -310,7 +419,7 @@ func (s Service) Regions() map[string]Region {
 // A region is the AWS region the service exists in. Whereas a Endpoint is
 // an URL that can be resolved to a instance of a service.
 func (s Service) Endpoints() map[string]Endpoint {
-	es := map[string]Endpoint{}
+	es := make(map[string]Endpoint, len(s.p.Services[s.id].Endpoints))
 	for id := range s.p.Services[s.id].Endpoints {
 		es[id] = Endpoint{
 			id:        id,
@@ -350,6 +459,9 @@ type ResolvedEndpoint struct {
 	// The endpoint URL
 	URL string
 
+	// The endpoint partition
+	PartitionID string
+
 	// The region that should be used for signing requests.
 	SigningRegion string
 
@@ -377,21 +489,21 @@ type EndpointNotFoundError struct {
 	Region    string
 }
 
-// A myuserServiceError is returned when the service does not resolve to an
+// A UnknownServiceError is returned when the service does not resolve to an
 // endpoint. Includes a list of all known services for the partition. Returned
 // when a partition does not support the service.
-type myuserServiceError struct {
+type UnknownServiceError struct {
 	awsError
 	Partition string
 	Service   string
 	Known     []string
 }
 
-// NewmyuserServiceError builds and returns myuserServiceError.
-func NewmyuserServiceError(p, s string, known []string) myuserServiceError {
-	return myuserServiceError{
-		awsError: awserr.New("myuserServiceError",
-			"could not resolve endpoint for myuser service", nil),
+// NewUnknownServiceError builds and returns UnknownServiceError.
+func NewUnknownServiceError(p, s string, known []string) UnknownServiceError {
+	return UnknownServiceError{
+		awsError: awserr.New("UnknownServiceError",
+			"could not resolve endpoint for unknown service", nil),
 		Partition: p,
 		Service:   s,
 		Known:     known,
@@ -399,7 +511,7 @@ func NewmyuserServiceError(p, s string, known []string) myuserServiceError {
 }
 
 // String returns the string representation of the error.
-func (e myuserServiceError) Error() string {
+func (e UnknownServiceError) Error() string {
 	extra := fmt.Sprintf("partition: %q, service: %q",
 		e.Partition, e.Service)
 	if len(e.Known) > 0 {
@@ -409,14 +521,14 @@ func (e myuserServiceError) Error() string {
 }
 
 // String returns the string representation of the error.
-func (e myuserServiceError) String() string {
+func (e UnknownServiceError) String() string {
 	return e.Error()
 }
 
-// A myuserEndpointError is returned when in StrictMatching mode and the
+// A UnknownEndpointError is returned when in StrictMatching mode and the
 // service is valid, but the region does not resolve to an endpoint. Includes
 // a list of all known endpoints for the service.
-type myuserEndpointError struct {
+type UnknownEndpointError struct {
 	awsError
 	Partition string
 	Service   string
@@ -424,10 +536,10 @@ type myuserEndpointError struct {
 	Known     []string
 }
 
-// NewmyuserEndpointError builds and returns myuserEndpointError.
-func NewmyuserEndpointError(p, s, r string, known []string) myuserEndpointError {
-	return myuserEndpointError{
-		awsError: awserr.New("myuserEndpointError",
+// NewUnknownEndpointError builds and returns UnknownEndpointError.
+func NewUnknownEndpointError(p, s, r string, known []string) UnknownEndpointError {
+	return UnknownEndpointError{
+		awsError: awserr.New("UnknownEndpointError",
 			"could not resolve endpoint", nil),
 		Partition: p,
 		Service:   s,
@@ -437,7 +549,7 @@ func NewmyuserEndpointError(p, s, r string, known []string) myuserEndpointError 
 }
 
 // String returns the string representation of the error.
-func (e myuserEndpointError) Error() string {
+func (e UnknownEndpointError) Error() string {
 	extra := fmt.Sprintf("partition: %q, service: %q, region: %q",
 		e.Partition, e.Service, e.Region)
 	if len(e.Known) > 0 {
@@ -447,6 +559,6 @@ func (e myuserEndpointError) Error() string {
 }
 
 // String returns the string representation of the error.
-func (e myuserEndpointError) String() string {
+func (e UnknownEndpointError) String() string {
 	return e.Error()
 }

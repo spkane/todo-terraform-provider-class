@@ -106,7 +106,7 @@ func RegisterBrokenAuthHeaderProvider(tokenURL string) {}
 type AuthStyle int
 
 const (
-	AuthStylemyuser   AuthStyle = 0
+	AuthStyleUnknown  AuthStyle = 0
 	AuthStyleInParams AuthStyle = 1
 	AuthStyleInHeader AuthStyle = 2
 )
@@ -122,7 +122,7 @@ var authStyleCache struct {
 }
 
 // ResetAuthCache resets the global authentication style cache used
-// for AuthStylemyuser token requests.
+// for AuthStyleUnknown token requests.
 func ResetAuthCache() {
 	authStyleCache.Lock()
 	defer authStyleCache.Unlock()

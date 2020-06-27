@@ -48,7 +48,7 @@ func (c *Converter) marshalEmit(v cty.Value, e *yaml_emitter_t) error {
 	case v.IsNull():
 		return c.marshalPrimitive(v, e)
 	case !v.IsKnown():
-		return fmt.Errorf("cannot serialize myuser value as YAML")
+		return fmt.Errorf("cannot serialize unknown value as YAML")
 	case ty.IsPrimitiveType():
 		return c.marshalPrimitive(v, e)
 	case ty.IsTupleType(), ty.IsListType(), ty.IsSetType():

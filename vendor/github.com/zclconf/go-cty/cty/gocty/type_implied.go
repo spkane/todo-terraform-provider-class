@@ -47,7 +47,7 @@ func impliedType(rt reflect.Type, path cty.Path) (cty.Type, error) {
 
 	// Collection types
 	case reflect.Slice:
-		path := append(path, cty.IndexStep{Key: cty.myuserVal(cty.Number)})
+		path := append(path, cty.IndexStep{Key: cty.UnknownVal(cty.Number)})
 		ety, err := impliedType(rt.Elem(), path)
 		if err != nil {
 			return cty.NilType, err
@@ -57,7 +57,7 @@ func impliedType(rt reflect.Type, path cty.Path) (cty.Type, error) {
 		if !stringType.AssignableTo(rt.Key()) {
 			return cty.NilType, path.NewErrorf("no cty.Type for %s (must have string keys)", rt)
 		}
-		path := append(path, cty.IndexStep{Key: cty.myuserVal(cty.String)})
+		path := append(path, cty.IndexStep{Key: cty.UnknownVal(cty.String)})
 		ety, err := impliedType(rt.Elem(), path)
 		if err != nil {
 			return cty.NilType, err

@@ -61,6 +61,13 @@ func newGRPCClient(doneCtx context.Context, c *Client) (*GRPCClient, error) {
 	go broker.Run()
 	go brokerGRPCClient.StartStream()
 
+	// Start the stdio client
+	stdioClient, err := newGRPCStdioClient(doneCtx, c.logger.Named("stdio"), conn)
+	if err != nil {
+		return nil, err
+	}
+	go stdioClient.Run(c.config.SyncStdout, c.config.SyncStderr)
+
 	cl := &GRPCClient{
 		Conn:       conn,
 		Plugins:    c.config.Plugins,
@@ -94,7 +101,7 @@ func (c *GRPCClient) Close() error {
 func (c *GRPCClient) Dispense(name string) (interface{}, error) {
 	raw, ok := c.Plugins[name]
 	if !ok {
-		return nil, fmt.Errorf("myuser plugin type: %s", name)
+		return nil, fmt.Errorf("unknown plugin type: %s", name)
 	}
 
 	p, ok := raw.(GRPCPlugin)

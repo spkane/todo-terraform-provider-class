@@ -74,7 +74,7 @@ func (r *DiffFieldReader) ReadField(address []string) (FieldReadResult, error) {
 	case typeObject:
 		res, err = readObjectField(r, address, schema.Elem.(map[string]*Schema))
 	default:
-		panic(fmt.Sprintf("myuser type: %#v", schema.Type))
+		panic(fmt.Sprintf("Unknown type: %#v", schema.Type))
 	}
 
 	r.cache[cacheKey] = cachedFieldReadResult{
@@ -95,7 +95,7 @@ func (r *DiffFieldReader) readMap(
 		return FieldReadResult{}, err
 	}
 	if source.Exists {
-		// readMap may return a nil value, or an myuser value placeholder in
+		// readMap may return a nil value, or an unknown value placeholder in
 		// some cases, causing the type assertion to panic if we don't assign the ok value
 		result, _ = source.Value.(map[string]interface{})
 		resultSet = true

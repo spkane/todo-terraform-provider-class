@@ -28,8 +28,8 @@ func evaluateResourceForEachExpression(expr hcl.Expression, ctx EvalContext) (fo
 }
 
 // evaluateResourceForEachExpressionKnown is like evaluateResourceForEachExpression
-// except that it handles an myuser result by returning an empty map and
-// a known = false, rather than by reporting the myuser value as an error
+// except that it handles an unknown result by returning an empty map and
+// a known = false, rather than by reporting the unknown value as an error
 // diagnostic.
 func evaluateResourceForEachExpressionKnown(expr hcl.Expression, ctx EvalContext) (forEach map[string]cty.Value, known bool, diags tfdiags.Diagnostics) {
 	if expr == nil {
@@ -82,12 +82,28 @@ func evaluateResourceForEachExpressionKnown(expr hcl.Expression, ctx EvalContext
 			return nil, true, diags
 		}
 
-		// A set may contain myuser values that must be
+		// A set may contain unknown values that must be
 		// discovered by checking with IsWhollyKnown (which iterates through the
-		// structure), while for maps in cty, keys can never be myuser or null,
+		// structure), while for maps in cty, keys can never be unknown or null,
 		// thus the earlier IsKnown check suffices for maps
 		if !forEachVal.IsWhollyKnown() {
 			return map[string]cty.Value{}, false, diags
+		}
+
+		// A set of strings may contain null, which makes it impossible to
+		// convert to a map, so we must return an error
+		it := forEachVal.ElementIterator()
+		for it.Next() {
+			item, _ := it.Element()
+			if item.IsNull() {
+				diags = diags.Append(&hcl.Diagnostic{
+					Severity: hcl.DiagError,
+					Summary:  "Invalid for_each set argument",
+					Detail:   fmt.Sprintf(`The given "for_each" argument value is unsuitable: "for_each" sets must not contain null values.`),
+					Subject:  expr.Range().Ptr(),
+				})
+				return nil, true, diags
+			}
 		}
 	}
 

@@ -266,8 +266,8 @@ are interpreted by again recursively applying the mapping rules defined in
 this section to each of the property values.
 
 If any evaluated property name strings produce null values, an error is
-produced and evaluation fails. If any produce _myuser_ values, the _entire
-object's_ result is an myuser value of the dynamic pseudo-type, signalling
+produced and evaluation fails. If any produce _unknown_ values, the _entire
+object's_ result is an unknown value of the dynamic pseudo-type, signalling
 that the type of the object cannot be determined.
 
 It is an error to define the same property name multiple times within a single

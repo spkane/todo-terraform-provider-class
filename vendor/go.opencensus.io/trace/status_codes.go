@@ -19,7 +19,7 @@ package trace
 const (
 	StatusCodeOK                 = 0
 	StatusCodeCancelled          = 1
-	StatusCodemyuser             = 2
+	StatusCodeUnknown            = 2
 	StatusCodeInvalidArgument    = 3
 	StatusCodeDeadlineExceeded   = 4
 	StatusCodeNotFound           = 5

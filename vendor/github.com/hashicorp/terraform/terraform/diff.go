@@ -610,7 +610,7 @@ func (d *InstanceDiff) applyBlockDiff(path []string, attrs map[string]string, sc
 		countAddr := strings.Join(append(path, n, "#"), ".")
 		if countDiff, ok := d.Attributes[countAddr]; ok {
 			if countDiff.NewComputed {
-				result[localBlockPrefix+"#"] = hcl2shim.myuserVariableValue
+				result[localBlockPrefix+"#"] = hcl2shim.UnknownVariableValue
 			} else {
 				result[localBlockPrefix+"#"] = countDiff.New
 
@@ -618,7 +618,7 @@ func (d *InstanceDiff) applyBlockDiff(path []string, attrs map[string]string, sc
 				// information to track removals. If the list was truncated, we need to
 				// remove the extra items from the result.
 				if block.Nesting == configschema.NestingList &&
-					countDiff.New != "" && countDiff.New != hcl2shim.myuserVariableValue {
+					countDiff.New != "" && countDiff.New != hcl2shim.UnknownVariableValue {
 					length, _ := strconv.Atoi(countDiff.New)
 					for k := range result {
 						if !strings.HasPrefix(k, localBlockPrefix) {
@@ -676,15 +676,15 @@ func (d *InstanceDiff) applySingleAttrDiff(path []string, attrs map[string]strin
 	old, exists := attrs[currentKey]
 
 	if diff != nil && diff.NewComputed {
-		result[attr] = hcl2shim.myuserVariableValue
+		result[attr] = hcl2shim.UnknownVariableValue
 		return result, nil
 	}
 
-	// "id" must exist and not be an empty string, or it must be myuser.
+	// "id" must exist and not be an empty string, or it must be unknown.
 	// This only applied to top-level "id" fields.
 	if attr == "id" && len(path) == 1 {
 		if old == "" {
-			result[attr] = hcl2shim.myuserVariableValue
+			result[attr] = hcl2shim.UnknownVariableValue
 		} else {
 			result[attr] = old
 		}
@@ -715,8 +715,8 @@ func (d *InstanceDiff) applySingleAttrDiff(path []string, attrs map[string]strin
 	// check for missmatched diff values
 	if exists &&
 		old != diff.Old &&
-		old != hcl2shim.myuserVariableValue &&
-		diff.Old != hcl2shim.myuserVariableValue {
+		old != hcl2shim.UnknownVariableValue &&
+		diff.Old != hcl2shim.UnknownVariableValue {
 		return result, fmt.Errorf("diff apply conflict for %s: diff expects %q, but prior value has %q", attr, diff.Old, old)
 	}
 
@@ -734,7 +734,7 @@ func (d *InstanceDiff) applySingleAttrDiff(path []string, attrs map[string]strin
 	}
 
 	if attrSchema.Computed && diff.NewComputed {
-		result[attr] = hcl2shim.myuserVariableValue
+		result[attr] = hcl2shim.UnknownVariableValue
 		return result, nil
 	}
 
@@ -767,7 +767,7 @@ func (d *InstanceDiff) applyCollectionDiff(path []string, attrs map[string]strin
 			}
 
 			if diff.NewComputed {
-				result[k[len(prefix):]] = hcl2shim.myuserVariableValue
+				result[k[len(prefix):]] = hcl2shim.UnknownVariableValue
 				return result, nil
 			}
 
@@ -832,7 +832,7 @@ func (d *InstanceDiff) applyCollectionDiff(path []string, attrs map[string]strin
 	count := result[countKey]
 	length, _ := strconv.Atoi(count)
 
-	if count != "" && count != hcl2shim.myuserVariableValue &&
+	if count != "" && count != hcl2shim.UnknownVariableValue &&
 		attrSchema.Type.Equals(cty.List(cty.String)) {
 		// insert empty strings into missing indexes
 		for i := 0; i < length; i++ {
@@ -960,7 +960,7 @@ func countFlatmapContainerValues(key string, attrs map[string]string) string {
 type ResourceAttrDiff struct {
 	Old         string      // Old Value
 	New         string      // New Value
-	NewComputed bool        // True if new value is computed (myuser currently)
+	NewComputed bool        // True if new value is computed (unknown currently)
 	NewRemoved  bool        // True if this attribute is being removed
 	NewExtra    interface{} // Extra information for the provider
 	RequiresNew bool        // True if change requires new resource
@@ -985,7 +985,7 @@ func (d *ResourceAttrDiff) GoString() string {
 type DiffAttrType byte
 
 const (
-	DiffAttrmyuser DiffAttrType = iota
+	DiffAttrUnknown DiffAttrType = iota
 	DiffAttrInput
 	DiffAttrOutput
 )

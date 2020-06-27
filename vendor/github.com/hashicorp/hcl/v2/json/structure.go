@@ -470,7 +470,7 @@ func (e *expression) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) {
 			}
 			if !name.IsKnown() {
 				// This is a bit of a weird case, since our usual rules require
-				// us to tolerate myusers and just represent the result as
+				// us to tolerate unknowns and just represent the result as
 				// best we can but if we don't know the key then we can't
 				// know the type of our object at all, and thus we must turn
 				// the whole thing into cty.DynamicVal. This is consistent with
@@ -496,7 +496,7 @@ func (e *expression) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) {
 			attrRanges[nameStr] = jsonAttr.NameRange
 		}
 		if !known {
-			// We encountered an myuser key somewhere along the way, so
+			// We encountered an unknown key somewhere along the way, so
 			// we can't know what our type will eventually be.
 			return cty.DynamicVal, diags
 		}

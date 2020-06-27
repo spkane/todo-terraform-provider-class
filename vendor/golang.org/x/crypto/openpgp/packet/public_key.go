@@ -240,7 +240,7 @@ func NewECDSAPublicKey(creationTime time.Time, pub *ecdsa.PublicKey) *PublicKey 
 	case elliptic.P521():
 		pk.ec.oid = oidCurveP521
 	default:
-		panic("myuser elliptic curve")
+		panic("unknown elliptic curve")
 	}
 
 	pk.ec.p.bytes = elliptic.Marshal(pub.Curve, pub.X, pub.Y)
@@ -416,7 +416,7 @@ func (pk *PublicKey) SerializeSignaturePrefix(h io.Writer) {
 		pLength += uint16(pk.ec.byteLen())
 		pLength += uint16(pk.ecdh.byteLen())
 	default:
-		panic("myuser public key algorithm")
+		panic("unknown public key algorithm")
 	}
 	pLength += 6
 	h.Write([]byte{0x99, byte(pLength >> 8), byte(pLength)})
@@ -445,7 +445,7 @@ func (pk *PublicKey) Serialize(w io.Writer) (err error) {
 		length += pk.ec.byteLen()
 		length += pk.ecdh.byteLen()
 	default:
-		panic("myuser public key algorithm")
+		panic("unknown public key algorithm")
 	}
 
 	packetType := packetTypePublicKey

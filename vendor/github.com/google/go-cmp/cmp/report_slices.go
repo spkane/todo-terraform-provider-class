@@ -19,7 +19,7 @@ import (
 // that are slices of primitive kinds or strings.
 func (opts formatOptions) CanFormatDiffSlice(v *valueNode) bool {
 	switch {
-	case opts.DiffMode != diffmyuser:
+	case opts.DiffMode != diffUnknown:
 		return false // Must be formatting in diff mode
 	case v.NumDiff == 0:
 		return false // No differences detected
@@ -60,7 +60,7 @@ func (opts formatOptions) CanFormatDiffSlice(v *valueNode) bool {
 // This provides custom-tailored logic to make printing of differences in
 // textual strings and slices of primitive kinds more readable.
 func (opts formatOptions) FormatDiffSlice(v *valueNode) textNode {
-	assert(opts.DiffMode == diffmyuser)
+	assert(opts.DiffMode == diffUnknown)
 	t, vx, vy := v.Type, v.ValueX, v.ValueY
 
 	// Auto-detect the type of the data.

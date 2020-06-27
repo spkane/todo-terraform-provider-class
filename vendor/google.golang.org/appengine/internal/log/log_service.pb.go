@@ -3,13 +3,9 @@
 
 package log
 
-import (
-	fmt "fmt"
-
-	proto "github.com/golang/protobuf/proto"
-
-	math "math"
-)
+import proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -85,8 +81,8 @@ func (dst *LogServiceError) XXX_Merge(src proto.Message) {
 func (m *LogServiceError) XXX_Size() int {
 	return xxx_messageInfo_LogServiceError.Size(m)
 }
-func (m *LogServiceError) XXX_Discardmyuser() {
-	xxx_messageInfo_LogServiceError.Discardmyuser(m)
+func (m *LogServiceError) XXX_DiscardUnknown() {
+	xxx_messageInfo_LogServiceError.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_LogServiceError proto.InternalMessageInfo
@@ -118,8 +114,8 @@ func (dst *UserAppLogLine) XXX_Merge(src proto.Message) {
 func (m *UserAppLogLine) XXX_Size() int {
 	return xxx_messageInfo_UserAppLogLine.Size(m)
 }
-func (m *UserAppLogLine) XXX_Discardmyuser() {
-	xxx_messageInfo_UserAppLogLine.Discardmyuser(m)
+func (m *UserAppLogLine) XXX_DiscardUnknown() {
+	xxx_messageInfo_UserAppLogLine.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_UserAppLogLine proto.InternalMessageInfo
@@ -170,8 +166,8 @@ func (dst *UserAppLogGroup) XXX_Merge(src proto.Message) {
 func (m *UserAppLogGroup) XXX_Size() int {
 	return xxx_messageInfo_UserAppLogGroup.Size(m)
 }
-func (m *UserAppLogGroup) XXX_Discardmyuser() {
-	xxx_messageInfo_UserAppLogGroup.Discardmyuser(m)
+func (m *UserAppLogGroup) XXX_DiscardUnknown() {
+	xxx_messageInfo_UserAppLogGroup.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_UserAppLogGroup proto.InternalMessageInfo
@@ -208,8 +204,8 @@ func (dst *FlushRequest) XXX_Merge(src proto.Message) {
 func (m *FlushRequest) XXX_Size() int {
 	return xxx_messageInfo_FlushRequest.Size(m)
 }
-func (m *FlushRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_FlushRequest.Discardmyuser(m)
+func (m *FlushRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_FlushRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_FlushRequest proto.InternalMessageInfo
@@ -246,8 +242,8 @@ func (dst *SetStatusRequest) XXX_Merge(src proto.Message) {
 func (m *SetStatusRequest) XXX_Size() int {
 	return xxx_messageInfo_SetStatusRequest.Size(m)
 }
-func (m *SetStatusRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_SetStatusRequest.Discardmyuser(m)
+func (m *SetStatusRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetStatusRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_SetStatusRequest proto.InternalMessageInfo
@@ -284,8 +280,8 @@ func (dst *LogOffset) XXX_Merge(src proto.Message) {
 func (m *LogOffset) XXX_Size() int {
 	return xxx_messageInfo_LogOffset.Size(m)
 }
-func (m *LogOffset) XXX_Discardmyuser() {
-	xxx_messageInfo_LogOffset.Discardmyuser(m)
+func (m *LogOffset) XXX_DiscardUnknown() {
+	xxx_messageInfo_LogOffset.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_LogOffset proto.InternalMessageInfo
@@ -324,8 +320,8 @@ func (dst *LogLine) XXX_Merge(src proto.Message) {
 func (m *LogLine) XXX_Size() int {
 	return xxx_messageInfo_LogLine.Size(m)
 }
-func (m *LogLine) XXX_Discardmyuser() {
-	xxx_messageInfo_LogLine.Discardmyuser(m)
+func (m *LogLine) XXX_DiscardUnknown() {
+	xxx_messageInfo_LogLine.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_LogLine proto.InternalMessageInfo
@@ -413,8 +409,8 @@ func (dst *RequestLog) XXX_Merge(src proto.Message) {
 func (m *RequestLog) XXX_Size() int {
 	return xxx_messageInfo_RequestLog.Size(m)
 }
-func (m *RequestLog) XXX_Discardmyuser() {
-	xxx_messageInfo_RequestLog.Discardmyuser(m)
+func (m *RequestLog) XXX_DiscardUnknown() {
+	xxx_messageInfo_RequestLog.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_RequestLog proto.InternalMessageInfo
@@ -715,8 +711,8 @@ func (dst *LogModuleVersion) XXX_Merge(src proto.Message) {
 func (m *LogModuleVersion) XXX_Size() int {
 	return xxx_messageInfo_LogModuleVersion.Size(m)
 }
-func (m *LogModuleVersion) XXX_Discardmyuser() {
-	xxx_messageInfo_LogModuleVersion.Discardmyuser(m)
+func (m *LogModuleVersion) XXX_DiscardUnknown() {
+	xxx_messageInfo_LogModuleVersion.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_LogModuleVersion proto.InternalMessageInfo
@@ -780,8 +776,8 @@ func (dst *LogReadRequest) XXX_Merge(src proto.Message) {
 func (m *LogReadRequest) XXX_Size() int {
 	return xxx_messageInfo_LogReadRequest.Size(m)
 }
-func (m *LogReadRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_LogReadRequest.Discardmyuser(m)
+func (m *LogReadRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_LogReadRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_LogReadRequest proto.InternalMessageInfo
@@ -946,8 +942,8 @@ func (dst *LogReadResponse) XXX_Merge(src proto.Message) {
 func (m *LogReadResponse) XXX_Size() int {
 	return xxx_messageInfo_LogReadResponse.Size(m)
 }
-func (m *LogReadResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_LogReadResponse.Discardmyuser(m)
+func (m *LogReadResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_LogReadResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_LogReadResponse proto.InternalMessageInfo
@@ -1003,8 +999,8 @@ func (dst *LogUsageRecord) XXX_Merge(src proto.Message) {
 func (m *LogUsageRecord) XXX_Size() int {
 	return xxx_messageInfo_LogUsageRecord.Size(m)
 }
-func (m *LogUsageRecord) XXX_Discardmyuser() {
-	xxx_messageInfo_LogUsageRecord.Discardmyuser(m)
+func (m *LogUsageRecord) XXX_DiscardUnknown() {
+	xxx_messageInfo_LogUsageRecord.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_LogUsageRecord proto.InternalMessageInfo
@@ -1083,8 +1079,8 @@ func (dst *LogUsageRequest) XXX_Merge(src proto.Message) {
 func (m *LogUsageRequest) XXX_Size() int {
 	return xxx_messageInfo_LogUsageRequest.Size(m)
 }
-func (m *LogUsageRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_LogUsageRequest.Discardmyuser(m)
+func (m *LogUsageRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_LogUsageRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_LogUsageRequest proto.InternalMessageInfo
@@ -1173,8 +1169,8 @@ func (dst *LogUsageResponse) XXX_Merge(src proto.Message) {
 func (m *LogUsageResponse) XXX_Size() int {
 	return xxx_messageInfo_LogUsageResponse.Size(m)
 }
-func (m *LogUsageResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_LogUsageResponse.Discardmyuser(m)
+func (m *LogUsageResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_LogUsageResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_LogUsageResponse proto.InternalMessageInfo

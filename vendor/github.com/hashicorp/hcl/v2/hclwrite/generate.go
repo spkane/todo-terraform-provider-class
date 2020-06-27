@@ -16,10 +16,10 @@ import (
 // This function only supports types that are used by HCL. In particular, it
 // does not support capsule types and will panic if given one.
 //
-// It is not possible to express an myuser value in source code, so this
-// function will panic if the given value is myuser or contains any myuser
+// It is not possible to express an unknown value in source code, so this
+// function will panic if the given value is unknown or contains any unknown
 // values. A caller can call the value's IsWhollyKnown method to verify that
-// no myuser values are present before calling TokensForValue.
+// no unknown values are present before calling TokensForValue.
 func TokensForValue(val cty.Value) Tokens {
 	toks := appendTokensForValue(val, nil)
 	format(toks) // fiddle with the SpacesBefore field to get canonical spacing
@@ -43,7 +43,7 @@ func appendTokensForValue(val cty.Value, toks Tokens) Tokens {
 	switch {
 
 	case !val.IsKnown():
-		panic("cannot produce tokens for myuser value")
+		panic("cannot produce tokens for unknown value")
 
 	case val.IsNull():
 		toks = append(toks, &Token{
@@ -159,12 +159,12 @@ func appendTokensForValue(val cty.Value, toks Tokens) Tokens {
 
 func appendTokensForTraversal(traversal hcl.Traversal, toks Tokens) Tokens {
 	for _, step := range traversal {
-		appendTokensForTraversalStep(step, toks)
+		toks = appendTokensForTraversalStep(step, toks)
 	}
 	return toks
 }
 
-func appendTokensForTraversalStep(step hcl.Traverser, toks Tokens) {
+func appendTokensForTraversalStep(step hcl.Traverser, toks Tokens) Tokens {
 	switch ts := step.(type) {
 	case hcl.TraverseRoot:
 		toks = append(toks, &Token{
@@ -188,7 +188,7 @@ func appendTokensForTraversalStep(step hcl.Traverser, toks Tokens) {
 			Type:  hclsyntax.TokenOBrack,
 			Bytes: []byte{'['},
 		})
-		appendTokensForValue(ts.Key, toks)
+		toks = appendTokensForValue(ts.Key, toks)
 		toks = append(toks, &Token{
 			Type:  hclsyntax.TokenCBrack,
 			Bytes: []byte{']'},
@@ -196,6 +196,8 @@ func appendTokensForTraversalStep(step hcl.Traverser, toks Tokens) {
 	default:
 		panic(fmt.Sprintf("unsupported traversal step type %T", step))
 	}
+
+	return toks
 }
 
 func escapeQuotedStringLit(s string) []byte {

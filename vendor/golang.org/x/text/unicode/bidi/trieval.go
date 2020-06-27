@@ -34,7 +34,7 @@ const (
 	FSI // FirstStrongIsolate
 	PDI // PopDirectionalIsolate
 
-	myuserClass = ^Class(0)
+	unknownClass = ^Class(0)
 )
 
 var controlToClass = map[rune]Class{

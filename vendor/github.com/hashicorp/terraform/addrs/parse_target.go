@@ -78,7 +78,7 @@ func ParseTarget(traversal hcl.Traversal) (*Target, tfdiags.Diagnostics) {
 				Subject:  remain[0].SourceRange().Ptr(),
 			})
 		default:
-			panic("myuser mode")
+			panic("unknown mode")
 		}
 		return nil, diags
 	}

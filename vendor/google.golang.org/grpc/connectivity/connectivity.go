@@ -44,7 +44,7 @@ func (s State) String() string {
 	case Shutdown:
 		return "SHUTDOWN"
 	default:
-		grpclog.Errorf("myuser connectivity state: %d", s)
+		grpclog.Errorf("unknown connectivity state: %d", s)
 		return "Invalid-State"
 	}
 }

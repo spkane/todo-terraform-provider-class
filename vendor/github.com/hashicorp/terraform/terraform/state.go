@@ -380,7 +380,7 @@ func (s *State) Remove(addr ...string) error {
 		case *InstanceState:
 			s.removeInstance(path, r.Parent.Value.(*ResourceState), v)
 		default:
-			return fmt.Errorf("myuser type to delete: %T", r.Value)
+			return fmt.Errorf("unknown type to delete: %T", r.Value)
 		}
 	}
 
@@ -1199,7 +1199,7 @@ func (m *ModuleState) prune() {
 	}
 
 	for k, v := range m.Outputs {
-		if v.Value == hcl2shim.myuserVariableValue {
+		if v.Value == hcl2shim.UnknownVariableValue {
 			delete(m.Outputs, k)
 		}
 	}
@@ -1375,7 +1375,7 @@ func (rsk *ResourceStateKey) String() string {
 	case DataResourceMode:
 		prefix = "data."
 	default:
-		panic(fmt.Errorf("myuser resource mode %s", rsk.Mode))
+		panic(fmt.Errorf("unknown resource mode %s", rsk.Mode))
 	}
 	if rsk.Index == -1 {
 		return fmt.Sprintf("%s%s.%s", prefix, rsk.Type, rsk.Name)
@@ -1825,7 +1825,7 @@ func (s *InstanceState) MergeDiff(d *InstanceDiff) *InstanceState {
 				continue
 			}
 			if diff.NewComputed {
-				result.Attributes[k] = hcl2shim.myuserVariableValue
+				result.Attributes[k] = hcl2shim.UnknownVariableValue
 				continue
 			}
 

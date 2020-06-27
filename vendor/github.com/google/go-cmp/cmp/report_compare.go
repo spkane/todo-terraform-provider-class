@@ -25,7 +25,7 @@ const numContextRecords = 2
 type diffMode byte
 
 const (
-	diffmyuser    diffMode = 0
+	diffUnknown   diffMode = 0
 	diffIdentical diffMode = ' '
 	diffRemoved   diffMode = '-'
 	diffInserted  diffMode = '+'
@@ -46,7 +46,7 @@ const (
 type formatOptions struct {
 	// DiffMode controls the output mode of FormatDiff.
 	//
-	// If diffmyuser,   then produce a diff of the x and y values.
+	// If diffUnknown,   then produce a diff of the x and y values.
 	// If diffIdentical, then emit values as if they were equal.
 	// If diffRemoved,   then only emit x values (ignoring y values).
 	// If diffInserted,  then only emit y values (ignoring x values).
@@ -84,7 +84,7 @@ func (opts formatOptions) FormatDiff(v *valueNode) textNode {
 	// For leaf nodes, format the value based on the reflect.Values alone.
 	if v.MaxDepth == 0 {
 		switch opts.DiffMode {
-		case diffmyuser, diffIdentical:
+		case diffUnknown, diffIdentical:
 			// Format Equal.
 			if v.NumDiff == 0 {
 				outx := opts.FormatValue(v.ValueX, visitedPointers{})
@@ -99,7 +99,7 @@ func (opts formatOptions) FormatDiff(v *valueNode) textNode {
 			}
 
 			// Format unequal.
-			assert(opts.DiffMode == diffmyuser)
+			assert(opts.DiffMode == diffUnknown)
 			var list textList
 			outx := opts.WithTypeMode(elideType).FormatValue(v.ValueX, visitedPointers{})
 			outy := opts.WithTypeMode(elideType).FormatValue(v.ValueY, visitedPointers{})
@@ -194,7 +194,7 @@ func (opts formatOptions) formatDiffList(recs []reportRecord, k reflect.Kind) te
 			list.AppendEllipsis(diffStats{})
 		}
 		return textWrap{"{", list, "}"}
-	case diffmyuser:
+	case diffUnknown:
 	default:
 		panic("invalid diff mode")
 	}

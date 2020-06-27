@@ -49,13 +49,13 @@ func (ki keyIncorrectError) Error() string {
 
 var ErrKeyIncorrect error = keyIncorrectError(0)
 
-type myuserIssuerError int
+type unknownIssuerError int
 
-func (myuserIssuerError) Error() string {
-	return "openpgp: signature made by myuser entity"
+func (unknownIssuerError) Error() string {
+	return "openpgp: signature made by unknown entity"
 }
 
-var ErrmyuserIssuer error = myuserIssuerError(0)
+var ErrUnknownIssuer error = unknownIssuerError(0)
 
 type keyRevokedError int
 
@@ -65,8 +65,8 @@ func (keyRevokedError) Error() string {
 
 var ErrKeyRevoked error = keyRevokedError(0)
 
-type myuserPacketTypeError uint8
+type UnknownPacketTypeError uint8
 
-func (upte myuserPacketTypeError) Error() string {
-	return "openpgp: myuser packet type: " + strconv.Itoa(int(upte))
+func (upte UnknownPacketTypeError) Error() string {
+	return "openpgp: unknown packet type: " + strconv.Itoa(int(upte))
 }

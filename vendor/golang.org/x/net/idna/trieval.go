@@ -62,7 +62,7 @@ const (
 type category uint16
 
 const (
-	myuser               category = 0 // not currently defined in unicode.
+	unknown              category = 0 // not currently defined in unicode.
 	mapped               category = 1
 	disallowedSTD3Mapped category = 2
 	deviation            category = 3

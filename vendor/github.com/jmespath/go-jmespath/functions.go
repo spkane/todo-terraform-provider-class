@@ -17,7 +17,7 @@ type jpFunction func(arguments []interface{}) (interface{}, error)
 type jpType string
 
 const (
-	jpmyuser      jpType = "myuser"
+	jpUnknown     jpType = "unknown"
 	jpNumber      jpType = "number"
 	jpString      jpType = "string"
 	jpArray       jpType = "array"
@@ -387,7 +387,7 @@ func (a *argSpec) typeCheck(arg interface{}) error {
 func (f *functionCaller) CallFunction(name string, arguments []interface{}, intr *treeInterpreter) (interface{}, error) {
 	entry, ok := f.functionTable[name]
 	if !ok {
-		return nil, errors.New("myuser function: " + name)
+		return nil, errors.New("unknown function: " + name)
 	}
 	resolvedArgs, err := entry.resolveArgs(arguments)
 	if err != nil {
@@ -694,7 +694,7 @@ func jpfType(arguments []interface{}) (interface{}, error) {
 	if arg == true || arg == false {
 		return "boolean", nil
 	}
-	return nil, errors.New("myuser type")
+	return nil, errors.New("unknown type")
 }
 func jpfKeys(arguments []interface{}) (interface{}, error) {
 	arg := arguments[0].(map[string]interface{})
@@ -830,7 +830,7 @@ func jpfToNumber(arguments []interface{}) (interface{}, error) {
 	if arg == true || arg == false {
 		return nil, nil
 	}
-	return nil, errors.New("myuser type")
+	return nil, errors.New("unknown type")
 }
 func jpfNotNull(arguments []interface{}) (interface{}, error) {
 	for _, arg := range arguments {

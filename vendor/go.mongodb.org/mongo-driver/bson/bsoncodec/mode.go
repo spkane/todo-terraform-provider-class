@@ -40,7 +40,7 @@ func (m mode) String() string {
 	case mSpacer:
 		str = "CodeWithScopeSpacerFrame"
 	default:
-		str = "myuserMode"
+		str = "UnknownMode"
 	}
 
 	return str

@@ -311,7 +311,7 @@ func (intr *treeInterpreter) Execute(node ASTNode, value interface{}) (interface
 		}
 		return collected, nil
 	}
-	return nil, errors.New("myuser AST node: " + node.nodeType.String())
+	return nil, errors.New("Unknown AST node: " + node.nodeType.String())
 }
 
 func (intr *treeInterpreter) fieldFromStruct(key string, value interface{}) (interface{}, error) {

@@ -149,7 +149,7 @@ func buildBody(r *request.Request, v reflect.Value) {
 					default:
 						r.Error = awserr.New(request.ErrCodeSerialization,
 							"failed to encode REST request",
-							fmt.Errorf("myuser payload type %s", payload.Type()))
+							fmt.Errorf("unknown payload type %s", payload.Type()))
 					}
 				}
 			}

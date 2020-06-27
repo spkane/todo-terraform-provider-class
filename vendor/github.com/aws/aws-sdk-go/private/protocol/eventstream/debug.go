@@ -101,7 +101,7 @@ func (hs *decodedHeaders) UnmarshalJSON(b []byte) error {
 		}
 		headers.Set(h.Name, value)
 	}
-	(*hs) = decodedHeaders(headers)
+	*hs = decodedHeaders(headers)
 
 	return nil
 }
@@ -139,6 +139,6 @@ func valueFromType(typ valueType, val interface{}) (Value, error) {
 		copy(tv[:], v)
 		return tv, err
 	default:
-		panic(fmt.Sprintf("myuser type, %s, %T", typ.String(), val))
+		panic(fmt.Sprintf("unknown type, %s, %T", typ.String(), val))
 	}
 }

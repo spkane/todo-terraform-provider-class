@@ -75,7 +75,7 @@ type LinkType int32
 
 // LinkType values.
 const (
-	LinkTypeUnspecified LinkType = iota // The relationship of the two spans is myuser.
+	LinkTypeUnspecified LinkType = iota // The relationship of the two spans is unknown.
 	LinkTypeChild                       // The linked span is a child of the current span.
 	LinkTypeParent                      // The linked span is the parent of the current span.
 )
@@ -94,7 +94,7 @@ type MessageEventType int32
 
 // MessageEventType values.
 const (
-	MessageEventTypeUnspecified MessageEventType = iota // myuser event type.
+	MessageEventTypeUnspecified MessageEventType = iota // Unknown event type.
 	MessageEventTypeSent                                // Indicates a sent RPC message.
 	MessageEventTypeRecv                                // Indicates a received RPC message.
 )

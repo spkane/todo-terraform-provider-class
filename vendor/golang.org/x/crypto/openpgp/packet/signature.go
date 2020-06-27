@@ -384,7 +384,7 @@ func parseSignatureSubpacket(sig *Signature, subpacket []byte, isHashed bool) (r
 		}
 	default:
 		if isCritical {
-			err = errors.UnsupportedError("myuser critical signature subpacket type " + strconv.Itoa(int(packetType)))
+			err = errors.UnsupportedError("unknown critical signature subpacket type " + strconv.Itoa(int(packetType)))
 			return
 		}
 	}

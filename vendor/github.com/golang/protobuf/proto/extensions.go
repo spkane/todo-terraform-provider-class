@@ -274,7 +274,7 @@ func extensionProperties(ed *ExtensionDesc) *Properties {
 	}
 
 	prop := new(Properties)
-	prop.Init(reflect.TypeOf(ed.ExtensionType), "myuser_name", ed.Tag, nil)
+	prop.Init(reflect.TypeOf(ed.ExtensionType), "unknown_name", ed.Tag, nil)
 	extProp.m[key] = prop
 	return prop
 }

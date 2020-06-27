@@ -36,7 +36,7 @@ var FormatFunc = function.New(&function.Spec{
 				// We require all nested values to be known because the only
 				// thing we can do for a collection/structural type is print
 				// it as JSON and that requires it to be wholly known.
-				return cty.myuserVal(cty.String), nil
+				return cty.UnknownVal(cty.String), nil
 			}
 		}
 		str, err := formatFSM(args[0].AsString(), args[1:])
@@ -52,10 +52,10 @@ var FormatListFunc = function.New(&function.Spec{
 		},
 	},
 	VarParam: &function.Parameter{
-		Name:        "args",
-		Type:        cty.DynamicPseudoType,
-		AllowNull:   true,
-		Allowmyuser: true,
+		Name:         "args",
+		Type:         cty.DynamicPseudoType,
+		AllowNull:    true,
+		AllowUnknown: true,
 	},
 	Type: function.StaticReturnType(cty.List(cty.String)),
 	Impl: func(args []cty.Value, retType cty.Type) (cty.Value, error) {
@@ -80,6 +80,7 @@ var FormatListFunc = function.New(&function.Spec{
 		lenChooser := -1
 		iterators := make([]cty.ElementIterator, len(args))
 		singleVals := make([]cty.Value, len(args))
+		unknowns := make([]bool, len(args))
 		for i, arg := range args {
 			argTy := arg.Type()
 			switch {
@@ -87,7 +88,8 @@ var FormatListFunc = function.New(&function.Spec{
 				if !argTy.IsTupleType() && !arg.IsKnown() {
 					// We can't iterate this one at all yet then, so we can't
 					// yet produce a result.
-					return cty.myuserVal(retType), nil
+					unknowns[i] = true
+					continue
 				}
 				thisLen := arg.LengthInt()
 				if iterLen == -1 {
@@ -103,9 +105,23 @@ var FormatListFunc = function.New(&function.Spec{
 						)
 					}
 				}
+				if !arg.IsKnown() {
+					// We allowed an unknown tuple value to fall through in
+					// our initial check above so that we'd be able to run
+					// the above error checks against it, but we still can't
+					// iterate it if the checks pass.
+					unknowns[i] = true
+					continue
+				}
 				iterators[i] = arg.ElementIterator()
 			default:
 				singleVals[i] = arg
+			}
+		}
+
+		for _, isUnk := range unknowns {
+			if isUnk {
+				return cty.UnknownVal(retType), nil
 			}
 		}
 
@@ -137,14 +153,14 @@ var FormatListFunc = function.New(&function.Spec{
 					fmtArgs[i] = singleVals[i]
 				}
 
-				// If any of the arguments to this call would be myuser then
-				// this particular result is myuser, but we'll keep going
+				// If any of the arguments to this call would be unknown then
+				// this particular result is unknown, but we'll keep going
 				// to see if any other iterations can produce known values.
 				if !fmtArgs[i].IsWhollyKnown() {
 					// We require all nested values to be known because the only
 					// thing we can do for a collection/structural type is print
 					// it as JSON and that requires it to be wholly known.
-					ret = append(ret, cty.myuserVal(cty.String))
+					ret = append(ret, cty.UnknownVal(cty.String))
 					continue Results
 				}
 			}

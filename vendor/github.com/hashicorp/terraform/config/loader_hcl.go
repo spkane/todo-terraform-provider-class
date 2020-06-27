@@ -162,7 +162,7 @@ func (t *hclConfigurable) Config() (*Config, error) {
 			continue
 		}
 
-		config.myuserKeys = append(config.myuserKeys, k)
+		config.unknownKeys = append(config.unknownKeys, k)
 	}
 
 	return config, nil
@@ -264,11 +264,11 @@ func loadTerraformHcl(list *ast.ObjectList) (*Terraform, error) {
 		return nil, fmt.Errorf("terraform block: should be an object")
 	}
 
-	// NOTE: We purposely don't validate myuser HCL keys here so that
+	// NOTE: We purposely don't validate unknown HCL keys here so that
 	// we can potentially read _future_ Terraform version config (to
 	// still be able to validate the required version).
 	//
-	// We should still keep track of myuser keys to validate later, but
+	// We should still keep track of unknown keys to validate later, but
 	// HCL doesn't currently support that.
 
 	var config Terraform

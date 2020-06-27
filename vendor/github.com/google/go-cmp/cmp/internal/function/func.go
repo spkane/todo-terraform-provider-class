@@ -71,7 +71,7 @@ var lastIdentRx = regexp.MustCompile(`[_\p{L}][_\p{L}\p{N}]*$`)
 func NameOf(v reflect.Value) string {
 	fnc := runtime.FuncForPC(v.Pointer())
 	if fnc == nil {
-		return "<myuser>"
+		return "<unknown>"
 	}
 	fullName := fnc.Name() // e.g., "long/path/name/mypkg.(*MyType).(long/path/name/mypkg.myMethod)-fm"
 

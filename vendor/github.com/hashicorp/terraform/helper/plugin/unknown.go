@@ -7,9 +7,9 @@ import (
 	"github.com/zclconf/go-cty/cty"
 )
 
-// Setmyusers takes a cty.Value, and compares it to the schema setting any null
-// values which are computed to myuser.
-func Setmyusers(val cty.Value, schema *configschema.Block) cty.Value {
+// SetUnknowns takes a cty.Value, and compares it to the schema setting any null
+// values which are computed to unknown.
+func SetUnknowns(val cty.Value, schema *configschema.Block) cty.Value {
 	if !val.IsKnown() {
 		return val
 	}
@@ -22,14 +22,14 @@ func Setmyusers(val cty.Value, schema *configschema.Block) cty.Value {
 		for name, attr := range schema.Attributes {
 			switch {
 			case attr.Computed:
-				objMap[name] = cty.myuserVal(attr.Type)
+				objMap[name] = cty.UnknownVal(attr.Type)
 				allNull = false
 			default:
 				objMap[name] = cty.NullVal(attr.Type)
 			}
 		}
 
-		// If this object has no myuser attributes, then we can leave it null.
+		// If this object has no unknown attributes, then we can leave it null.
 		if allNull {
 			return val
 		}
@@ -44,7 +44,7 @@ func Setmyusers(val cty.Value, schema *configschema.Block) cty.Value {
 		v := valMap[name]
 
 		if attr.Computed && v.IsNull() {
-			newVals[name] = cty.myuserVal(attr.Type)
+			newVals[name] = cty.UnknownVal(attr.Type)
 			continue
 		}
 
@@ -67,14 +67,14 @@ func Setmyusers(val cty.Value, schema *configschema.Block) cty.Value {
 		case blockS.Nesting == configschema.NestingSingle || blockS.Nesting == configschema.NestingGroup:
 			// NestingSingle is the only exception here, where we treat the
 			// block directly as an object
-			newVals[name] = Setmyusers(blockVal, &blockS.Block)
+			newVals[name] = SetUnknowns(blockVal, &blockS.Block)
 
 		case blockValType.IsSetType(), blockValType.IsListType(), blockValType.IsTupleType():
 			listVals := blockVal.AsValueSlice()
 			newListVals := make([]cty.Value, 0, len(listVals))
 
 			for _, v := range listVals {
-				newListVals = append(newListVals, Setmyusers(v, &blockS.Block))
+				newListVals = append(newListVals, SetUnknowns(v, &blockS.Block))
 			}
 
 			switch {
@@ -101,7 +101,7 @@ func Setmyusers(val cty.Value, schema *configschema.Block) cty.Value {
 			newMapVals := make(map[string]cty.Value)
 
 			for k, v := range mapVals {
-				newMapVals[k] = Setmyusers(v, &blockS.Block)
+				newMapVals[k] = SetUnknowns(v, &blockS.Block)
 			}
 
 			switch {
@@ -123,7 +123,7 @@ func Setmyusers(val cty.Value, schema *configschema.Block) cty.Value {
 			}
 
 		default:
-			panic(fmt.Sprintf("failed to set myuser values for nested block %q:%#v", name, blockValType))
+			panic(fmt.Sprintf("failed to set unknown values for nested block %q:%#v", name, blockValType))
 		}
 	}
 

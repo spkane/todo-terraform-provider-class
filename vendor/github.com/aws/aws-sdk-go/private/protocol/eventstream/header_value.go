@@ -51,7 +51,7 @@ func (t valueType) String() string {
 	case uuidValueType:
 		return "uuid"
 	default:
-		return fmt.Sprintf("myuser value type %d", uint8(t))
+		return fmt.Sprintf("unknown value type %d", uint8(t))
 	}
 }
 
@@ -459,6 +459,11 @@ func (v *TimestampValue) decode(r io.Reader) error {
 
 	*v = TimestampValue(timeFromEpochMilli(int64(n)))
 	return nil
+}
+
+// MarshalJSON implements the json.Marshaler interface
+func (v TimestampValue) MarshalJSON() ([]byte, error) {
+	return []byte(v.String()), nil
 }
 
 func timeFromEpochMilli(t int64) time.Time {

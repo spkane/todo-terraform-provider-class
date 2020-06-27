@@ -97,12 +97,12 @@ func (r *ConfigFieldReader) readField(
 	if protoVersion5 {
 		switch schema.Type {
 		case TypeList, TypeSet, TypeMap, typeObject:
-			// Check if the value itself is myuser.
-			// The new protocol shims will add myuser values to this list of
+			// Check if the value itself is unknown.
+			// The new protocol shims will add unknown values to this list of
 			// ComputedKeys. This is the only way we have to indicate that a
-			// collection is myuser in the config
-			for _, myuser := range r.Config.ComputedKeys {
-				if k == myuser {
+			// collection is unknown in the config
+			for _, unknown := range r.Config.ComputedKeys {
+				if k == unknown {
 					log.Printf("[DEBUG] setting computed for %q from ComputedKeys", k)
 					return FieldReadResult{Computed: true, Exists: true}, nil
 				}
@@ -135,7 +135,7 @@ func (r *ConfigFieldReader) readField(
 			&nestedConfigFieldReader{r},
 			address, schema.Elem.(map[string]*Schema))
 	default:
-		panic(fmt.Sprintf("myuser type: %s", schema.Type))
+		panic(fmt.Sprintf("Unknown type: %s", schema.Type))
 	}
 }
 
@@ -223,7 +223,7 @@ func (r *ConfigFieldReader) readMap(k string, schema *Schema) (FieldReadResult, 
 		// the map may have been empty on the configuration, so we leave the
 		// empty result
 	default:
-		panic(fmt.Sprintf("myuser type: %#v", mraw))
+		panic(fmt.Sprintf("unknown type: %#v", mraw))
 	}
 
 	err := mapValuesToPrimitive(k, result, schema)

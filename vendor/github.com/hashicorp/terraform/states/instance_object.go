@@ -66,7 +66,7 @@ const (
 	// the value stored in state when evaluating expressions. A planned
 	// object stored in state will be incomplete if any of its attributes are
 	// not yet known, and the plan must be consulted in order to "see" those
-	// myuser values, because the state is not able to represent them.
+	// unknown values, because the state is not able to represent them.
 	ObjectPlanned ObjectStatus = 'P'
 )
 
@@ -85,16 +85,16 @@ const (
 // so the caller must not mutate the receiver any further once once this
 // method is called.
 func (o *ResourceInstanceObject) Encode(ty cty.Type, schemaVersion uint64) (*ResourceInstanceObjectSrc, error) {
-	// Our state serialization can't represent myuser values, so we convert
-	// them to nulls here. This is lossy, but nobody should be writing myuser
+	// Our state serialization can't represent unknown values, so we convert
+	// them to nulls here. This is lossy, but nobody should be writing unknown
 	// values here and expecting to get them out again later.
 	//
-	// We get myuser values here while we're building out a "planned state"
+	// We get unknown values here while we're building out a "planned state"
 	// during the plan phase, but the value stored in the plan takes precedence
-	// for expression evaluation. The apply step should never produce myuser
+	// for expression evaluation. The apply step should never produce unknown
 	// values, but if it does it's the responsibility of the caller to detect
 	// and raise an error about that.
-	val := cty.myuserAsNull(o.Value)
+	val := cty.UnknownAsNull(o.Value)
 
 	src, err := ctyjson.Marshal(val, ty)
 	if err != nil {

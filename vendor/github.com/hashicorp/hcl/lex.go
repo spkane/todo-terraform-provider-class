@@ -8,7 +8,7 @@ import (
 type lexModeValue byte
 
 const (
-	lexModemyuser lexModeValue = iota
+	lexModeUnknown lexModeValue = iota
 	lexModeHcl
 	lexModeJson
 )

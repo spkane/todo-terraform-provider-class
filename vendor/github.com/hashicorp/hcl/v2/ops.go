@@ -14,7 +14,7 @@ import (
 //
 // This is exported so that applications can perform indexing in a manner
 // consistent with how the language does it, including handling of null and
-// myuser values, etc.
+// unknown values, etc.
 //
 // Diagnostics are produced if the given combination of values is not valid.
 // Therefore a pointer to a source range must be provided to use in diagnostics,
@@ -81,7 +81,7 @@ func Index(collection, key cty.Value, srcRange *Range) (cty.Value, Diagnostics) 
 			if ty.IsTupleType() {
 				return cty.DynamicVal, nil
 			} else {
-				return cty.myuserVal(ty.ElementType()), nil
+				return cty.UnknownVal(ty.ElementType()), nil
 			}
 		}
 		if has.False() {
@@ -174,7 +174,7 @@ func Index(collection, key cty.Value, srcRange *Range) (cty.Value, Diagnostics) 
 //
 // This is exported so that applications can access attributes in a manner
 // consistent with how the language does it, including handling of null and
-// myuser values, etc.
+// unknown values, etc.
 //
 // Diagnostics are produced if the given combination of values is not valid.
 // Therefore a pointer to a source range must be provided to use in diagnostics,
@@ -207,13 +207,13 @@ func GetAttr(obj cty.Value, attrName string, srcRange *Range) (cty.Value, Diagno
 		}
 
 		if !obj.IsKnown() {
-			return cty.myuserVal(ty.AttributeType(attrName)), nil
+			return cty.UnknownVal(ty.AttributeType(attrName)), nil
 		}
 
 		return obj.GetAttr(attrName), nil
 	case ty.IsMapType():
 		if !obj.IsKnown() {
-			return cty.myuserVal(ty.ElementType()), nil
+			return cty.UnknownVal(ty.ElementType()), nil
 		}
 
 		idx := cty.StringVal(attrName)

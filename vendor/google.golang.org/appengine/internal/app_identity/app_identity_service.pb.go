@@ -3,13 +3,9 @@
 
 package app_identity
 
-import (
-	fmt "fmt"
-
-	proto "github.com/golang/protobuf/proto"
-
-	math "math"
-)
+import proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -26,32 +22,32 @@ type AppIdentityServiceError_ErrorCode int32
 
 const (
 	AppIdentityServiceError_SUCCESS           AppIdentityServiceError_ErrorCode = 0
-	AppIdentityServiceError_myuser_SCOPE      AppIdentityServiceError_ErrorCode = 9
+	AppIdentityServiceError_UNKNOWN_SCOPE     AppIdentityServiceError_ErrorCode = 9
 	AppIdentityServiceError_BLOB_TOO_LARGE    AppIdentityServiceError_ErrorCode = 1000
 	AppIdentityServiceError_DEADLINE_EXCEEDED AppIdentityServiceError_ErrorCode = 1001
 	AppIdentityServiceError_NOT_A_VALID_APP   AppIdentityServiceError_ErrorCode = 1002
-	AppIdentityServiceError_myuser_ERROR      AppIdentityServiceError_ErrorCode = 1003
+	AppIdentityServiceError_UNKNOWN_ERROR     AppIdentityServiceError_ErrorCode = 1003
 	AppIdentityServiceError_NOT_ALLOWED       AppIdentityServiceError_ErrorCode = 1005
 	AppIdentityServiceError_NOT_IMPLEMENTED   AppIdentityServiceError_ErrorCode = 1006
 )
 
 var AppIdentityServiceError_ErrorCode_name = map[int32]string{
 	0:    "SUCCESS",
-	9:    "myuser_SCOPE",
+	9:    "UNKNOWN_SCOPE",
 	1000: "BLOB_TOO_LARGE",
 	1001: "DEADLINE_EXCEEDED",
 	1002: "NOT_A_VALID_APP",
-	1003: "myuser_ERROR",
+	1003: "UNKNOWN_ERROR",
 	1005: "NOT_ALLOWED",
 	1006: "NOT_IMPLEMENTED",
 }
 var AppIdentityServiceError_ErrorCode_value = map[string]int32{
 	"SUCCESS":           0,
-	"myuser_SCOPE":      9,
+	"UNKNOWN_SCOPE":     9,
 	"BLOB_TOO_LARGE":    1000,
 	"DEADLINE_EXCEEDED": 1001,
 	"NOT_A_VALID_APP":   1002,
-	"myuser_ERROR":      1003,
+	"UNKNOWN_ERROR":     1003,
 	"NOT_ALLOWED":       1005,
 	"NOT_IMPLEMENTED":   1006,
 }
@@ -100,8 +96,8 @@ func (dst *AppIdentityServiceError) XXX_Merge(src proto.Message) {
 func (m *AppIdentityServiceError) XXX_Size() int {
 	return xxx_messageInfo_AppIdentityServiceError.Size(m)
 }
-func (m *AppIdentityServiceError) XXX_Discardmyuser() {
-	xxx_messageInfo_AppIdentityServiceError.Discardmyuser(m)
+func (m *AppIdentityServiceError) XXX_DiscardUnknown() {
+	xxx_messageInfo_AppIdentityServiceError.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_AppIdentityServiceError proto.InternalMessageInfo
@@ -131,8 +127,8 @@ func (dst *SignForAppRequest) XXX_Merge(src proto.Message) {
 func (m *SignForAppRequest) XXX_Size() int {
 	return xxx_messageInfo_SignForAppRequest.Size(m)
 }
-func (m *SignForAppRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_SignForAppRequest.Discardmyuser(m)
+func (m *SignForAppRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SignForAppRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_SignForAppRequest proto.InternalMessageInfo
@@ -170,8 +166,8 @@ func (dst *SignForAppResponse) XXX_Merge(src proto.Message) {
 func (m *SignForAppResponse) XXX_Size() int {
 	return xxx_messageInfo_SignForAppResponse.Size(m)
 }
-func (m *SignForAppResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_SignForAppResponse.Discardmyuser(m)
+func (m *SignForAppResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_SignForAppResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_SignForAppResponse proto.InternalMessageInfo
@@ -214,8 +210,8 @@ func (dst *GetPublicCertificateForAppRequest) XXX_Merge(src proto.Message) {
 func (m *GetPublicCertificateForAppRequest) XXX_Size() int {
 	return xxx_messageInfo_GetPublicCertificateForAppRequest.Size(m)
 }
-func (m *GetPublicCertificateForAppRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_GetPublicCertificateForAppRequest.Discardmyuser(m)
+func (m *GetPublicCertificateForAppRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetPublicCertificateForAppRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetPublicCertificateForAppRequest proto.InternalMessageInfo
@@ -246,8 +242,8 @@ func (dst *PublicCertificate) XXX_Merge(src proto.Message) {
 func (m *PublicCertificate) XXX_Size() int {
 	return xxx_messageInfo_PublicCertificate.Size(m)
 }
-func (m *PublicCertificate) XXX_Discardmyuser() {
-	xxx_messageInfo_PublicCertificate.Discardmyuser(m)
+func (m *PublicCertificate) XXX_DiscardUnknown() {
+	xxx_messageInfo_PublicCertificate.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_PublicCertificate proto.InternalMessageInfo
@@ -292,8 +288,8 @@ func (dst *GetPublicCertificateForAppResponse) XXX_Merge(src proto.Message) {
 func (m *GetPublicCertificateForAppResponse) XXX_Size() int {
 	return xxx_messageInfo_GetPublicCertificateForAppResponse.Size(m)
 }
-func (m *GetPublicCertificateForAppResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_GetPublicCertificateForAppResponse.Discardmyuser(m)
+func (m *GetPublicCertificateForAppResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetPublicCertificateForAppResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetPublicCertificateForAppResponse proto.InternalMessageInfo
@@ -336,8 +332,8 @@ func (dst *GetServiceAccountNameRequest) XXX_Merge(src proto.Message) {
 func (m *GetServiceAccountNameRequest) XXX_Size() int {
 	return xxx_messageInfo_GetServiceAccountNameRequest.Size(m)
 }
-func (m *GetServiceAccountNameRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_GetServiceAccountNameRequest.Discardmyuser(m)
+func (m *GetServiceAccountNameRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetServiceAccountNameRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetServiceAccountNameRequest proto.InternalMessageInfo
@@ -367,8 +363,8 @@ func (dst *GetServiceAccountNameResponse) XXX_Merge(src proto.Message) {
 func (m *GetServiceAccountNameResponse) XXX_Size() int {
 	return xxx_messageInfo_GetServiceAccountNameResponse.Size(m)
 }
-func (m *GetServiceAccountNameResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_GetServiceAccountNameResponse.Discardmyuser(m)
+func (m *GetServiceAccountNameResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetServiceAccountNameResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetServiceAccountNameResponse proto.InternalMessageInfo
@@ -407,8 +403,8 @@ func (dst *GetAccessTokenRequest) XXX_Merge(src proto.Message) {
 func (m *GetAccessTokenRequest) XXX_Size() int {
 	return xxx_messageInfo_GetAccessTokenRequest.Size(m)
 }
-func (m *GetAccessTokenRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_GetAccessTokenRequest.Discardmyuser(m)
+func (m *GetAccessTokenRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetAccessTokenRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetAccessTokenRequest proto.InternalMessageInfo
@@ -460,8 +456,8 @@ func (dst *GetAccessTokenResponse) XXX_Merge(src proto.Message) {
 func (m *GetAccessTokenResponse) XXX_Size() int {
 	return xxx_messageInfo_GetAccessTokenResponse.Size(m)
 }
-func (m *GetAccessTokenResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_GetAccessTokenResponse.Discardmyuser(m)
+func (m *GetAccessTokenResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetAccessTokenResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetAccessTokenResponse proto.InternalMessageInfo
@@ -504,8 +500,8 @@ func (dst *GetDefaultGcsBucketNameRequest) XXX_Merge(src proto.Message) {
 func (m *GetDefaultGcsBucketNameRequest) XXX_Size() int {
 	return xxx_messageInfo_GetDefaultGcsBucketNameRequest.Size(m)
 }
-func (m *GetDefaultGcsBucketNameRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_GetDefaultGcsBucketNameRequest.Discardmyuser(m)
+func (m *GetDefaultGcsBucketNameRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetDefaultGcsBucketNameRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetDefaultGcsBucketNameRequest proto.InternalMessageInfo
@@ -535,8 +531,8 @@ func (dst *GetDefaultGcsBucketNameResponse) XXX_Merge(src proto.Message) {
 func (m *GetDefaultGcsBucketNameResponse) XXX_Size() int {
 	return xxx_messageInfo_GetDefaultGcsBucketNameResponse.Size(m)
 }
-func (m *GetDefaultGcsBucketNameResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_GetDefaultGcsBucketNameResponse.Discardmyuser(m)
+func (m *GetDefaultGcsBucketNameResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetDefaultGcsBucketNameResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetDefaultGcsBucketNameResponse proto.InternalMessageInfo

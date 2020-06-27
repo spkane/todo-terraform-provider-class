@@ -6,12 +6,11 @@ package tfplugin5
 import (
 	context "context"
 	fmt "fmt"
-	math "math"
-
 	proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -119,8 +118,8 @@ func (m *DynamicValue) XXX_Merge(src proto.Message) {
 func (m *DynamicValue) XXX_Size() int {
 	return xxx_messageInfo_DynamicValue.Size(m)
 }
-func (m *DynamicValue) XXX_Discardmyuser() {
-	xxx_messageInfo_DynamicValue.Discardmyuser(m)
+func (m *DynamicValue) XXX_DiscardUnknown() {
+	xxx_messageInfo_DynamicValue.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_DynamicValue proto.InternalMessageInfo
@@ -168,8 +167,8 @@ func (m *Diagnostic) XXX_Merge(src proto.Message) {
 func (m *Diagnostic) XXX_Size() int {
 	return xxx_messageInfo_Diagnostic.Size(m)
 }
-func (m *Diagnostic) XXX_Discardmyuser() {
-	xxx_messageInfo_Diagnostic.Discardmyuser(m)
+func (m *Diagnostic) XXX_DiscardUnknown() {
+	xxx_messageInfo_Diagnostic.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Diagnostic proto.InternalMessageInfo
@@ -228,8 +227,8 @@ func (m *AttributePath) XXX_Merge(src proto.Message) {
 func (m *AttributePath) XXX_Size() int {
 	return xxx_messageInfo_AttributePath.Size(m)
 }
-func (m *AttributePath) XXX_Discardmyuser() {
-	xxx_messageInfo_AttributePath.Discardmyuser(m)
+func (m *AttributePath) XXX_DiscardUnknown() {
+	xxx_messageInfo_AttributePath.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_AttributePath proto.InternalMessageInfo
@@ -271,8 +270,8 @@ func (m *AttributePath_Step) XXX_Merge(src proto.Message) {
 func (m *AttributePath_Step) XXX_Size() int {
 	return xxx_messageInfo_AttributePath_Step.Size(m)
 }
-func (m *AttributePath_Step) XXX_Discardmyuser() {
-	xxx_messageInfo_AttributePath_Step.Discardmyuser(m)
+func (m *AttributePath_Step) XXX_DiscardUnknown() {
+	xxx_messageInfo_AttributePath_Step.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_AttributePath_Step proto.InternalMessageInfo
@@ -361,8 +360,8 @@ func (m *Stop) XXX_Merge(src proto.Message) {
 func (m *Stop) XXX_Size() int {
 	return xxx_messageInfo_Stop.Size(m)
 }
-func (m *Stop) XXX_Discardmyuser() {
-	xxx_messageInfo_Stop.Discardmyuser(m)
+func (m *Stop) XXX_DiscardUnknown() {
+	xxx_messageInfo_Stop.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Stop proto.InternalMessageInfo
@@ -392,8 +391,8 @@ func (m *Stop_Request) XXX_Merge(src proto.Message) {
 func (m *Stop_Request) XXX_Size() int {
 	return xxx_messageInfo_Stop_Request.Size(m)
 }
-func (m *Stop_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_Stop_Request.Discardmyuser(m)
+func (m *Stop_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_Stop_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Stop_Request proto.InternalMessageInfo
@@ -424,8 +423,8 @@ func (m *Stop_Response) XXX_Merge(src proto.Message) {
 func (m *Stop_Response) XXX_Size() int {
 	return xxx_messageInfo_Stop_Response.Size(m)
 }
-func (m *Stop_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_Stop_Response.Discardmyuser(m)
+func (m *Stop_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_Stop_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Stop_Response proto.InternalMessageInfo
@@ -467,8 +466,8 @@ func (m *RawState) XXX_Merge(src proto.Message) {
 func (m *RawState) XXX_Size() int {
 	return xxx_messageInfo_RawState.Size(m)
 }
-func (m *RawState) XXX_Discardmyuser() {
-	xxx_messageInfo_RawState.Discardmyuser(m)
+func (m *RawState) XXX_DiscardUnknown() {
+	xxx_messageInfo_RawState.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_RawState proto.InternalMessageInfo
@@ -519,8 +518,8 @@ func (m *Schema) XXX_Merge(src proto.Message) {
 func (m *Schema) XXX_Size() int {
 	return xxx_messageInfo_Schema.Size(m)
 }
-func (m *Schema) XXX_Discardmyuser() {
-	xxx_messageInfo_Schema.Discardmyuser(m)
+func (m *Schema) XXX_DiscardUnknown() {
+	xxx_messageInfo_Schema.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Schema proto.InternalMessageInfo
@@ -567,8 +566,8 @@ func (m *Schema_Block) XXX_Merge(src proto.Message) {
 func (m *Schema_Block) XXX_Size() int {
 	return xxx_messageInfo_Schema_Block.Size(m)
 }
-func (m *Schema_Block) XXX_Discardmyuser() {
-	xxx_messageInfo_Schema_Block.Discardmyuser(m)
+func (m *Schema_Block) XXX_DiscardUnknown() {
+	xxx_messageInfo_Schema_Block.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Schema_Block proto.InternalMessageInfo
@@ -626,8 +625,8 @@ func (m *Schema_Attribute) XXX_Merge(src proto.Message) {
 func (m *Schema_Attribute) XXX_Size() int {
 	return xxx_messageInfo_Schema_Attribute.Size(m)
 }
-func (m *Schema_Attribute) XXX_Discardmyuser() {
-	xxx_messageInfo_Schema_Attribute.Discardmyuser(m)
+func (m *Schema_Attribute) XXX_DiscardUnknown() {
+	xxx_messageInfo_Schema_Attribute.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Schema_Attribute proto.InternalMessageInfo
@@ -711,8 +710,8 @@ func (m *Schema_NestedBlock) XXX_Merge(src proto.Message) {
 func (m *Schema_NestedBlock) XXX_Size() int {
 	return xxx_messageInfo_Schema_NestedBlock.Size(m)
 }
-func (m *Schema_NestedBlock) XXX_Discardmyuser() {
-	xxx_messageInfo_Schema_NestedBlock.Discardmyuser(m)
+func (m *Schema_NestedBlock) XXX_DiscardUnknown() {
+	xxx_messageInfo_Schema_NestedBlock.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Schema_NestedBlock proto.InternalMessageInfo
@@ -777,8 +776,8 @@ func (m *GetProviderSchema) XXX_Merge(src proto.Message) {
 func (m *GetProviderSchema) XXX_Size() int {
 	return xxx_messageInfo_GetProviderSchema.Size(m)
 }
-func (m *GetProviderSchema) XXX_Discardmyuser() {
-	xxx_messageInfo_GetProviderSchema.Discardmyuser(m)
+func (m *GetProviderSchema) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetProviderSchema.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetProviderSchema proto.InternalMessageInfo
@@ -808,8 +807,8 @@ func (m *GetProviderSchema_Request) XXX_Merge(src proto.Message) {
 func (m *GetProviderSchema_Request) XXX_Size() int {
 	return xxx_messageInfo_GetProviderSchema_Request.Size(m)
 }
-func (m *GetProviderSchema_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_GetProviderSchema_Request.Discardmyuser(m)
+func (m *GetProviderSchema_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetProviderSchema_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetProviderSchema_Request proto.InternalMessageInfo
@@ -843,8 +842,8 @@ func (m *GetProviderSchema_Response) XXX_Merge(src proto.Message) {
 func (m *GetProviderSchema_Response) XXX_Size() int {
 	return xxx_messageInfo_GetProviderSchema_Response.Size(m)
 }
-func (m *GetProviderSchema_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_GetProviderSchema_Response.Discardmyuser(m)
+func (m *GetProviderSchema_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetProviderSchema_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetProviderSchema_Response proto.InternalMessageInfo
@@ -902,8 +901,8 @@ func (m *PrepareProviderConfig) XXX_Merge(src proto.Message) {
 func (m *PrepareProviderConfig) XXX_Size() int {
 	return xxx_messageInfo_PrepareProviderConfig.Size(m)
 }
-func (m *PrepareProviderConfig) XXX_Discardmyuser() {
-	xxx_messageInfo_PrepareProviderConfig.Discardmyuser(m)
+func (m *PrepareProviderConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_PrepareProviderConfig.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_PrepareProviderConfig proto.InternalMessageInfo
@@ -934,8 +933,8 @@ func (m *PrepareProviderConfig_Request) XXX_Merge(src proto.Message) {
 func (m *PrepareProviderConfig_Request) XXX_Size() int {
 	return xxx_messageInfo_PrepareProviderConfig_Request.Size(m)
 }
-func (m *PrepareProviderConfig_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_PrepareProviderConfig_Request.Discardmyuser(m)
+func (m *PrepareProviderConfig_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_PrepareProviderConfig_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_PrepareProviderConfig_Request proto.InternalMessageInfo
@@ -974,8 +973,8 @@ func (m *PrepareProviderConfig_Response) XXX_Merge(src proto.Message) {
 func (m *PrepareProviderConfig_Response) XXX_Size() int {
 	return xxx_messageInfo_PrepareProviderConfig_Response.Size(m)
 }
-func (m *PrepareProviderConfig_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_PrepareProviderConfig_Response.Discardmyuser(m)
+func (m *PrepareProviderConfig_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_PrepareProviderConfig_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_PrepareProviderConfig_Response proto.InternalMessageInfo
@@ -1019,8 +1018,8 @@ func (m *UpgradeResourceState) XXX_Merge(src proto.Message) {
 func (m *UpgradeResourceState) XXX_Size() int {
 	return xxx_messageInfo_UpgradeResourceState.Size(m)
 }
-func (m *UpgradeResourceState) XXX_Discardmyuser() {
-	xxx_messageInfo_UpgradeResourceState.Discardmyuser(m)
+func (m *UpgradeResourceState) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpgradeResourceState.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_UpgradeResourceState proto.InternalMessageInfo
@@ -1059,8 +1058,8 @@ func (m *UpgradeResourceState_Request) XXX_Merge(src proto.Message) {
 func (m *UpgradeResourceState_Request) XXX_Size() int {
 	return xxx_messageInfo_UpgradeResourceState_Request.Size(m)
 }
-func (m *UpgradeResourceState_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_UpgradeResourceState_Request.Discardmyuser(m)
+func (m *UpgradeResourceState_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpgradeResourceState_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_UpgradeResourceState_Request proto.InternalMessageInfo
@@ -1119,8 +1118,8 @@ func (m *UpgradeResourceState_Response) XXX_Merge(src proto.Message) {
 func (m *UpgradeResourceState_Response) XXX_Size() int {
 	return xxx_messageInfo_UpgradeResourceState_Response.Size(m)
 }
-func (m *UpgradeResourceState_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_UpgradeResourceState_Response.Discardmyuser(m)
+func (m *UpgradeResourceState_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpgradeResourceState_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_UpgradeResourceState_Response proto.InternalMessageInfo
@@ -1164,8 +1163,8 @@ func (m *ValidateResourceTypeConfig) XXX_Merge(src proto.Message) {
 func (m *ValidateResourceTypeConfig) XXX_Size() int {
 	return xxx_messageInfo_ValidateResourceTypeConfig.Size(m)
 }
-func (m *ValidateResourceTypeConfig) XXX_Discardmyuser() {
-	xxx_messageInfo_ValidateResourceTypeConfig.Discardmyuser(m)
+func (m *ValidateResourceTypeConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidateResourceTypeConfig.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ValidateResourceTypeConfig proto.InternalMessageInfo
@@ -1197,8 +1196,8 @@ func (m *ValidateResourceTypeConfig_Request) XXX_Merge(src proto.Message) {
 func (m *ValidateResourceTypeConfig_Request) XXX_Size() int {
 	return xxx_messageInfo_ValidateResourceTypeConfig_Request.Size(m)
 }
-func (m *ValidateResourceTypeConfig_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_ValidateResourceTypeConfig_Request.Discardmyuser(m)
+func (m *ValidateResourceTypeConfig_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidateResourceTypeConfig_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ValidateResourceTypeConfig_Request proto.InternalMessageInfo
@@ -1243,8 +1242,8 @@ func (m *ValidateResourceTypeConfig_Response) XXX_Merge(src proto.Message) {
 func (m *ValidateResourceTypeConfig_Response) XXX_Size() int {
 	return xxx_messageInfo_ValidateResourceTypeConfig_Response.Size(m)
 }
-func (m *ValidateResourceTypeConfig_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_ValidateResourceTypeConfig_Response.Discardmyuser(m)
+func (m *ValidateResourceTypeConfig_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidateResourceTypeConfig_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ValidateResourceTypeConfig_Response proto.InternalMessageInfo
@@ -1281,8 +1280,8 @@ func (m *ValidateDataSourceConfig) XXX_Merge(src proto.Message) {
 func (m *ValidateDataSourceConfig) XXX_Size() int {
 	return xxx_messageInfo_ValidateDataSourceConfig.Size(m)
 }
-func (m *ValidateDataSourceConfig) XXX_Discardmyuser() {
-	xxx_messageInfo_ValidateDataSourceConfig.Discardmyuser(m)
+func (m *ValidateDataSourceConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidateDataSourceConfig.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ValidateDataSourceConfig proto.InternalMessageInfo
@@ -1314,8 +1313,8 @@ func (m *ValidateDataSourceConfig_Request) XXX_Merge(src proto.Message) {
 func (m *ValidateDataSourceConfig_Request) XXX_Size() int {
 	return xxx_messageInfo_ValidateDataSourceConfig_Request.Size(m)
 }
-func (m *ValidateDataSourceConfig_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_ValidateDataSourceConfig_Request.Discardmyuser(m)
+func (m *ValidateDataSourceConfig_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidateDataSourceConfig_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ValidateDataSourceConfig_Request proto.InternalMessageInfo
@@ -1360,8 +1359,8 @@ func (m *ValidateDataSourceConfig_Response) XXX_Merge(src proto.Message) {
 func (m *ValidateDataSourceConfig_Response) XXX_Size() int {
 	return xxx_messageInfo_ValidateDataSourceConfig_Response.Size(m)
 }
-func (m *ValidateDataSourceConfig_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_ValidateDataSourceConfig_Response.Discardmyuser(m)
+func (m *ValidateDataSourceConfig_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidateDataSourceConfig_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ValidateDataSourceConfig_Response proto.InternalMessageInfo
@@ -1398,8 +1397,8 @@ func (m *Configure) XXX_Merge(src proto.Message) {
 func (m *Configure) XXX_Size() int {
 	return xxx_messageInfo_Configure.Size(m)
 }
-func (m *Configure) XXX_Discardmyuser() {
-	xxx_messageInfo_Configure.Discardmyuser(m)
+func (m *Configure) XXX_DiscardUnknown() {
+	xxx_messageInfo_Configure.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Configure proto.InternalMessageInfo
@@ -1431,8 +1430,8 @@ func (m *Configure_Request) XXX_Merge(src proto.Message) {
 func (m *Configure_Request) XXX_Size() int {
 	return xxx_messageInfo_Configure_Request.Size(m)
 }
-func (m *Configure_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_Configure_Request.Discardmyuser(m)
+func (m *Configure_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_Configure_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Configure_Request proto.InternalMessageInfo
@@ -1477,8 +1476,8 @@ func (m *Configure_Response) XXX_Merge(src proto.Message) {
 func (m *Configure_Response) XXX_Size() int {
 	return xxx_messageInfo_Configure_Response.Size(m)
 }
-func (m *Configure_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_Configure_Response.Discardmyuser(m)
+func (m *Configure_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_Configure_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Configure_Response proto.InternalMessageInfo
@@ -1515,8 +1514,8 @@ func (m *ReadResource) XXX_Merge(src proto.Message) {
 func (m *ReadResource) XXX_Size() int {
 	return xxx_messageInfo_ReadResource.Size(m)
 }
-func (m *ReadResource) XXX_Discardmyuser() {
-	xxx_messageInfo_ReadResource.Discardmyuser(m)
+func (m *ReadResource) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReadResource.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ReadResource proto.InternalMessageInfo
@@ -1549,8 +1548,8 @@ func (m *ReadResource_Request) XXX_Merge(src proto.Message) {
 func (m *ReadResource_Request) XXX_Size() int {
 	return xxx_messageInfo_ReadResource_Request.Size(m)
 }
-func (m *ReadResource_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_ReadResource_Request.Discardmyuser(m)
+func (m *ReadResource_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReadResource_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ReadResource_Request proto.InternalMessageInfo
@@ -1604,8 +1603,8 @@ func (m *ReadResource_Response) XXX_Merge(src proto.Message) {
 func (m *ReadResource_Response) XXX_Size() int {
 	return xxx_messageInfo_ReadResource_Response.Size(m)
 }
-func (m *ReadResource_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_ReadResource_Response.Discardmyuser(m)
+func (m *ReadResource_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReadResource_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ReadResource_Response proto.InternalMessageInfo
@@ -1656,8 +1655,8 @@ func (m *PlanResourceChange) XXX_Merge(src proto.Message) {
 func (m *PlanResourceChange) XXX_Size() int {
 	return xxx_messageInfo_PlanResourceChange.Size(m)
 }
-func (m *PlanResourceChange) XXX_Discardmyuser() {
-	xxx_messageInfo_PlanResourceChange.Discardmyuser(m)
+func (m *PlanResourceChange) XXX_DiscardUnknown() {
+	xxx_messageInfo_PlanResourceChange.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_PlanResourceChange proto.InternalMessageInfo
@@ -1692,8 +1691,8 @@ func (m *PlanResourceChange_Request) XXX_Merge(src proto.Message) {
 func (m *PlanResourceChange_Request) XXX_Size() int {
 	return xxx_messageInfo_PlanResourceChange_Request.Size(m)
 }
-func (m *PlanResourceChange_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_PlanResourceChange_Request.Discardmyuser(m)
+func (m *PlanResourceChange_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_PlanResourceChange_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_PlanResourceChange_Request proto.InternalMessageInfo
@@ -1774,8 +1773,8 @@ func (m *PlanResourceChange_Response) XXX_Merge(src proto.Message) {
 func (m *PlanResourceChange_Response) XXX_Size() int {
 	return xxx_messageInfo_PlanResourceChange_Response.Size(m)
 }
-func (m *PlanResourceChange_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_PlanResourceChange_Response.Discardmyuser(m)
+func (m *PlanResourceChange_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_PlanResourceChange_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_PlanResourceChange_Response proto.InternalMessageInfo
@@ -1840,8 +1839,8 @@ func (m *ApplyResourceChange) XXX_Merge(src proto.Message) {
 func (m *ApplyResourceChange) XXX_Size() int {
 	return xxx_messageInfo_ApplyResourceChange.Size(m)
 }
-func (m *ApplyResourceChange) XXX_Discardmyuser() {
-	xxx_messageInfo_ApplyResourceChange.Discardmyuser(m)
+func (m *ApplyResourceChange) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApplyResourceChange.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ApplyResourceChange proto.InternalMessageInfo
@@ -1876,8 +1875,8 @@ func (m *ApplyResourceChange_Request) XXX_Merge(src proto.Message) {
 func (m *ApplyResourceChange_Request) XXX_Size() int {
 	return xxx_messageInfo_ApplyResourceChange_Request.Size(m)
 }
-func (m *ApplyResourceChange_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_ApplyResourceChange_Request.Discardmyuser(m)
+func (m *ApplyResourceChange_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApplyResourceChange_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ApplyResourceChange_Request proto.InternalMessageInfo
@@ -1957,8 +1956,8 @@ func (m *ApplyResourceChange_Response) XXX_Merge(src proto.Message) {
 func (m *ApplyResourceChange_Response) XXX_Size() int {
 	return xxx_messageInfo_ApplyResourceChange_Response.Size(m)
 }
-func (m *ApplyResourceChange_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_ApplyResourceChange_Response.Discardmyuser(m)
+func (m *ApplyResourceChange_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApplyResourceChange_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ApplyResourceChange_Response proto.InternalMessageInfo
@@ -2016,8 +2015,8 @@ func (m *ImportResourceState) XXX_Merge(src proto.Message) {
 func (m *ImportResourceState) XXX_Size() int {
 	return xxx_messageInfo_ImportResourceState.Size(m)
 }
-func (m *ImportResourceState) XXX_Discardmyuser() {
-	xxx_messageInfo_ImportResourceState.Discardmyuser(m)
+func (m *ImportResourceState) XXX_DiscardUnknown() {
+	xxx_messageInfo_ImportResourceState.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ImportResourceState proto.InternalMessageInfo
@@ -2049,8 +2048,8 @@ func (m *ImportResourceState_Request) XXX_Merge(src proto.Message) {
 func (m *ImportResourceState_Request) XXX_Size() int {
 	return xxx_messageInfo_ImportResourceState_Request.Size(m)
 }
-func (m *ImportResourceState_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_ImportResourceState_Request.Discardmyuser(m)
+func (m *ImportResourceState_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_ImportResourceState_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ImportResourceState_Request proto.InternalMessageInfo
@@ -2097,8 +2096,8 @@ func (m *ImportResourceState_ImportedResource) XXX_Merge(src proto.Message) {
 func (m *ImportResourceState_ImportedResource) XXX_Size() int {
 	return xxx_messageInfo_ImportResourceState_ImportedResource.Size(m)
 }
-func (m *ImportResourceState_ImportedResource) XXX_Discardmyuser() {
-	xxx_messageInfo_ImportResourceState_ImportedResource.Discardmyuser(m)
+func (m *ImportResourceState_ImportedResource) XXX_DiscardUnknown() {
+	xxx_messageInfo_ImportResourceState_ImportedResource.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ImportResourceState_ImportedResource proto.InternalMessageInfo
@@ -2151,8 +2150,8 @@ func (m *ImportResourceState_Response) XXX_Merge(src proto.Message) {
 func (m *ImportResourceState_Response) XXX_Size() int {
 	return xxx_messageInfo_ImportResourceState_Response.Size(m)
 }
-func (m *ImportResourceState_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_ImportResourceState_Response.Discardmyuser(m)
+func (m *ImportResourceState_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_ImportResourceState_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ImportResourceState_Response proto.InternalMessageInfo
@@ -2196,8 +2195,8 @@ func (m *ReadDataSource) XXX_Merge(src proto.Message) {
 func (m *ReadDataSource) XXX_Size() int {
 	return xxx_messageInfo_ReadDataSource.Size(m)
 }
-func (m *ReadDataSource) XXX_Discardmyuser() {
-	xxx_messageInfo_ReadDataSource.Discardmyuser(m)
+func (m *ReadDataSource) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReadDataSource.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ReadDataSource proto.InternalMessageInfo
@@ -2229,8 +2228,8 @@ func (m *ReadDataSource_Request) XXX_Merge(src proto.Message) {
 func (m *ReadDataSource_Request) XXX_Size() int {
 	return xxx_messageInfo_ReadDataSource_Request.Size(m)
 }
-func (m *ReadDataSource_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_ReadDataSource_Request.Discardmyuser(m)
+func (m *ReadDataSource_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReadDataSource_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ReadDataSource_Request proto.InternalMessageInfo
@@ -2276,8 +2275,8 @@ func (m *ReadDataSource_Response) XXX_Merge(src proto.Message) {
 func (m *ReadDataSource_Response) XXX_Size() int {
 	return xxx_messageInfo_ReadDataSource_Response.Size(m)
 }
-func (m *ReadDataSource_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_ReadDataSource_Response.Discardmyuser(m)
+func (m *ReadDataSource_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReadDataSource_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ReadDataSource_Response proto.InternalMessageInfo
@@ -2321,8 +2320,8 @@ func (m *GetProvisionerSchema) XXX_Merge(src proto.Message) {
 func (m *GetProvisionerSchema) XXX_Size() int {
 	return xxx_messageInfo_GetProvisionerSchema.Size(m)
 }
-func (m *GetProvisionerSchema) XXX_Discardmyuser() {
-	xxx_messageInfo_GetProvisionerSchema.Discardmyuser(m)
+func (m *GetProvisionerSchema) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetProvisionerSchema.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetProvisionerSchema proto.InternalMessageInfo
@@ -2352,8 +2351,8 @@ func (m *GetProvisionerSchema_Request) XXX_Merge(src proto.Message) {
 func (m *GetProvisionerSchema_Request) XXX_Size() int {
 	return xxx_messageInfo_GetProvisionerSchema_Request.Size(m)
 }
-func (m *GetProvisionerSchema_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_GetProvisionerSchema_Request.Discardmyuser(m)
+func (m *GetProvisionerSchema_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetProvisionerSchema_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetProvisionerSchema_Request proto.InternalMessageInfo
@@ -2385,8 +2384,8 @@ func (m *GetProvisionerSchema_Response) XXX_Merge(src proto.Message) {
 func (m *GetProvisionerSchema_Response) XXX_Size() int {
 	return xxx_messageInfo_GetProvisionerSchema_Response.Size(m)
 }
-func (m *GetProvisionerSchema_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_GetProvisionerSchema_Response.Discardmyuser(m)
+func (m *GetProvisionerSchema_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetProvisionerSchema_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetProvisionerSchema_Response proto.InternalMessageInfo
@@ -2430,8 +2429,8 @@ func (m *ValidateProvisionerConfig) XXX_Merge(src proto.Message) {
 func (m *ValidateProvisionerConfig) XXX_Size() int {
 	return xxx_messageInfo_ValidateProvisionerConfig.Size(m)
 }
-func (m *ValidateProvisionerConfig) XXX_Discardmyuser() {
-	xxx_messageInfo_ValidateProvisionerConfig.Discardmyuser(m)
+func (m *ValidateProvisionerConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidateProvisionerConfig.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ValidateProvisionerConfig proto.InternalMessageInfo
@@ -2462,8 +2461,8 @@ func (m *ValidateProvisionerConfig_Request) XXX_Merge(src proto.Message) {
 func (m *ValidateProvisionerConfig_Request) XXX_Size() int {
 	return xxx_messageInfo_ValidateProvisionerConfig_Request.Size(m)
 }
-func (m *ValidateProvisionerConfig_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_ValidateProvisionerConfig_Request.Discardmyuser(m)
+func (m *ValidateProvisionerConfig_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidateProvisionerConfig_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ValidateProvisionerConfig_Request proto.InternalMessageInfo
@@ -2501,8 +2500,8 @@ func (m *ValidateProvisionerConfig_Response) XXX_Merge(src proto.Message) {
 func (m *ValidateProvisionerConfig_Response) XXX_Size() int {
 	return xxx_messageInfo_ValidateProvisionerConfig_Response.Size(m)
 }
-func (m *ValidateProvisionerConfig_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_ValidateProvisionerConfig_Response.Discardmyuser(m)
+func (m *ValidateProvisionerConfig_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidateProvisionerConfig_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ValidateProvisionerConfig_Response proto.InternalMessageInfo
@@ -2539,8 +2538,8 @@ func (m *ProvisionResource) XXX_Merge(src proto.Message) {
 func (m *ProvisionResource) XXX_Size() int {
 	return xxx_messageInfo_ProvisionResource.Size(m)
 }
-func (m *ProvisionResource) XXX_Discardmyuser() {
-	xxx_messageInfo_ProvisionResource.Discardmyuser(m)
+func (m *ProvisionResource) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProvisionResource.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ProvisionResource proto.InternalMessageInfo
@@ -2572,8 +2571,8 @@ func (m *ProvisionResource_Request) XXX_Merge(src proto.Message) {
 func (m *ProvisionResource_Request) XXX_Size() int {
 	return xxx_messageInfo_ProvisionResource_Request.Size(m)
 }
-func (m *ProvisionResource_Request) XXX_Discardmyuser() {
-	xxx_messageInfo_ProvisionResource_Request.Discardmyuser(m)
+func (m *ProvisionResource_Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProvisionResource_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ProvisionResource_Request proto.InternalMessageInfo
@@ -2619,8 +2618,8 @@ func (m *ProvisionResource_Response) XXX_Merge(src proto.Message) {
 func (m *ProvisionResource_Response) XXX_Size() int {
 	return xxx_messageInfo_ProvisionResource_Response.Size(m)
 }
-func (m *ProvisionResource_Response) XXX_Discardmyuser() {
-	xxx_messageInfo_ProvisionResource_Response.Discardmyuser(m)
+func (m *ProvisionResource_Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProvisionResource_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ProvisionResource_Response proto.InternalMessageInfo

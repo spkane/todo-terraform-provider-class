@@ -15,7 +15,7 @@ import (
 )
 
 // RawConfig is a structure that holds a piece of configuration
-// where the overall structure is myuser since it will be used
+// where the overall structure is unknown since it will be used
 // to configure a plugin or some other similar external component.
 //
 // RawConfigs can be interpolated with variables that come from
@@ -45,9 +45,9 @@ type RawConfig struct {
 	Interpolations []ast.Node
 	Variables      map[string]InterpolatedVariable
 
-	lock       sync.Mutex
-	config     map[string]interface{}
-	myuserKeys []string
+	lock        sync.Mutex
+	config      map[string]interface{}
+	unknownKeys []string
 }
 
 // NewRawConfig creates a new RawConfig structure and populates the
@@ -137,12 +137,12 @@ func (r *RawConfig) Value() interface{} {
 // Config returns the entire configuration with the variables
 // interpolated from any call to Interpolate.
 //
-// If any interpolated variables are myuser (value set to
-// myuserVariableValue), the first non-container (map, slice, etc.) element
-// will be removed from the config. The keys of myuser variables
-// can be found using the myuserKeys function.
+// If any interpolated variables are unknown (value set to
+// UnknownVariableValue), the first non-container (map, slice, etc.) element
+// will be removed from the config. The keys of unknown variables
+// can be found using the UnknownKeys function.
 //
-// By pruning out myuser keys from the configuration, the raw
+// By pruning out unknown keys from the configuration, the raw
 // structure will always successfully decode into its ultimate
 // structure using something like mapstructure.
 func (r *RawConfig) Config() map[string]interface{} {
@@ -206,19 +206,19 @@ func (r *RawConfig) Merge(other *RawConfig) *RawConfig {
 		result.config[k] = v
 	}
 
-	// Build the myuser keys
-	if len(r.myuserKeys) > 0 || len(other.myuserKeys) > 0 {
-		myuserKeys := make(map[string]struct{})
-		for _, k := range r.myuserKeys {
-			myuserKeys[k] = struct{}{}
+	// Build the unknown keys
+	if len(r.unknownKeys) > 0 || len(other.unknownKeys) > 0 {
+		unknownKeys := make(map[string]struct{})
+		for _, k := range r.unknownKeys {
+			unknownKeys[k] = struct{}{}
 		}
-		for _, k := range other.myuserKeys {
-			myuserKeys[k] = struct{}{}
+		for _, k := range other.unknownKeys {
+			unknownKeys[k] = struct{}{}
 		}
 
-		result.myuserKeys = make([]string, 0, len(myuserKeys))
-		for k, _ := range myuserKeys {
-			result.myuserKeys = append(result.myuserKeys, k)
+		result.unknownKeys = make([]string, 0, len(unknownKeys))
+		for k, _ := range unknownKeys {
+			result.unknownKeys = append(result.unknownKeys, k)
 		}
 	}
 
@@ -279,7 +279,7 @@ func (r *RawConfig) interpolate(fn interpolationWalkerFunc) error {
 		return err
 	}
 
-	r.myuserKeys = w.myuserKeys
+	r.unknownKeys = w.unknownKeys
 	return nil
 }
 
@@ -352,12 +352,12 @@ func (r *RawConfig) couldBeInteger() bool {
 	}
 }
 
-// myuserKeys returns the keys of the configuration that are myuser
+// UnknownKeys returns the keys of the configuration that are unknown
 // because they had interpolated variables that must be computed.
-func (r *RawConfig) myuserKeys() []string {
+func (r *RawConfig) UnknownKeys() []string {
 	r.lock.Lock()
 	defer r.lock.Unlock()
-	return r.myuserKeys
+	return r.unknownKeys
 }
 
 // See GobEncode

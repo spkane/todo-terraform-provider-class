@@ -40,23 +40,23 @@ import (
 )
 
 type generatedDiscarder interface {
-	XXX_Discardmyuser()
+	XXX_DiscardUnknown()
 }
 
-// Discardmyuser recursively discards all myuser fields from this message
+// DiscardUnknown recursively discards all unknown fields from this message
 // and all embedded messages.
 //
 // When unmarshaling a message with unrecognized fields, the tags and values
 // of such fields are preserved in the Message. This allows a later call to
 // marshal to be able to produce a message that continues to have those
-// unrecognized fields. To avoid this, Discardmyuser is used to
-// explicitly clear the myuser fields after unmarshaling.
+// unrecognized fields. To avoid this, DiscardUnknown is used to
+// explicitly clear the unknown fields after unmarshaling.
 //
-// For proto2 messages, the myuser fields of message extensions are only
+// For proto2 messages, the unknown fields of message extensions are only
 // discarded from messages that have been accessed via GetExtension.
-func Discardmyuser(m Message) {
+func DiscardUnknown(m Message) {
 	if m, ok := m.(generatedDiscarder); ok {
-		m.XXX_Discardmyuser()
+		m.XXX_DiscardUnknown()
 		return
 	}
 	// TODO: Dynamically populate a InternalMessageInfo for legacy messages,
@@ -65,8 +65,8 @@ func Discardmyuser(m Message) {
 	discardLegacy(m)
 }
 
-// Discardmyuser recursively discards all myuser fields.
-func (a *InternalMessageInfo) Discardmyuser(m Message) {
+// DiscardUnknown recursively discards all unknown fields.
+func (a *InternalMessageInfo) DiscardUnknown(m Message) {
 	di := atomicLoadDiscardInfo(&a.discard)
 	if di == nil {
 		di = getDiscardInfo(reflect.TypeOf(m).Elem())
@@ -120,14 +120,14 @@ func (di *discardInfo) discard(src pointer) {
 		fi.discard(sfp)
 	}
 
-	// For proto2 messages, only discard myuser fields in message extensions
+	// For proto2 messages, only discard unknown fields in message extensions
 	// that have been accessed via GetExtension.
 	if em, err := extendable(src.asPointerTo(di.typ).Interface()); err == nil {
-		// Ignore lock since Discardmyuser is not concurrency safe.
+		// Ignore lock since DiscardUnknown is not concurrency safe.
 		emm, _ := em.extensionsRead()
 		for _, mx := range emm {
 			if m, ok := mx.value.(Message); ok {
-				Discardmyuser(m)
+				DiscardUnknown(m)
 			}
 		}
 	}
@@ -206,7 +206,7 @@ func (di *discardInfo) computeDiscardInfo() {
 						}
 						for _, key := range sm.MapKeys() {
 							val := sm.MapIndex(key)
-							Discardmyuser(val.Interface().(Message))
+							DiscardUnknown(val.Interface().(Message))
 						}
 					}
 				} else {
@@ -229,7 +229,7 @@ func (di *discardInfo) computeDiscardInfo() {
 						}
 						switch sv.Type().Kind() {
 						case reflect.Ptr: // Proto struct (e.g., *T)
-							Discardmyuser(sv.Interface().(Message))
+							DiscardUnknown(sv.Interface().(Message))
 						}
 					}
 				}
@@ -336,7 +336,7 @@ func discardLegacy(m Message) {
 		vf.Set(reflect.ValueOf([]byte(nil)))
 	}
 
-	// For proto2 messages, only discard myuser fields in message extensions
+	// For proto2 messages, only discard unknown fields in message extensions
 	// that have been accessed via GetExtension.
 	if em, err := extendable(m); err == nil {
 		// Ignore lock since discardLegacy is not concurrency safe.

@@ -66,7 +66,7 @@ func (t typeTuple) GoString() string {
 // the empty tuple type.
 var EmptyTuple Type
 
-// EmptyTupleVal is the only possible non-null, non-myuser value of type
+// EmptyTupleVal is the only possible non-null, non-unknown value of type
 // EmptyTuple.
 var EmptyTupleVal Value
 

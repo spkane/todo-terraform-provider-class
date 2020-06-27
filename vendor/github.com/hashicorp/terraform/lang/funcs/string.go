@@ -27,13 +27,13 @@ var JoinFunc = function.New(&function.Spec{
 		sep := args[0].AsString()
 		listVals := args[1:]
 		if len(listVals) < 1 {
-			return cty.myuserVal(cty.String), fmt.Errorf("at least one list is required")
+			return cty.UnknownVal(cty.String), fmt.Errorf("at least one list is required")
 		}
 
 		l := 0
 		for _, list := range listVals {
 			if !list.IsWhollyKnown() {
-				return cty.myuserVal(cty.String), nil
+				return cty.UnknownVal(cty.String), nil
 			}
 			l += list.LengthInt()
 		}
@@ -45,9 +45,9 @@ var JoinFunc = function.New(&function.Spec{
 				_, val := it.Element()
 				if val.IsNull() {
 					if len(listVals) > 1 {
-						return cty.myuserVal(cty.String), function.NewArgErrorf(ai+1, "element %d of list %d is null; cannot concatenate null values", ei, ai+1)
+						return cty.UnknownVal(cty.String), function.NewArgErrorf(ai+1, "element %d of list %d is null; cannot concatenate null values", ei, ai+1)
 					}
-					return cty.myuserVal(cty.String), function.NewArgErrorf(ai+1, "element %d is null; cannot concatenate null values", ei)
+					return cty.UnknownVal(cty.String), function.NewArgErrorf(ai+1, "element %d is null; cannot concatenate null values", ei)
 				}
 				items = append(items, val.AsString())
 				ei++
@@ -72,7 +72,7 @@ var SortFunc = function.New(&function.Spec{
 		if !listVal.IsWhollyKnown() {
 			// If some of the element values aren't known yet then we
 			// can't yet predict the order of the result.
-			return cty.myuserVal(retType), nil
+			return cty.UnknownVal(retType), nil
 		}
 		if listVal.LengthInt() == 0 { // Easy path
 			return listVal, nil
@@ -82,7 +82,7 @@ var SortFunc = function.New(&function.Spec{
 		for it := listVal.ElementIterator(); it.Next(); {
 			iv, v := it.Element()
 			if v.IsNull() {
-				return cty.myuserVal(retType), fmt.Errorf("given list element %s is null; a null string cannot be sorted", iv.AsBigFloat().String())
+				return cty.UnknownVal(retType), fmt.Errorf("given list element %s is null; a null string cannot be sorted", iv.AsBigFloat().String())
 			}
 			list = append(list, v.AsString())
 		}
@@ -155,7 +155,7 @@ var IndentFunc = function.New(&function.Spec{
 	Impl: func(args []cty.Value, retType cty.Type) (ret cty.Value, err error) {
 		var spaces int
 		if err := gocty.FromCtyValue(args[0], &spaces); err != nil {
-			return cty.myuserVal(cty.String), err
+			return cty.UnknownVal(cty.String), err
 		}
 		data := args[1].AsString()
 		pad := strings.Repeat(" ", spaces)
@@ -191,7 +191,7 @@ var ReplaceFunc = function.New(&function.Spec{
 		if len(substr) > 1 && substr[0] == '/' && substr[len(substr)-1] == '/' {
 			re, err := regexp.Compile(substr[1 : len(substr)-1])
 			if err != nil {
-				return cty.myuserVal(cty.String), err
+				return cty.UnknownVal(cty.String), err
 			}
 
 			return cty.StringVal(re.ReplaceAllString(str, replace)), nil

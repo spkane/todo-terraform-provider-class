@@ -188,7 +188,7 @@ func (tt yaml_token_type_t) String() string {
 	case yaml_SCALAR_TOKEN:
 		return "yaml_SCALAR_TOKEN"
 	}
-	return "<myuser token>"
+	return "<unknown token>"
 }
 
 // The token structure.
@@ -256,7 +256,7 @@ var eventStrings = []string{
 
 func (e yaml_event_type_t) String() string {
 	if e < 0 || int(e) >= len(eventStrings) {
-		return fmt.Sprintf("myuser event %d", e)
+		return fmt.Sprintf("unknown event %d", e)
 	}
 	return eventStrings[e]
 }
@@ -508,7 +508,7 @@ func (ps yaml_parser_state_t) String() string {
 	case yaml_PARSE_END_STATE:
 		return "yaml_PARSE_END_STATE"
 	}
-	return "<myuser parser state>"
+	return "<unknown parser state>"
 }
 
 // This structure holds aliases data.

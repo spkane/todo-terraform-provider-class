@@ -124,7 +124,7 @@ func (t Token) Value() interface{} {
 			return false
 		}
 
-		panic("myuser bool value: " + t.Text)
+		panic("unknown bool value: " + t.Text)
 	case FLOAT:
 		v, err := strconv.ParseFloat(t.Text, 64)
 		if err != nil {

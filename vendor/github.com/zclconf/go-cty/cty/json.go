@@ -23,7 +23,7 @@ func (t Type) MarshalJSON() ([]byte, error) {
 		case primitiveTypeString:
 			return []byte{'"', 's', 't', 'r', 'i', 'n', 'g', '"'}, nil
 		default:
-			panic("myuser primitive type kind")
+			panic("unknown primitive type kind")
 		}
 	case typeList, typeMap, typeSet:
 		buf := &bytes.Buffer{}
@@ -70,7 +70,7 @@ func (t Type) MarshalJSON() ([]byte, error) {
 		return nil, fmt.Errorf("type not allowed: %s", t.FriendlyName())
 	default:
 		// should never happen
-		panic("myuser type implementation")
+		panic("unknown type implementation")
 	}
 }
 

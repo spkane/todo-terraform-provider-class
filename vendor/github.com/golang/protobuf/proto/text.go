@@ -274,7 +274,7 @@ func (tm *TextMarshaler) writeStruct(w *textWriter, sv reflect.Value) error {
 			// The first is handled here;
 			// the second is handled at the bottom of this function.
 			if name == "XXX_unrecognized" && !fv.IsNil() {
-				if err := writemyuserStruct(w, fv.Interface().([]byte)); err != nil {
+				if err := writeUnknownStruct(w, fv.Interface().([]byte)); err != nil {
 					return err
 				}
 			}
@@ -456,6 +456,8 @@ func (tm *TextMarshaler) writeStruct(w *textWriter, sv reflect.Value) error {
 	return nil
 }
 
+var textMarshalerType = reflect.TypeOf((*encoding.TextMarshaler)(nil)).Elem()
+
 // writeAny writes an arbitrary field.
 func (tm *TextMarshaler) writeAny(w *textWriter, v reflect.Value, props *Properties) error {
 	v = reflect.Indirect(v)
@@ -519,8 +521,8 @@ func (tm *TextMarshaler) writeAny(w *textWriter, v reflect.Value, props *Propert
 			// mutating this value.
 			v = v.Addr()
 		}
-		if etm, ok := v.Interface().(encoding.TextMarshaler); ok {
-			text, err := etm.MarshalText()
+		if v.Type().Implements(textMarshalerType) {
+			text, err := v.Interface().(encoding.TextMarshaler).MarshalText()
 			if err != nil {
 				return err
 			}
@@ -592,9 +594,9 @@ func writeString(w *textWriter, s string) error {
 	return w.WriteByte('"')
 }
 
-func writemyuserStruct(w *textWriter, data []byte) (err error) {
+func writeUnknownStruct(w *textWriter, data []byte) (err error) {
 	if !w.compact {
-		if _, err := fmt.Fprintf(w, "/* %d myuser bytes */\n", len(data)); err != nil {
+		if _, err := fmt.Fprintf(w, "/* %d unknown bytes */\n", len(data)); err != nil {
 			return err
 		}
 	}
@@ -636,18 +638,18 @@ func writemyuserStruct(w *textWriter, data []byte) (err error) {
 			}
 		case WireFixed32:
 			x, err = b.DecodeFixed32()
-			err = writemyuserInt(w, x, err)
+			err = writeUnknownInt(w, x, err)
 		case WireFixed64:
 			x, err = b.DecodeFixed64()
-			err = writemyuserInt(w, x, err)
+			err = writeUnknownInt(w, x, err)
 		case WireStartGroup:
 			err = w.WriteByte('{')
 			w.indent()
 		case WireVarint:
 			x, err = b.DecodeVarint()
-			err = writemyuserInt(w, x, err)
+			err = writeUnknownInt(w, x, err)
 		default:
-			_, err = fmt.Fprintf(w, "/* myuser wire type %d */", wire)
+			_, err = fmt.Fprintf(w, "/* unknown wire type %d */", wire)
 		}
 		if err != nil {
 			return err
@@ -659,7 +661,7 @@ func writemyuserStruct(w *textWriter, data []byte) (err error) {
 	return nil
 }
 
-func writemyuserInt(w *textWriter, x uint64, err error) error {
+func writeUnknownInt(w *textWriter, x uint64, err error) error {
 	if err == nil {
 		_, err = fmt.Fprint(w, x)
 	} else {
@@ -702,8 +704,8 @@ func (tm *TextMarshaler) writeExtensions(w *textWriter, pv reflect.Value) error 
 			desc = emap[extNum]
 		}
 		if desc == nil {
-			// myuser extension.
-			if err := writemyuserStruct(w, ext.enc); err != nil {
+			// Unknown extension.
+			if err := writeUnknownStruct(w, ext.enc); err != nil {
 				return err
 			}
 			continue

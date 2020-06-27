@@ -184,7 +184,7 @@ func (s *state) processOption(opt Option) {
 	case reporter:
 		s.reporters = append(s.reporters, opt)
 	default:
-		panic(fmt.Sprintf("myuser option %T", opt))
+		panic(fmt.Sprintf("unknown option %T", opt))
 	}
 }
 

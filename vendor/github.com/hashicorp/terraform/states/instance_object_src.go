@@ -104,7 +104,7 @@ func (os *ResourceInstanceObjectSrc) CompleteUpgrade(newAttrs cty.Value, newType
 	// This is the same principle as ResourceInstanceObject.Encode, but
 	// avoiding a decode/re-encode cycle because we don't have type info
 	// available for the "old" attributes.
-	newAttrs = cty.myuserAsNull(newAttrs)
+	newAttrs = cty.UnknownAsNull(newAttrs)
 	src, err := ctyjson.Marshal(newAttrs, newType)
 	if err != nil {
 		return nil, err

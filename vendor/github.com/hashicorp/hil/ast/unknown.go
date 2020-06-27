@@ -1,10 +1,10 @@
 package ast
 
-// Ismyuser reports whether a variable is myuser or contains any value
-// that is myuser. This will recurse into lists and maps and so on.
-func Ismyuser(v Variable) bool {
-	// If it is myuser itself, return true
-	if v.Type == Typemyuser {
+// IsUnknown reports whether a variable is unknown or contains any value
+// that is unknown. This will recurse into lists and maps and so on.
+func IsUnknown(v Variable) bool {
+	// If it is unknown itself, return true
+	if v.Type == TypeUnknown {
 		return true
 	}
 
@@ -12,13 +12,13 @@ func Ismyuser(v Variable) bool {
 	switch v.Type {
 	case TypeList:
 		for _, el := range v.Value.([]Variable) {
-			if Ismyuser(el) {
+			if IsUnknown(el) {
 				return true
 			}
 		}
 	case TypeMap:
 		for _, el := range v.Value.(map[string]Variable) {
-			if Ismyuser(el) {
+			if IsUnknown(el) {
 				return true
 			}
 		}

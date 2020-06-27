@@ -50,7 +50,7 @@ func (e ErrCode) String() string {
 	if s, ok := errCodeName[e]; ok {
 		return s
 	}
-	return fmt.Sprintf("myuser error code 0x%x", uint32(e))
+	return fmt.Sprintf("unknown error code 0x%x", uint32(e))
 }
 
 // ConnectionError is an error that results in the termination of the

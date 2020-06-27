@@ -61,7 +61,7 @@ var ElementFunc = function.New(&function.Spec{
 		}
 
 		if !args[0].IsKnown() {
-			return cty.myuserVal(retType), nil
+			return cty.UnknownVal(retType), nil
 		}
 
 		l := args[0].LengthInt()
@@ -82,7 +82,7 @@ var LengthFunc = function.New(&function.Spec{
 			Name:             "value",
 			Type:             cty.DynamicPseudoType,
 			AllowDynamicType: true,
-			Allowmyuser:      true,
+			AllowUnknown:     true,
 		},
 	},
 	Type: func(args []cty.Value) (cty.Type, error) {
@@ -99,7 +99,7 @@ var LengthFunc = function.New(&function.Spec{
 		collTy := args[0].Type()
 		switch {
 		case collTy == cty.DynamicPseudoType:
-			return cty.myuserVal(cty.Number), nil
+			return cty.UnknownVal(cty.Number), nil
 		case collTy.IsTupleType():
 			l := len(collTy.TupleElementTypes())
 			return cty.NumberIntVal(int64(l)), nil
@@ -115,7 +115,7 @@ var LengthFunc = function.New(&function.Spec{
 			return coll.Length(), nil
 		default:
 			// Should never happen, because of the checks in our Type func above
-			return cty.myuserVal(cty.Number), errors.New("impossible value type for length(...)")
+			return cty.UnknownVal(cty.Number), errors.New("impossible value type for length(...)")
 		}
 	},
 })
@@ -129,7 +129,7 @@ var CoalesceFunc = function.New(&function.Spec{
 	VarParam: &function.Parameter{
 		Name:             "vals",
 		Type:             cty.DynamicPseudoType,
-		Allowmyuser:      true,
+		AllowUnknown:     true,
 		AllowDynamicType: true,
 		AllowNull:        true,
 	},
@@ -149,7 +149,7 @@ var CoalesceFunc = function.New(&function.Spec{
 			// We already know this will succeed because of the checks in our Type func above
 			argVal, _ = convert.Convert(argVal, retType)
 			if !argVal.IsKnown() {
-				return cty.myuserVal(retType), nil
+				return cty.UnknownVal(retType), nil
 			}
 			if argVal.IsNull() {
 				continue
@@ -171,7 +171,7 @@ var CoalesceListFunc = function.New(&function.Spec{
 	VarParam: &function.Parameter{
 		Name:             "vals",
 		Type:             cty.DynamicPseudoType,
-		Allowmyuser:      true,
+		AllowUnknown:     true,
 		AllowDynamicType: true,
 		AllowNull:        true,
 	},
@@ -183,7 +183,7 @@ var CoalesceListFunc = function.New(&function.Spec{
 		argTypes := make([]cty.Type, len(args))
 
 		for i, arg := range args {
-			// if any argument is myuser, we can't be certain know which type we will return
+			// if any argument is unknown, we can't be certain know which type we will return
 			if !arg.IsKnown() {
 				return cty.DynamicPseudoType, nil
 			}
@@ -209,10 +209,10 @@ var CoalesceListFunc = function.New(&function.Spec{
 	Impl: func(args []cty.Value, retType cty.Type) (ret cty.Value, err error) {
 		for _, arg := range args {
 			if !arg.IsKnown() {
-				// If we run into an myuser list at some point, we can't
+				// If we run into an unknown list at some point, we can't
 				// predict the final result yet. (If there's a known, non-empty
 				// arg before this then we won't get here.)
-				return cty.myuserVal(retType), nil
+				return cty.UnknownVal(retType), nil
 			}
 
 			if arg.LengthInt() > 0 {
@@ -239,7 +239,7 @@ var CompactFunc = function.New(&function.Spec{
 		if !listVal.IsWhollyKnown() {
 			// If some of the element values aren't known yet then we
 			// can't yet return a compacted list
-			return cty.myuserVal(retType), nil
+			return cty.UnknownVal(retType), nil
 		}
 
 		var outputList []cty.Value
@@ -310,7 +310,7 @@ var IndexFunc = function.New(&function.Spec{
 		}
 
 		if !args[0].IsKnown() {
-			return cty.myuserVal(cty.Number), nil
+			return cty.UnknownVal(cty.Number), nil
 		}
 
 		if args[0].LengthInt() == 0 { // Easy path
@@ -324,7 +324,7 @@ var IndexFunc = function.New(&function.Spec{
 				return cty.NilVal, err
 			}
 			if !eq.IsKnown() {
-				return cty.myuserVal(cty.Number), nil
+				return cty.UnknownVal(cty.Number), nil
 			}
 			if eq.True() {
 				return i, nil
@@ -351,7 +351,7 @@ var DistinctFunc = function.New(&function.Spec{
 		listVal := args[0]
 
 		if !listVal.IsWhollyKnown() {
-			return cty.myuserVal(retType), nil
+			return cty.UnknownVal(retType), nil
 		}
 		var list []cty.Value
 
@@ -389,7 +389,7 @@ var ChunklistFunc = function.New(&function.Spec{
 	Impl: func(args []cty.Value, retType cty.Type) (ret cty.Value, err error) {
 		listVal := args[0]
 		if !listVal.IsKnown() {
-			return cty.myuserVal(retType), nil
+			return cty.UnknownVal(retType), nil
 		}
 
 		if listVal.LengthInt() == 0 {
@@ -473,7 +473,7 @@ var FlattenFunc = function.New(&function.Spec{
 
 		out, known := flattener(inputList)
 		if !known {
-			return cty.myuserVal(retType), nil
+			return cty.UnknownVal(retType), nil
 		}
 
 		return cty.TupleVal(out), nil
@@ -481,7 +481,7 @@ var FlattenFunc = function.New(&function.Spec{
 })
 
 // Flatten until it's not a cty.List, and return whether the value is known.
-// We can flatten lists with myuser values, as long as they are not
+// We can flatten lists with unknown values, as long as they are not
 // lists themselves.
 func flattener(flattenList cty.Value) ([]cty.Value, bool) {
 	out := make([]cty.Value, 0)
@@ -508,9 +508,9 @@ func flattener(flattenList cty.Value) ([]cty.Value, bool) {
 var KeysFunc = function.New(&function.Spec{
 	Params: []function.Parameter{
 		{
-			Name:        "inputMap",
-			Type:        cty.DynamicPseudoType,
-			Allowmyuser: true,
+			Name:         "inputMap",
+			Type:         cty.DynamicPseudoType,
+			AllowUnknown: true,
 		},
 	},
 	Type: func(args []cty.Value) (cty.Type, error) {
@@ -540,7 +540,7 @@ var KeysFunc = function.New(&function.Spec{
 
 		switch {
 		case m.Type().IsObjectType():
-			// In this case we allow myuser values so we must work only with
+			// In this case we allow unknown values so we must work only with
 			// the attribute _types_, not with the value itself.
 			var names []string
 			for name := range m.Type().AttributeTypes() {
@@ -557,7 +557,7 @@ var KeysFunc = function.New(&function.Spec{
 			return cty.TupleVal(keys), nil
 		default:
 			if !m.IsKnown() {
-				return cty.myuserVal(retType), nil
+				return cty.UnknownVal(retType), nil
 			}
 
 			// cty guarantees that ElementIterator will iterate in lexicographical
@@ -583,7 +583,7 @@ var ListFunc = function.New(&function.Spec{
 	VarParam: &function.Parameter{
 		Name:             "vals",
 		Type:             cty.DynamicPseudoType,
-		Allowmyuser:      true,
+		AllowUnknown:     true,
 		AllowDynamicType: true,
 		AllowNull:        true,
 	},
@@ -633,7 +633,7 @@ var LookupFunc = function.New(&function.Spec{
 	VarParam: &function.Parameter{
 		Name:             "default",
 		Type:             cty.DynamicPseudoType,
-		Allowmyuser:      true,
+		AllowUnknown:     true,
 		AllowDynamicType: true,
 		AllowNull:        true,
 	},
@@ -684,7 +684,7 @@ var LookupFunc = function.New(&function.Spec{
 		lookupKey := args[1].AsString()
 
 		if !mapVar.IsWhollyKnown() {
-			return cty.myuserVal(retType), nil
+			return cty.UnknownVal(retType), nil
 		}
 
 		if mapVar.Type().IsObjectType() {
@@ -703,7 +703,7 @@ var LookupFunc = function.New(&function.Spec{
 			return defaultVal, nil
 		}
 
-		return cty.myuserVal(cty.DynamicPseudoType), fmt.Errorf(
+		return cty.UnknownVal(cty.DynamicPseudoType), fmt.Errorf(
 			"lookup failed to find '%s'", lookupKey)
 	},
 })
@@ -717,7 +717,7 @@ var MapFunc = function.New(&function.Spec{
 	VarParam: &function.Parameter{
 		Name:             "vals",
 		Type:             cty.DynamicPseudoType,
-		Allowmyuser:      true,
+		AllowUnknown:     true,
 		AllowDynamicType: true,
 		AllowNull:        true,
 	},
@@ -744,7 +744,7 @@ var MapFunc = function.New(&function.Spec{
 	Impl: func(args []cty.Value, retType cty.Type) (ret cty.Value, err error) {
 		for _, arg := range args {
 			if !arg.IsWhollyKnown() {
-				return cty.myuserVal(retType), nil
+				return cty.UnknownVal(retType), nil
 			}
 		}
 
@@ -810,7 +810,7 @@ var MatchkeysFunc = function.New(&function.Spec{
 	},
 	Impl: func(args []cty.Value, retType cty.Type) (ret cty.Value, err error) {
 		if !args[0].IsKnown() {
-			return cty.myuserVal(cty.List(retType.ElementType())), nil
+			return cty.UnknownVal(cty.List(retType.ElementType())), nil
 		}
 
 		if args[0].LengthInt() != args[1].LengthInt() {
@@ -833,7 +833,7 @@ var MatchkeysFunc = function.New(&function.Spec{
 		}
 
 		if !values.IsWhollyKnown() || !keys.IsWhollyKnown() {
-			return cty.myuserVal(retType), nil
+			return cty.UnknownVal(retType), nil
 		}
 
 		i := 0
@@ -883,7 +883,7 @@ var MergeFunc = function.New(&function.Spec{
 
 		for _, arg := range args {
 			if !arg.IsWhollyKnown() {
-				return cty.myuserVal(retType), nil
+				return cty.UnknownVal(retType), nil
 			}
 			if !arg.Type().IsObjectType() && !arg.Type().IsMapType() {
 				return cty.NilVal, fmt.Errorf("arguments must be maps or objects, got %#v", arg.Type().FriendlyName())
@@ -1192,7 +1192,7 @@ var TransposeFunc = function.New(&function.Spec{
 	Impl: func(args []cty.Value, retType cty.Type) (ret cty.Value, err error) {
 		inputMap := args[0]
 		if !inputMap.IsWhollyKnown() {
-			return cty.myuserVal(retType), nil
+			return cty.UnknownVal(retType), nil
 		}
 
 		outputMap := make(map[string]cty.Value)
@@ -1342,13 +1342,13 @@ var ZipmapFunc = function.New(&function.Spec{
 		values := args[1]
 
 		if !keys.IsWhollyKnown() {
-			// myuser map keys and object attributes are not supported, so
-			// our entire result must be myuser in this case.
-			return cty.myuserVal(retType), nil
+			// Unknown map keys and object attributes are not supported, so
+			// our entire result must be unknown in this case.
+			return cty.UnknownVal(retType), nil
 		}
 
 		// both keys and values are guaranteed to be shallowly-known here,
-		// because our declared params above don't allow myuser or null values.
+		// because our declared params above don't allow unknown or null values.
 		if keys.LengthInt() != values.LengthInt() {
 			return cty.NilVal, fmt.Errorf("number of keys (%d) does not match number of values (%d)", keys.LengthInt(), values.LengthInt())
 		}

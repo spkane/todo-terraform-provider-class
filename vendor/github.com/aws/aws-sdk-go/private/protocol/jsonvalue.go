@@ -22,7 +22,7 @@ const (
 // EncodeJSONValue marshals the value into a JSON string, and optionally base64
 // encodes the string before returning it.
 //
-// Will panic if the escape mode is myuser.
+// Will panic if the escape mode is unknown.
 func EncodeJSONValue(v aws.JSONValue, escape EscapeMode) (string, error) {
 	b, err := json.Marshal(v)
 	if err != nil {
@@ -38,13 +38,13 @@ func EncodeJSONValue(v aws.JSONValue, escape EscapeMode) (string, error) {
 		return strconv.Quote(string(b)), nil
 	}
 
-	panic(fmt.Sprintf("EncodeJSONValue called with myuser EscapeMode, %v", escape))
+	panic(fmt.Sprintf("EncodeJSONValue called with unknown EscapeMode, %v", escape))
 }
 
 // DecodeJSONValue will attempt to decode the string input as a JSONValue.
 // Optionally decoding base64 the value first before JSON unmarshaling.
 //
-// Will panic if the escape mode is myuser.
+// Will panic if the escape mode is unknown.
 func DecodeJSONValue(v string, escape EscapeMode) (aws.JSONValue, error) {
 	var b []byte
 	var err error
@@ -59,7 +59,7 @@ func DecodeJSONValue(v string, escape EscapeMode) (aws.JSONValue, error) {
 		u, err = strconv.Unquote(v)
 		b = []byte(u)
 	default:
-		panic(fmt.Sprintf("DecodeJSONValue called with myuser EscapeMode, %v", escape))
+		panic(fmt.Sprintf("DecodeJSONValue called with unknown EscapeMode, %v", escape))
 	}
 
 	if err != nil {

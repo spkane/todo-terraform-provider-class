@@ -6,11 +6,11 @@ package appengine;
 message AppIdentityServiceError {
   enum ErrorCode {
     SUCCESS = 0;
-    myuser_SCOPE = 9;
+    UNKNOWN_SCOPE = 9;
     BLOB_TOO_LARGE = 1000;
     DEADLINE_EXCEEDED = 1001;
     NOT_A_VALID_APP = 1002;
-    myuser_ERROR = 1003;
+    UNKNOWN_ERROR = 1003;
     NOT_ALLOWED = 1005;
     NOT_IMPLEMENTED = 1006;
   }

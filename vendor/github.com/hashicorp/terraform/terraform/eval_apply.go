@@ -71,7 +71,7 @@ func (n *EvalApply) Eval(ctx EvalContext) (interface{}, error) {
 
 	if !configVal.IsWhollyKnown() {
 		return nil, fmt.Errorf(
-			"configuration for %s still contains myuser values during apply (this is a bug in Terraform; please report it!)",
+			"configuration for %s still contains unknown values during apply (this is a bug in Terraform; please report it!)",
 			absAddr,
 		)
 	}
@@ -146,15 +146,15 @@ func (n *EvalApply) Eval(ctx EvalContext) (interface{}, error) {
 	// evaluation to continue to a later point where our state object will
 	// be saved.
 
-	// By this point there must not be any myuser values remaining in our
-	// object, because we've applied the change and we can't save myusers
+	// By this point there must not be any unknown values remaining in our
+	// object, because we've applied the change and we can't save unknowns
 	// in our persistent state. If any are present then we will indicate an
 	// error (which is always a bug in the provider) but we will also replace
 	// them with nulls so that we can successfully save the portions of the
 	// returned value that are known.
 	if !newVal.IsWhollyKnown() {
 		// To generate better error messages, we'll go for a walk through the
-		// value and make a separate diagnostic for each myuser value we
+		// value and make a separate diagnostic for each unknown value we
 		// find.
 		cty.Walk(newVal, func(path cty.Path, val cty.Value) (bool, error) {
 			if !val.IsKnown() {
@@ -163,7 +163,7 @@ func (n *EvalApply) Eval(ctx EvalContext) (interface{}, error) {
 					tfdiags.Error,
 					"Provider returned invalid result object after apply",
 					fmt.Sprintf(
-						"After the apply operation, the provider still indicated an myuser value for %s%s. All values must be known after apply, so this is always a bug in the provider and should be reported in the provider's own repository. Terraform will still save the other known object values in the state.",
+						"After the apply operation, the provider still indicated an unknown value for %s%s. All values must be known after apply, so this is always a bug in the provider and should be reported in the provider's own repository. Terraform will still save the other known object values in the state.",
 						n.Addr.Absolute(ctx.Path()), pathStr,
 					),
 				))
@@ -172,18 +172,18 @@ func (n *EvalApply) Eval(ctx EvalContext) (interface{}, error) {
 		})
 
 		// NOTE: This operation can potentially be lossy if there are multiple
-		// elements in a set that differ only by myuser values: after
+		// elements in a set that differ only by unknown values: after
 		// replacing with null these will be merged together into a single set
 		// element. Since we can only get here in the presence of a provider
 		// bug, we accept this because storing a result here is always a
 		// best-effort sort of thing.
-		newVal = cty.myuserAsNull(newVal)
+		newVal = cty.UnknownAsNull(newVal)
 	}
 
 	if change.Action != plans.Delete && !diags.HasErrors() {
-		// Only values that were marked as myuser in the planned value are allowed
-		// to change during the apply operation. (We do this after the myuser-ness
-		// check above so that we also catch anything that became myuser after
+		// Only values that were marked as unknown in the planned value are allowed
+		// to change during the apply operation. (We do this after the unknown-ness
+		// check above so that we also catch anything that became unknown after
 		// being known during plan.)
 		//
 		// If we are returning other errors anyway then we'll give this
@@ -561,8 +561,15 @@ func (n *EvalApplyProvisioners) apply(ctx EvalContext, provs []*configs.Provisio
 		provisioner := ctx.Provisioner(prov.Type)
 		schema := ctx.ProvisionerSchema(prov.Type)
 
-		forEach, forEachDiags := evaluateResourceForEachExpression(n.ResourceConfig.ForEach, ctx)
-		diags = diags.Append(forEachDiags)
+		var forEach map[string]cty.Value
+
+		// We can't evaluate the for_each expression during a destroy
+		if n.When != configs.ProvisionerWhenDestroy {
+			m, forEachDiags := evaluateResourceForEachExpression(n.ResourceConfig.ForEach, ctx)
+			diags = diags.Append(forEachDiags)
+			forEach = m
+		}
+
 		keyData := EvalDataForInstanceKey(instanceAddr.Key, forEach)
 
 		// Evaluate the main provisioner configuration.

@@ -34,7 +34,7 @@ func (n *Index) Type(s Scope) (Type, error) {
 
 	variable, ok := s.LookupVar(variableAccess.Name)
 	if !ok {
-		return TypeInvalid, fmt.Errorf("myuser variable accessed: %s", variableAccess.Name)
+		return TypeInvalid, fmt.Errorf("unknown variable accessed: %s", variableAccess.Name)
 	}
 
 	switch variable.Type {

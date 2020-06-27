@@ -532,11 +532,11 @@ message BeginTransactionRequest {
   optional string database_id = 4;
 
   enum TransactionMode {
-    myuser = 0;
+    UNKNOWN = 0;
     READ_ONLY = 1;
     READ_WRITE = 2;
   }
-  optional TransactionMode mode = 5 [default = myuser];
+  optional TransactionMode mode = 5 [default = UNKNOWN];
 
   optional Transaction previous_transaction = 7;
 }

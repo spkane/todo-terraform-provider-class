@@ -3,13 +3,9 @@
 
 package remote_api
 
-import (
-	fmt "fmt"
-
-	proto "github.com/golang/protobuf/proto"
-
-	math "math"
-)
+import proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -25,7 +21,7 @@ const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 type RpcError_ErrorCode int32
 
 const (
-	RpcError_myuser              RpcError_ErrorCode = 0
+	RpcError_UNKNOWN             RpcError_ErrorCode = 0
 	RpcError_CALL_NOT_FOUND      RpcError_ErrorCode = 1
 	RpcError_PARSE_ERROR         RpcError_ErrorCode = 2
 	RpcError_SECURITY_VIOLATION  RpcError_ErrorCode = 3
@@ -41,7 +37,7 @@ const (
 )
 
 var RpcError_ErrorCode_name = map[int32]string{
-	0:  "myuser",
+	0:  "UNKNOWN",
 	1:  "CALL_NOT_FOUND",
 	2:  "PARSE_ERROR",
 	3:  "SECURITY_VIOLATION",
@@ -56,7 +52,7 @@ var RpcError_ErrorCode_name = map[int32]string{
 	12: "DEADLINE_EXCEEDED",
 }
 var RpcError_ErrorCode_value = map[string]int32{
-	"myuser":              0,
+	"UNKNOWN":             0,
 	"CALL_NOT_FOUND":      1,
 	"PARSE_ERROR":         2,
 	"SECURITY_VIOLATION":  3,
@@ -119,8 +115,8 @@ func (dst *Request) XXX_Merge(src proto.Message) {
 func (m *Request) XXX_Size() int {
 	return xxx_messageInfo_Request.Size(m)
 }
-func (m *Request) XXX_Discardmyuser() {
-	xxx_messageInfo_Request.Discardmyuser(m)
+func (m *Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_Request.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Request proto.InternalMessageInfo
@@ -179,8 +175,8 @@ func (dst *ApplicationError) XXX_Merge(src proto.Message) {
 func (m *ApplicationError) XXX_Size() int {
 	return xxx_messageInfo_ApplicationError.Size(m)
 }
-func (m *ApplicationError) XXX_Discardmyuser() {
-	xxx_messageInfo_ApplicationError.Discardmyuser(m)
+func (m *ApplicationError) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApplicationError.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ApplicationError proto.InternalMessageInfo
@@ -225,8 +221,8 @@ func (dst *RpcError) XXX_Merge(src proto.Message) {
 func (m *RpcError) XXX_Size() int {
 	return xxx_messageInfo_RpcError.Size(m)
 }
-func (m *RpcError) XXX_Discardmyuser() {
-	xxx_messageInfo_RpcError.Discardmyuser(m)
+func (m *RpcError) XXX_DiscardUnknown() {
+	xxx_messageInfo_RpcError.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_RpcError proto.InternalMessageInfo
@@ -274,8 +270,8 @@ func (dst *Response) XXX_Merge(src proto.Message) {
 func (m *Response) XXX_Size() int {
 	return xxx_messageInfo_Response.Size(m)
 }
-func (m *Response) XXX_Discardmyuser() {
-	xxx_messageInfo_Response.Discardmyuser(m)
+func (m *Response) XXX_DiscardUnknown() {
+	xxx_messageInfo_Response.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Response proto.InternalMessageInfo

@@ -163,7 +163,7 @@ func (r *ResourceAddress) stateId() string {
 	case DataResourceMode:
 		result = fmt.Sprintf("data.%s", result)
 	default:
-		panic(fmt.Errorf("myuser resource mode: %s", r.Mode))
+		panic(fmt.Errorf("unknown resource mode: %s", r.Mode))
 	}
 	if r.Index >= 0 {
 		result += fmt.Sprintf(".%d", r.Index)

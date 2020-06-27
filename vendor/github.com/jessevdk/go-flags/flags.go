@@ -21,7 +21,7 @@ The following features are supported in go-flags:
     Multiple option groups each containing a set of options
     Generate and print well-formatted help message
     Passing remaining command line arguments after -- (optional)
-    Ignoring myuser command line options (optional)
+    Ignoring unknown command line options (optional)
     Supports -I/usr/include -I=/usr/include -I /usr/include option argument specification
     Supports multiple short options -aux
     Supports all primitive go types (string, int{8..64}, uint{8..64}, float)

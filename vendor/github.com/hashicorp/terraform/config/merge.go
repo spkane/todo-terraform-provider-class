@@ -8,20 +8,20 @@ package config
 func Merge(c1, c2 *Config) (*Config, error) {
 	c := new(Config)
 
-	// Merge myuser keys
-	myusers := make(map[string]struct{})
-	for _, k := range c1.myuserKeys {
-		_, present := myusers[k]
+	// Merge unknown keys
+	unknowns := make(map[string]struct{})
+	for _, k := range c1.unknownKeys {
+		_, present := unknowns[k]
 		if !present {
-			myusers[k] = struct{}{}
-			c.myuserKeys = append(c.myuserKeys, k)
+			unknowns[k] = struct{}{}
+			c.unknownKeys = append(c.unknownKeys, k)
 		}
 	}
-	for _, k := range c2.myuserKeys {
-		_, present := myusers[k]
+	for _, k := range c2.unknownKeys {
+		_, present := unknowns[k]
 		if !present {
-			myusers[k] = struct{}{}
-			c.myuserKeys = append(c.myuserKeys, k)
+			unknowns[k] = struct{}{}
+			c.unknownKeys = append(c.unknownKeys, k)
 		}
 	}
 

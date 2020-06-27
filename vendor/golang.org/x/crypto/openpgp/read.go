@@ -51,7 +51,7 @@ type MessageDetails struct {
 	// be verified as UnverifiedBody is read. The signature cannot be
 	// checked until the whole of UnverifiedBody is read so UnverifiedBody
 	// must be consumed until EOF before the data can be trusted. Even if a
-	// message isn't signed (or the signer is myuser) the data may contain
+	// message isn't signed (or the signer is unknown) the data may contain
 	// an authentication code that is only checked once UnverifiedBody has
 	// been consumed. Once EOF has been seen, the following fields are
 	// valid. (An authentication code failure is reported as a
@@ -359,7 +359,7 @@ func (scr *signatureCheckReader) Read(buf []byte) (n int, err error) {
 
 // CheckDetachedSignature takes a signed file and a detached signature and
 // returns the signer if the signature is valid. If the signer isn't known,
-// ErrmyuserIssuer is returned.
+// ErrUnknownIssuer is returned.
 func CheckDetachedSignature(keyring KeyRing, signed, signature io.Reader) (signer *Entity, err error) {
 	var issuerKeyId uint64
 	var hashFunc crypto.Hash
@@ -371,7 +371,7 @@ func CheckDetachedSignature(keyring KeyRing, signed, signature io.Reader) (signe
 	for {
 		p, err = packets.Next()
 		if err == io.EOF {
-			return nil, errors.ErrmyuserIssuer
+			return nil, errors.ErrUnknownIssuer
 		}
 		if err != nil {
 			return nil, err

@@ -276,7 +276,7 @@ type Change struct {
 	//     Replace  As with Update.
 	//     Delete   Before is the value prior to delete, and After is always nil.
 	//
-	// myuser values may appear anywhere within the Before and After values,
+	// Unknown values may appear anywhere within the Before and After values,
 	// either as the values themselves or as nested elements within known
 	// collections/structures.
 	Before, After cty.Value

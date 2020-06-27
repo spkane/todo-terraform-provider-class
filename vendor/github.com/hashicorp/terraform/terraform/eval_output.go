@@ -60,9 +60,9 @@ func (n *EvalWriteOutput) Eval(ctx EvalContext) (interface{}, error) {
 		if n.ContinueOnErr || flagWarnOutputErrors {
 			log.Printf("[ERROR] Output interpolation %q failed: %s", n.Addr.Name, diags.Err())
 			// if we're continuing, make sure the output is included, and
-			// marked as myuser. If the evaluator was able to find a type
+			// marked as unknown. If the evaluator was able to find a type
 			// for the value in spite of the error then we'll use it.
-			n.setValue(addr, state, changes, cty.myuserVal(val.Type()))
+			n.setValue(addr, state, changes, cty.UnknownVal(val.Type()))
 			return nil, EvalEarlyExitError{}
 		}
 		return nil, diags.Err()
@@ -75,11 +75,11 @@ func (n *EvalWriteOutput) Eval(ctx EvalContext) (interface{}, error) {
 
 func (n *EvalWriteOutput) setValue(addr addrs.AbsOutputValue, state *states.SyncState, changes *plans.ChangesSync, val cty.Value) {
 	if val.IsKnown() && !val.IsNull() {
-		// The state itself doesn't represent myuser values, so we null them
-		// out here and then we'll save the real myuser value in the planned
+		// The state itself doesn't represent unknown values, so we null them
+		// out here and then we'll save the real unknown value in the planned
 		// changeset below, if we have one on this graph walk.
 		log.Printf("[TRACE] EvalWriteOutput: Saving value for %s in state", addr)
-		stateVal := cty.myuserAsNull(val)
+		stateVal := cty.UnknownAsNull(val)
 		state.SetOutputValue(addr, stateVal, n.Sensitive)
 	} else {
 		log.Printf("[TRACE] EvalWriteOutput: Removing %s from state (it is now null)", addr)
@@ -88,7 +88,7 @@ func (n *EvalWriteOutput) setValue(addr addrs.AbsOutputValue, state *states.Sync
 
 	// If we also have an active changeset then we'll replicate the value in
 	// there. This is used in preference to the state where present, since it
-	// *is* able to represent myusers, while the state cannot.
+	// *is* able to represent unknowns, while the state cannot.
 	if changes != nil {
 		// For the moment we are not properly tracking changes to output
 		// values, and just marking them always as "Create" or "Destroy"

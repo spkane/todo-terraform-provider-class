@@ -18,10 +18,10 @@ var JSONEncodeFunc = function.New(&function.Spec{
 	Impl: func(args []cty.Value, retType cty.Type) (cty.Value, error) {
 		val := args[0]
 		if !val.IsWhollyKnown() {
-			// We can't serialize myusers, so if the value is myuser or
-			// contains any _nested_ myusers then our result must be
-			// myuser.
-			return cty.myuserVal(retType), nil
+			// We can't serialize unknowns, so if the value is unknown or
+			// contains any _nested_ unknowns then our result must be
+			// unknown.
+			return cty.UnknownVal(retType), nil
 		}
 
 		buf, err := json.Marshal(val, val.Type())

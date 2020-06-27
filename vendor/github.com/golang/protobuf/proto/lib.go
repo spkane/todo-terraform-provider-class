@@ -386,14 +386,14 @@ func (p *Buffer) Bytes() []byte { return p.buf }
 //
 // Note that the deterministic serialization is NOT canonical across
 // languages. It is not guaranteed to remain stable over time. It is unstable
-// across different builds with schema changes due to myuser fields.
+// across different builds with schema changes due to unknown fields.
 // Users who need canonical serialization (e.g., persistent storage in a
 // canonical form, fingerprinting, etc.) should define their own
 // canonicalization specification and implement their own serializer rather
 // than relying on this API.
 //
 // If deterministic serialization is requested, map entries will be sorted
-// by keys in lexographical order. This is an implementation detail and
+// by keys in lexicographical order. This is an implementation detail and
 // subject to change.
 func (p *Buffer) SetDeterministic(deterministic bool) {
 	p.deterministic = deterministic
@@ -531,7 +531,7 @@ out:
 
 		switch wire {
 		default:
-			fmt.Printf("%3d: t=%3d myuser wire=%d\n",
+			fmt.Printf("%3d: t=%3d unknown wire=%d\n",
 				index, tag, wire)
 			break out
 

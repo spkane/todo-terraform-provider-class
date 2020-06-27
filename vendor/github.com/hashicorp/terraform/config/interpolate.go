@@ -283,7 +283,7 @@ func (v *ResourceVariable) ResourceId() string {
 	case DataResourceMode:
 		return fmt.Sprintf("data.%s.%s", v.Type, v.Name)
 	default:
-		panic(fmt.Errorf("myuser resource mode %s", v.Mode))
+		panic(fmt.Errorf("unknown resource mode %s", v.Mode))
 	}
 }
 

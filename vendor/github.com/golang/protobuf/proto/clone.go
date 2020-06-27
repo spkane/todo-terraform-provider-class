@@ -230,7 +230,7 @@ func mergeAny(out, in reflect.Value, viaPtr bool, prop *Properties) {
 	case reflect.Struct:
 		mergeStruct(out, in)
 	default:
-		// myuser type, so not a protocol buffer
+		// unknown type, so not a protocol buffer
 		log.Printf("proto: don't know how to copy %v", in)
 	}
 }

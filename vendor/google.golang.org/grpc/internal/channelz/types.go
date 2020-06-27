@@ -673,8 +673,8 @@ func (c *channelTrace) clear() {
 type Severity int
 
 const (
-	// Ctmyuser indicates myuser severity of a trace event.
-	Ctmyuser Severity = iota
+	// CtUNKNOWN indicates unknown severity of a trace event.
+	CtUNKNOWN Severity = iota
 	// CtINFO indicates info level severity of a trace event.
 	CtINFO
 	// CtWarning indicates warning level severity of a trace event.

@@ -8,17 +8,17 @@ import (
 type ErrorType uint
 
 const (
-	// Errmyuser indicates a generic error.
-	Errmyuser ErrorType = iota
+	// ErrUnknown indicates a generic error.
+	ErrUnknown ErrorType = iota
 
 	// ErrExpectedArgument indicates that an argument was expected.
 	ErrExpectedArgument
 
-	// ErrmyuserFlag indicates an myuser flag.
-	ErrmyuserFlag
+	// ErrUnknownFlag indicates an unknown flag.
+	ErrUnknownFlag
 
-	// ErrmyuserGroup indicates an myuser group.
-	ErrmyuserGroup
+	// ErrUnknownGroup indicates an unknown group.
+	ErrUnknownGroup
 
 	// ErrMarshal indicates a marshalling error while converting values.
 	ErrMarshal
@@ -49,8 +49,8 @@ const (
 	// specified
 	ErrCommandRequired
 
-	// ErrmyuserCommand indicates that an myuser command was specified.
-	ErrmyuserCommand
+	// ErrUnknownCommand indicates that an unknown command was specified.
+	ErrUnknownCommand
 
 	// ErrInvalidChoice indicates an invalid option value which only allows
 	// a certain number of choices.
@@ -62,14 +62,14 @@ const (
 
 func (e ErrorType) String() string {
 	switch e {
-	case Errmyuser:
-		return "myuser"
+	case ErrUnknown:
+		return "unknown"
 	case ErrExpectedArgument:
 		return "expected argument"
-	case ErrmyuserFlag:
-		return "myuser flag"
-	case ErrmyuserGroup:
-		return "myuser group"
+	case ErrUnknownFlag:
+		return "unknown flag"
+	case ErrUnknownGroup:
+		return "unknown group"
 	case ErrMarshal:
 		return "marshal"
 	case ErrHelp:
@@ -86,8 +86,8 @@ func (e ErrorType) String() string {
 		return "tag"
 	case ErrCommandRequired:
 		return "command required"
-	case ErrmyuserCommand:
-		return "myuser command"
+	case ErrUnknownCommand:
+		return "unknown command"
 	case ErrInvalidChoice:
 		return "invalid choice"
 	case ErrInvalidTag:
@@ -127,7 +127,7 @@ func wrapError(err error) *Error {
 	ret, ok := err.(*Error)
 
 	if !ok {
-		return newError(Errmyuser, err.Error())
+		return newError(ErrUnknown, err.Error())
 	}
 
 	return ret

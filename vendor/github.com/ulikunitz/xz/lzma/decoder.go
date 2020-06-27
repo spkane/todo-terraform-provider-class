@@ -32,7 +32,7 @@ type decoder struct {
 
 // newDecoder creates a new decoder instance. The parameter size provides
 // the expected byte size of the decompressed data. If the size is
-// myuser use a negative value. In that case the decoder will look for
+// unknown use a negative value. In that case the decoder will look for
 // a terminating end-of-stream marker.
 func newDecoder(br io.ByteReader, state *state, dict *decoderDict, size int64) (d *decoder, err error) {
 	rd, err := newRangeDecoder(br)

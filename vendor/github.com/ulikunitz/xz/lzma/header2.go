@@ -54,7 +54,7 @@ var chunkTypeStrings = [...]string{
 // String returns a string representation of the chunk type.
 func (c chunkType) String() string {
 	if !(cEOS <= c && c <= cLRND) {
-		return "myuser"
+		return "unknown"
 	}
 	return chunkTypeStrings[c]
 }

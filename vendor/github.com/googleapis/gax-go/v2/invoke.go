@@ -80,7 +80,7 @@ func invoke(ctx context.Context, call APICall, settings CallSettings, sp sleeper
 		// as if there's a network hiccup, or the internet goes out for a
 		// minute. This is also why here we are doing string parsing instead of
 		// simply making Unavailable a non-retried code elsewhere.
-		if strings.Contains(err.Error(), "x509: certificate signed by myuser authority") {
+		if strings.Contains(err.Error(), "x509: certificate signed by unknown authority") {
 			return err
 		}
 		if retryer == nil {

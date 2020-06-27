@@ -191,11 +191,11 @@ func (n *EvalValidateProvisioner) evaluateBlock(ctx EvalContext, body hcl.Body, 
 		// For a resource that has count, we allow count.index but don't
 		// know at this stage what it will return.
 		keyData = InstanceKeyEvalData{
-			CountIndex: cty.myuserVal(cty.Number),
+			CountIndex: cty.UnknownVal(cty.Number),
 		}
 
-		// "self" can't point to an myuser key, but we'll force it to be
-		// key 0 here, which should return an myuser value of the
+		// "self" can't point to an unknown key, but we'll force it to be
+		// key 0 here, which should return an unknown value of the
 		// expected type since none of these elements are known at this
 		// point anyway.
 		selfAddr = n.ResourceAddr.Instance(addrs.IntKey(0))
@@ -203,12 +203,12 @@ func (n *EvalValidateProvisioner) evaluateBlock(ctx EvalContext, body hcl.Body, 
 		// For a resource that has for_each, we allow each.value and each.key
 		// but don't know at this stage what it will return.
 		keyData = InstanceKeyEvalData{
-			EachKey:   cty.myuserVal(cty.String),
+			EachKey:   cty.UnknownVal(cty.String),
 			EachValue: cty.DynamicVal,
 		}
 
-		// "self" can't point to an myuser key, but we'll force it to be
-		// key "" here, which should return an myuser value of the
+		// "self" can't point to an unknown key, but we'll force it to be
+		// key "" here, which should return an unknown value of the
 		// expected type since none of these elements are known at
 		// this point anyway.
 		selfAddr = n.ResourceAddr.Instance(addrs.StringKey(""))
@@ -356,7 +356,7 @@ type EvalValidateResource struct {
 
 	// ConfigVal, if non-nil, will be updated with the value resulting from
 	// evaluating the given configuration body. Since validation is performed
-	// very early, this value is likely to contain lots of myuser values,
+	// very early, this value is likely to contain lots of unknown values,
 	// but its type will conform to the schema of the resource type associated
 	// with the resource instance being validated.
 	ConfigVal *cty.Value
@@ -375,11 +375,11 @@ func (n *EvalValidateResource) Eval(ctx EvalContext) (interface{}, error) {
 
 	keyData := EvalDataForNoInstanceKey
 	if n.Config.Count != nil {
-		// If the config block has count, we'll evaluate with an myuser
+		// If the config block has count, we'll evaluate with an unknown
 		// number as count.index so we can still type check even though
 		// we won't expand count until the plan phase.
 		keyData = InstanceKeyEvalData{
-			CountIndex: cty.myuserVal(cty.Number),
+			CountIndex: cty.UnknownVal(cty.Number),
 		}
 
 		// Basic type-checking of the count argument. More complete validation
@@ -390,8 +390,8 @@ func (n *EvalValidateResource) Eval(ctx EvalContext) (interface{}, error) {
 
 	if n.Config.ForEach != nil {
 		keyData = InstanceKeyEvalData{
-			EachKey:   cty.myuserVal(cty.String),
-			EachValue: cty.myuserVal(cty.DynamicPseudoType),
+			EachKey:   cty.UnknownVal(cty.String),
+			EachValue: cty.UnknownVal(cty.DynamicPseudoType),
 		}
 
 		// Evaluate the for_each expression here so we can expose the diagnostics

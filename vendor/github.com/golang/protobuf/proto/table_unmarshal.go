@@ -194,10 +194,10 @@ func (u *unmarshalInfo) unmarshal(m pointer, b []byte) error {
 				}
 				return err
 			}
-			// Fragments with bad wire type are treated as myuser fields.
+			// Fragments with bad wire type are treated as unknown fields.
 		}
 
-		// myuser tag.
+		// Unknown tag.
 		if !u.unrecognized.IsValid() {
 			// Don't keep unrecognized data; just skip it.
 			var err error
@@ -458,7 +458,7 @@ func fieldUnmarshaler(f *reflect.StructField) unmarshaler {
 func typeUnmarshaler(t reflect.Type, tags string) unmarshaler {
 	tagArray := strings.Split(tags, ",")
 	encoding := tagArray[0]
-	name := "myuser"
+	name := "unknown"
 	proto3 := false
 	validateUTF8 := true
 	for _, tag := range tagArray[3:] {
@@ -1776,7 +1776,7 @@ func makeUnmarshalMap(f *reflect.StructField) unmarshaler {
 			case 2:
 				b, err = unmarshalVal(b, valToPointer(v), wire)
 			default:
-				err = errInternalBadWireType // skip myuser tag
+				err = errInternalBadWireType // skip unknown tag
 			}
 
 			if nerr.Merge(err) {
@@ -1786,7 +1786,7 @@ func makeUnmarshalMap(f *reflect.StructField) unmarshaler {
 				return nil, err
 			}
 
-			// Skip past myuser fields.
+			// Skip past unknown fields.
 			b, err = skipField(b, wire)
 			if err != nil {
 				return nil, err
@@ -1876,7 +1876,7 @@ func skipField(b []byte, wire int) ([]byte, error) {
 		}
 		b = b[i:]
 	default:
-		return b, fmt.Errorf("proto: can't skip myuser wire type %d", wire)
+		return b, fmt.Errorf("proto: can't skip unknown wire type %d", wire)
 	}
 	return b, nil
 }

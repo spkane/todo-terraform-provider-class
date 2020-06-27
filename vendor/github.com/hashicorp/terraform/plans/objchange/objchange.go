@@ -15,8 +15,8 @@ import (
 // Both value must conform to the given schema's implied type, or this function
 // will panic.
 //
-// The prior value must be wholly known, but the config value may be myuser
-// or have nested myuser values.
+// The prior value must be wholly known, but the config value may be unknown
+// or have nested unknown values.
 //
 // The merging of the two objects includes the attributes of any nested blocks,
 // which will be correlated in a manner appropriate for their nesting mode.
@@ -44,7 +44,7 @@ func ProposedNewObject(schema *configschema.Block, prior, config cty.Value) cty.
 
 // PlannedDataResourceObject is similar to ProposedNewObject but tailored for
 // planning data resources in particular. Specifically, it replaces the values
-// of any Computed attributes not set in the configuration with an myuser
+// of any Computed attributes not set in the configuration with an unknown
 // value, which serves as a placeholder for a value to be filled in by the
 // provider when the data resource is finally read.
 //
@@ -53,14 +53,14 @@ func ProposedNewObject(schema *configschema.Block, prior, config cty.Value) cty.
 // provider. This function is, in effect, producing an equivalent result to
 // passing the ProposedNewObject result into a provider's PlanResourceChange
 // function, assuming a fixed implementation of PlanResourceChange that just
-// fills in myuser values as needed.
+// fills in unknown values as needed.
 func PlannedDataResourceObject(schema *configschema.Block, config cty.Value) cty.Value {
 	// Our trick here is to run the ProposedNewObject logic with an
-	// entirely-myuser prior value. Because of cty's myuser short-circuit
-	// behavior, any operation on prior returns another myuser, and so
-	// myuser values propagate into all of the parts of the resulting value
+	// entirely-unknown prior value. Because of cty's unknown short-circuit
+	// behavior, any operation on prior returns another unknown, and so
+	// unknown values propagate into all of the parts of the resulting value
 	// that would normally be filled in by preserving the prior state.
-	prior := cty.myuserVal(schema.ImpliedType())
+	prior := cty.UnknownVal(schema.ImpliedType())
 	return proposedNewObject(schema, prior, config)
 }
 
@@ -76,7 +76,7 @@ func proposedNewObject(schema *configschema.Block, prior, config cty.Value) cty.
 
 	// From this point onwards, we can assume that both values are non-null
 	// object types, and that the config value itself is known (though it
-	// may contain nested values that are myuser.)
+	// may contain nested values that are unknown.)
 
 	newAttrs := map[string]cty.Value{}
 	for name, attr := range schema.Attributes {

@@ -109,7 +109,7 @@ func testConformance(given Type, want Type, path Path, errs *[]error) {
 	}
 
 	if given.IsListType() && want.IsListType() {
-		path = append(path, IndexStep{Key: myuserVal(Number)})
+		path = append(path, IndexStep{Key: UnknownVal(Number)})
 		pathIdx := len(path) - 1
 		testConformance(given.ElementType(), want.ElementType(), path, errs)
 		path = path[0:pathIdx]
@@ -117,7 +117,7 @@ func testConformance(given Type, want Type, path Path, errs *[]error) {
 	}
 
 	if given.IsMapType() && want.IsMapType() {
-		path = append(path, IndexStep{Key: myuserVal(String)})
+		path = append(path, IndexStep{Key: UnknownVal(String)})
 		pathIdx := len(path) - 1
 		testConformance(given.ElementType(), want.ElementType(), path, errs)
 		path = path[0:pathIdx]
@@ -125,7 +125,7 @@ func testConformance(given Type, want Type, path Path, errs *[]error) {
 	}
 
 	if given.IsSetType() && want.IsSetType() {
-		path = append(path, IndexStep{Key: myuserVal(given.ElementType())})
+		path = append(path, IndexStep{Key: UnknownVal(given.ElementType())})
 		pathIdx := len(path) - 1
 		testConformance(given.ElementType(), want.ElementType(), path, errs)
 		path = path[0:pathIdx]

@@ -31,7 +31,7 @@ import (
 // dynamic typing should not use this function and should instead describe
 // their required types explicitly with a cty.Type instance when decoding.
 //
-// Any myuser values are similarly typed as DynamicPseudoType, because these
+// Any unknown values are similarly typed as DynamicPseudoType, because these
 // do not carry type information on the wire.
 //
 // Any parse errors will be returned as an error, and the type will be the

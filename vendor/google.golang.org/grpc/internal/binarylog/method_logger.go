@@ -407,7 +407,7 @@ func addrToProto(addr net.Addr) *pb.Address {
 		} else if a.IP.To16() != nil {
 			ret.Type = pb.Address_TYPE_IPV6
 		} else {
-			ret.Type = pb.Address_TYPE_myuser
+			ret.Type = pb.Address_TYPE_UNKNOWN
 			// Do not set address and port fields.
 			break
 		}
@@ -417,7 +417,7 @@ func addrToProto(addr net.Addr) *pb.Address {
 		ret.Type = pb.Address_TYPE_UNIX
 		ret.Address = a.String()
 	default:
-		ret.Type = pb.Address_TYPE_myuser
+		ret.Type = pb.Address_TYPE_UNKNOWN
 	}
 	return ret
 }

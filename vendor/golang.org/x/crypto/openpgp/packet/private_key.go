@@ -31,7 +31,7 @@ type PrivateKey struct {
 	encryptedData []byte
 	cipher        CipherFunction
 	s2k           func(out, in []byte)
-	PrivateKey    interface{} // An *{rsa|dsa|ecdsa}.PrivateKey or a crypto.Signer.
+	PrivateKey    interface{} // An *{rsa|dsa|ecdsa}.PrivateKey or crypto.Signer/crypto.Decrypter (Decryptor RSA only).
 	sha1Checksum  bool
 	iv            []byte
 }
@@ -80,7 +80,7 @@ func NewSignerPrivateKey(creationTime time.Time, signer crypto.Signer) *PrivateK
 	case ecdsa.PublicKey:
 		pk.PublicKey = *NewECDSAPublicKey(creationTime, &pubkey)
 	default:
-		panic("openpgp: myuser crypto.Signer type in NewSignerPrivateKey")
+		panic("openpgp: unknown crypto.Signer type in NewSignerPrivateKey")
 	}
 	pk.PrivateKey = signer
 	return pk
@@ -174,7 +174,7 @@ func (pk *PrivateKey) Serialize(w io.Writer) (err error) {
 	case *ecdsa.PrivateKey:
 		err = serializeECDSAPrivateKey(privateKeyBuf, priv)
 	default:
-		err = errors.InvalidArgumentError("myuser private key type")
+		err = errors.InvalidArgumentError("unknown private key type")
 	}
 	if err != nil {
 		return

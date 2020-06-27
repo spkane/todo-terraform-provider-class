@@ -5,10 +5,10 @@
 // then values can be round-tripped without loss, except for capsule types
 // which are not currently supported.
 //
-// If any myuser values are passed to Marshal then they will be represented
+// If any unknown values are passed to Marshal then they will be represented
 // using a msgpack extension with type code zero, which is understood by
 // the Unmarshal function within this package but will not be understood by
-// a generic (non-cty-aware) msgpack decoder. Ensure that no myuser values
+// a generic (non-cty-aware) msgpack decoder. Ensure that no unknown values
 // are used if interoperability with other msgpack implementations is
 // required.
 package msgpack

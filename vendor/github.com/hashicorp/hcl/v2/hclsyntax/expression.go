@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/hashicorp/hcl/v2"
+	"github.com/hashicorp/hcl/v2/ext/customdecode"
 	"github.com/zclconf/go-cty/cty"
 	"github.com/zclconf/go-cty/cty/convert"
 	"github.com/zclconf/go-cty/cty/function"
@@ -232,7 +233,7 @@ func (e *FunctionCallExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnosti
 		return cty.DynamicVal, hcl.Diagnostics{
 			{
 				Severity:    hcl.DiagError,
-				Summary:     "Call to myuser function",
+				Summary:     "Call to unknown function",
 				Detail:      fmt.Sprintf("There is no function named %q.%s", e.Name, suggestion),
 				Subject:     &e.NameRange,
 				Context:     e.Range().Ptr(),
@@ -350,26 +351,38 @@ func (e *FunctionCallExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnosti
 			param = varParam
 		}
 
-		val, argDiags := argExpr.Value(ctx)
-		if len(argDiags) > 0 {
+		var val cty.Value
+		if decodeFn := customdecode.CustomExpressionDecoderForType(param.Type); decodeFn != nil {
+			var argDiags hcl.Diagnostics
+			val, argDiags = decodeFn(argExpr, ctx)
 			diags = append(diags, argDiags...)
-		}
+			if val == cty.NilVal {
+				val = cty.UnknownVal(param.Type)
+			}
+		} else {
+			var argDiags hcl.Diagnostics
+			val, argDiags = argExpr.Value(ctx)
+			if len(argDiags) > 0 {
+				diags = append(diags, argDiags...)
+			}
 
-		// Try to convert our value to the parameter type
-		val, err := convert.Convert(val, param.Type)
-		if err != nil {
-			diags = append(diags, &hcl.Diagnostic{
-				Severity: hcl.DiagError,
-				Summary:  "Invalid function argument",
-				Detail: fmt.Sprintf(
-					"Invalid value for %q parameter: %s.",
-					param.Name, err,
-				),
-				Subject:     argExpr.StartRange().Ptr(),
-				Context:     e.Range().Ptr(),
-				Expression:  argExpr,
-				EvalContext: ctx,
-			})
+			// Try to convert our value to the parameter type
+			var err error
+			val, err = convert.Convert(val, param.Type)
+			if err != nil {
+				diags = append(diags, &hcl.Diagnostic{
+					Severity: hcl.DiagError,
+					Summary:  "Invalid function argument",
+					Detail: fmt.Sprintf(
+						"Invalid value for %q parameter: %s.",
+						param.Name, err,
+					),
+					Subject:     argExpr.StartRange().Ptr(),
+					Context:     e.Range().Ptr(),
+					Expression:  argExpr,
+					EvalContext: ctx,
+				})
+			}
 		}
 
 		argVals[i] = val
@@ -494,7 +507,7 @@ func (e *ConditionalExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostic
 		resultType = trueResult.Type()
 		convs[1] = convert.GetConversionUnsafe(cty.DynamicPseudoType, resultType)
 	case trueResult.Type() == cty.DynamicPseudoType, falseResult.Type() == cty.DynamicPseudoType:
-		// the final resultType type is still myuser
+		// the final resultType type is still unknown
 		// we don't need to get the conversion, because both are a noop.
 
 	default:
@@ -535,10 +548,10 @@ func (e *ConditionalExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostic
 			Expression:  e.Condition,
 			EvalContext: ctx,
 		})
-		return cty.myuserVal(resultType), diags
+		return cty.UnknownVal(resultType), diags
 	}
 	if !condResult.IsKnown() {
-		return cty.myuserVal(resultType), diags
+		return cty.UnknownVal(resultType), diags
 	}
 	condResult, err := convert.Convert(condResult, cty.Bool)
 	if err != nil {
@@ -551,7 +564,7 @@ func (e *ConditionalExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostic
 			Expression:  e.Condition,
 			EvalContext: ctx,
 		})
-		return cty.myuserVal(resultType), diags
+		return cty.UnknownVal(resultType), diags
 	}
 
 	if condResult.True() {
@@ -573,7 +586,7 @@ func (e *ConditionalExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostic
 					Expression:  e.TrueResult,
 					EvalContext: ctx,
 				})
-				trueResult = cty.myuserVal(resultType)
+				trueResult = cty.UnknownVal(resultType)
 			}
 		}
 		return trueResult, diags
@@ -596,7 +609,7 @@ func (e *ConditionalExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostic
 					Expression:  e.FalseResult,
 					EvalContext: ctx,
 				})
-				falseResult = cty.myuserVal(resultType)
+				falseResult = cty.UnknownVal(resultType)
 			}
 		}
 		return falseResult, diags
@@ -615,8 +628,9 @@ type IndexExpr struct {
 	Collection Expression
 	Key        Expression
 
-	SrcRange  hcl.Range
-	OpenRange hcl.Range
+	SrcRange     hcl.Range
+	OpenRange    hcl.Range
+	BracketRange hcl.Range
 }
 
 func (e *IndexExpr) walkChildNodes(w internalWalkFunc) {
@@ -631,7 +645,7 @@ func (e *IndexExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) {
 	diags = append(diags, collDiags...)
 	diags = append(diags, keyDiags...)
 
-	val, indexDiags := hcl.Index(coll, key, &e.SrcRange)
+	val, indexDiags := hcl.Index(coll, key, &e.BracketRange)
 	setDiagEvalContext(indexDiags, e, ctx)
 	diags = append(diags, indexDiags...)
 	return val, diags
@@ -713,7 +727,7 @@ func (e *ObjectConsExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics
 	var diags hcl.Diagnostics
 
 	// This will get set to true if we fail to produce any of our keys,
-	// either because they are actually myuser or if the evaluation produces
+	// either because they are actually unknown or if the evaluation produces
 	// errors. In all of these case we must return DynamicPseudoType because
 	// we're unable to know the full set of keys our object has, and thus
 	// we can't produce a complete value of the intended type.
@@ -1314,7 +1328,7 @@ func (e *SplatExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) {
 		switch {
 		case sourceTy.IsListType() || sourceTy.IsSetType():
 			ety := sourceTy.ElementType()
-			e.Item.setValue(chiCtx, cty.myuserVal(ety))
+			e.Item.setValue(chiCtx, cty.UnknownVal(ety))
 			val, itemDiags := e.Each.Value(chiCtx)
 			diags = append(diags, itemDiags...)
 			e.Item.clearValue(chiCtx) // clean up our temporary value
@@ -1323,7 +1337,7 @@ func (e *SplatExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) {
 			etys := sourceTy.TupleElementTypes()
 			resultTys := make([]cty.Type, 0, len(etys))
 			for _, ety := range etys {
-				e.Item.setValue(chiCtx, cty.myuserVal(ety))
+				e.Item.setValue(chiCtx, cty.UnknownVal(ety))
 				val, itemDiags := e.Each.Value(chiCtx)
 				diags = append(diags, itemDiags...)
 				e.Item.clearValue(chiCtx) // clean up our temporary value
@@ -1342,7 +1356,7 @@ func (e *SplatExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) {
 		// checking to proceed.
 		ty, tyDiags := resultTy()
 		diags = append(diags, tyDiags...)
-		return cty.myuserVal(ty), diags
+		return cty.UnknownVal(ty), diags
 	}
 
 	vals := make([]cty.Value, 0, sourceVal.LengthInt())
@@ -1369,7 +1383,7 @@ func (e *SplatExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) {
 		// We'll ingore the resultTy diagnostics in this case since they
 		// will just be the same errors we saw while iterating above.
 		ty, _ := resultTy()
-		return cty.myuserVal(ty), diags
+		return cty.UnknownVal(ty), diags
 	}
 
 	switch {

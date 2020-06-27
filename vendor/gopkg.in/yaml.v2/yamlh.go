@@ -188,7 +188,7 @@ func (tt yaml_token_type_t) String() string {
 	case yaml_SCALAR_TOKEN:
 		return "yaml_SCALAR_TOKEN"
 	}
-	return "<myuser token>"
+	return "<unknown token>"
 }
 
 // The token structure.
@@ -256,7 +256,7 @@ var eventStrings = []string{
 
 func (e yaml_event_type_t) String() string {
 	if e < 0 || int(e) >= len(eventStrings) {
-		return fmt.Sprintf("myuser event %d", e)
+		return fmt.Sprintf("unknown event %d", e)
 	}
 	return eventStrings[e]
 }
@@ -508,7 +508,7 @@ func (ps yaml_parser_state_t) String() string {
 	case yaml_PARSE_END_STATE:
 		return "yaml_PARSE_END_STATE"
 	}
-	return "<myuser parser state>"
+	return "<unknown parser state>"
 }
 
 // This structure holds aliases data.
@@ -579,6 +579,7 @@ type yaml_parser_t struct {
 
 	simple_key_allowed bool                // May a simple key occur at the current position?
 	simple_keys        []yaml_simple_key_t // The stack of simple keys.
+	simple_keys_by_tok map[int]int         // possible simple_key indexes indexed by token_number
 
 	// Parser stuff
 

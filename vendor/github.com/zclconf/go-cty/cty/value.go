@@ -8,7 +8,7 @@ package cty
 // are intended for use in implementing a language in terms of cty, while
 // integration methods either enter or leave the type system, working with
 // native Go values. Operation methods are guaranteed to support all of the
-// expected short-circuit behavior for myuser and dynamic values, while
+// expected short-circuit behavior for unknown and dynamic values, while
 // integration methods may not.
 //
 // The philosophy for the operations API is that it's the caller's
@@ -38,14 +38,17 @@ func (val Value) Type() Type {
 }
 
 // IsKnown returns true if the value is known. That is, if it is not
-// the result of the myuser value constructor myuser(...), and is not
-// the result of an operation on another myuser value.
+// the result of the unknown value constructor Unknown(...), and is not
+// the result of an operation on another unknown value.
 //
-// myuser values are only produced either directly or as a result of
-// operating on other myuser values, and so an application that never
-// introduces myuser values can be guaranteed to never receive any either.
+// Unknown values are only produced either directly or as a result of
+// operating on other unknown values, and so an application that never
+// introduces Unknown values can be guaranteed to never receive any either.
 func (val Value) IsKnown() bool {
-	return val.v != myuser
+	if val.IsMarked() {
+		return val.unmarkForce().IsKnown()
+	}
+	return val.v != unknown
 }
 
 // IsNull returns true if the value is null. Values of any type can be
@@ -53,6 +56,9 @@ func (val Value) IsKnown() bool {
 // produces null, so an application that never introduces Null values can
 // be guaranteed to never receive any either.
 func (val Value) IsNull() bool {
+	if val.IsMarked() {
+		return val.unmarkForce().IsNull()
+	}
 	return val.v == nil
 }
 
@@ -71,9 +77,13 @@ var NilVal = Value{
 }
 
 // IsWhollyKnown is an extension of IsKnown that also recursively checks
-// inside collections and structures to see if there are any nested myuser
+// inside collections and structures to see if there are any nested unknown
 // values.
 func (val Value) IsWhollyKnown() bool {
+	if val.IsMarked() {
+		return val.unmarkForce().IsWhollyKnown()
+	}
+
 	if !val.IsKnown() {
 		return false
 	}

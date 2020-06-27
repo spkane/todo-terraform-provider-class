@@ -59,7 +59,7 @@ Requirements: bash, go, docker
 This section describes the various files used in the code generation process.
 It also contains instructions on how to modify these files to add a new
 architecture/OS or to add additional syscalls, types, or constants. Note that
-if you are using the new build system, the bin/programs cannot be called normally.
+if you are using the new build system, the scripts/programs cannot be called normally.
 They must be called from within the docker container.
 
 ### asm files
@@ -148,6 +148,17 @@ these constants are written to `zerrors_${GOOS}_${GOARCH}.go` via a C program,
 To add a constant, add the header that includes it to the appropriate variable.
 Then, edit the regex (if necessary) to match the desired constant. Avoid making
 the regex too broad to avoid matching unintended constants.
+
+### mkmerge.go
+
+This program is used to extract duplicate const, func, and type declarations
+from the generated architecture-specific files listed below, and merge these
+into a common file for each OS.
+
+The merge is performed in the following steps:
+1. Construct the set of common code that is idential in all architecture-specific files.
+2. Write this common code to the merged file.
+3. Remove the common code from all architecture-specific files.
 
 
 ## Generated files

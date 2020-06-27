@@ -29,7 +29,7 @@ func walk(path Path, val Value, cb func(Path, Value) (bool, error)) error {
 	}
 
 	if val.IsNull() || !val.IsKnown() {
-		// Can't recurse into null or myuser values, regardless of type
+		// Can't recurse into null or unknown values, regardless of type
 		return nil
 	}
 
@@ -96,7 +96,7 @@ func transform(path Path, val Value, cb func(Path, Value) (Value, error)) (Value
 	switch {
 
 	case val.IsNull() || !val.IsKnown():
-		// Can't recurse into null or myuser values, regardless of type
+		// Can't recurse into null or unknown values, regardless of type
 		newVal = val
 
 	case ty.IsListType() || ty.IsSetType() || ty.IsTupleType():
@@ -126,7 +126,7 @@ func transform(path Path, val Value, cb func(Path, Value) (Value, error)) (Value
 			case ty.IsTupleType():
 				newVal = TupleVal(elems)
 			default:
-				panic("myuser sequence type") // should never happen because of the case we are in
+				panic("unknown sequence type") // should never happen because of the case we are in
 			}
 		}
 

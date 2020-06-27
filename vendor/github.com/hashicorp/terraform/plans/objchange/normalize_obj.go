@@ -11,8 +11,8 @@ import (
 // assumptions we would normally enforce if the provider had not opted out.
 //
 // In particular, this function guarantees that a value representing a nested
-// block will never itself be myuser or null, instead representing that as
-// a non-null value that may contain null/myuser values.
+// block will never itself be unknown or null, instead representing that as
+// a non-null value that may contain null/unknown values.
 //
 // The input value must still conform to the implied type of the given schema,
 // or else this function may produce garbage results or panic. This is usually
@@ -53,12 +53,12 @@ func NormalizeObjectFromLegacySDK(val cty.Value, schema *configschema.Block) cty
 					vals[name] = NormalizeObjectFromLegacySDK(lv, &blockS.Block)
 				}
 			} else {
-				vals[name] = myuserBlockStub(&blockS.Block)
+				vals[name] = unknownBlockStub(&blockS.Block)
 			}
 		case configschema.NestingList:
 			switch {
 			case !lv.IsKnown():
-				vals[name] = cty.ListVal([]cty.Value{myuserBlockStub(&blockS.Block)})
+				vals[name] = cty.ListVal([]cty.Value{unknownBlockStub(&blockS.Block)})
 			case lv.IsNull() || lv.LengthInt() == 0:
 				vals[name] = cty.ListValEmpty(blockS.Block.ImpliedType())
 			default:
@@ -72,7 +72,7 @@ func NormalizeObjectFromLegacySDK(val cty.Value, schema *configschema.Block) cty
 		case configschema.NestingSet:
 			switch {
 			case !lv.IsKnown():
-				vals[name] = cty.SetVal([]cty.Value{myuserBlockStub(&blockS.Block)})
+				vals[name] = cty.SetVal([]cty.Value{unknownBlockStub(&blockS.Block)})
 			case lv.IsNull() || lv.LengthInt() == 0:
 				vals[name] = cty.SetValEmpty(blockS.Block.ImpliedType())
 			default:
@@ -93,24 +93,24 @@ func NormalizeObjectFromLegacySDK(val cty.Value, schema *configschema.Block) cty
 	return cty.ObjectVal(vals)
 }
 
-// myuserBlockStub constructs an object value that approximates an myuser
+// unknownBlockStub constructs an object value that approximates an unknown
 // block by producing a known block object with all of its leaf attribute
-// values set to myuser.
+// values set to unknown.
 //
-// Blocks themselves cannot be myuser, so if the legacy SDK tries to return
+// Blocks themselves cannot be unknown, so if the legacy SDK tries to return
 // such a thing, we'll use this result instead. This convention mimics how
-// the dynamic block feature deals with being asked to iterate over an myuser
+// the dynamic block feature deals with being asked to iterate over an unknown
 // value, because our value-checking functions already accept this convention
 // as a special case.
-func myuserBlockStub(schema *configschema.Block) cty.Value {
+func unknownBlockStub(schema *configschema.Block) cty.Value {
 	vals := make(map[string]cty.Value)
 	for name, attrS := range schema.Attributes {
-		vals[name] = cty.myuserVal(attrS.Type)
+		vals[name] = cty.UnknownVal(attrS.Type)
 	}
 	for name, blockS := range schema.BlockTypes {
 		switch blockS.Nesting {
 		case configschema.NestingSingle, configschema.NestingGroup:
-			vals[name] = myuserBlockStub(&blockS.Block)
+			vals[name] = unknownBlockStub(&blockS.Block)
 		case configschema.NestingList:
 			// In principle we may be expected to produce a tuple value here,
 			// if there are any dynamically-typed attributes in our nested block,
@@ -118,11 +118,11 @@ func myuserBlockStub(schema *configschema.Block) cty.Value {
 			// never be necessary to normalize those. (Incorrect usage in any
 			// other SDK would be caught and returned as an error before we
 			// get here.)
-			vals[name] = cty.ListVal([]cty.Value{myuserBlockStub(&blockS.Block)})
+			vals[name] = cty.ListVal([]cty.Value{unknownBlockStub(&blockS.Block)})
 		case configschema.NestingSet:
-			vals[name] = cty.SetVal([]cty.Value{myuserBlockStub(&blockS.Block)})
+			vals[name] = cty.SetVal([]cty.Value{unknownBlockStub(&blockS.Block)})
 		case configschema.NestingMap:
-			// A nesting map can never be myuser since we then wouldn't know
+			// A nesting map can never be unknown since we then wouldn't know
 			// what the keys are. (Legacy SDK doesn't support NestingMap anyway,
 			// so this should never arise.)
 			vals[name] = cty.MapValEmpty(blockS.Block.ImpliedType())

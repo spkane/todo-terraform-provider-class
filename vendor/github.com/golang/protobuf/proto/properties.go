@@ -213,7 +213,7 @@ func (p *Properties) Parse(s string) {
 		p.WireType = WireBytes
 		// no numeric converter for non-numeric types
 	default:
-		log.Printf("proto: tag has myuser wire type: %q", s)
+		log.Printf("proto: tag has unknown wire type: %q", s)
 		return
 	}
 

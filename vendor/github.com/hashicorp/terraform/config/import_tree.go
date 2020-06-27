@@ -81,7 +81,7 @@ func loadTree(root string) (*importTree, error) {
 
 	if f == nil {
 		return nil, fmt.Errorf(
-			"%s: myuser configuration format. Use '.tf' or '.tf.json' extension",
+			"%s: unknown configuration format. Use '.tf' or '.tf.json' extension",
 			root)
 	}
 

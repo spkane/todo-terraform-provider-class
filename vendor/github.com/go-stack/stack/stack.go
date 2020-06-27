@@ -390,7 +390,7 @@ func inGoroot(c Call) bool {
 }
 
 // TrimRuntime returns a slice of the CallStack with the topmost entries from
-// the go runtime removed. It considers any calls originating from myuser
+// the go runtime removed. It considers any calls originating from unknown
 // files, files under GOROOT, or _testmain.go as part of the runtime.
 func (cs CallStack) TrimRuntime() CallStack {
 	for len(cs) > 0 && inGoroot(cs[len(cs)-1]) {

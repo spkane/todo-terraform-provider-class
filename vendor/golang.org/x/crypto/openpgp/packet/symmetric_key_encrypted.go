@@ -40,7 +40,7 @@ func (ske *SymmetricKeyEncrypted) parse(r io.Reader) error {
 	ske.CipherFunc = CipherFunction(buf[1])
 
 	if ske.CipherFunc.KeySize() == 0 {
-		return errors.UnsupportedError("myuser cipher: " + strconv.Itoa(int(buf[1])))
+		return errors.UnsupportedError("unknown cipher: " + strconv.Itoa(int(buf[1])))
 	}
 
 	var err error
@@ -85,7 +85,7 @@ func (ske *SymmetricKeyEncrypted) Decrypt(passphrase []byte) ([]byte, CipherFunc
 	c.XORKeyStream(plaintextKey, ske.encryptedKey)
 	cipherFunc := CipherFunction(plaintextKey[0])
 	if cipherFunc.blockSize() == 0 {
-		return nil, ske.CipherFunc, errors.UnsupportedError("myuser cipher: " + strconv.Itoa(int(cipherFunc)))
+		return nil, ske.CipherFunc, errors.UnsupportedError("unknown cipher: " + strconv.Itoa(int(cipherFunc)))
 	}
 	plaintextKey = plaintextKey[1:]
 	if l, cipherKeySize := len(plaintextKey), cipherFunc.KeySize(); l != cipherFunc.KeySize() {
@@ -104,7 +104,7 @@ func SerializeSymmetricKeyEncrypted(w io.Writer, passphrase []byte, config *Conf
 	cipherFunc := config.Cipher()
 	keySize := cipherFunc.KeySize()
 	if keySize == 0 {
-		return nil, errors.UnsupportedError("myuser cipher: " + strconv.Itoa(int(cipherFunc)))
+		return nil, errors.UnsupportedError("unknown cipher: " + strconv.Itoa(int(cipherFunc)))
 	}
 
 	s2kBuf := new(bytes.Buffer)

@@ -44,8 +44,8 @@ func evaluateResourceCountExpression(expr hcl.Expression, ctx EvalContext) (int,
 }
 
 // evaluateResourceCountExpressionKnown is like evaluateResourceCountExpression
-// except that it handles an myuser result by returning count = 0 and
-// a known = false, rather than by reporting the myuser value as an error
+// except that it handles an unknown result by returning count = 0 and
+// a known = false, rather than by reporting the unknown value as an error
 // diagnostic.
 func evaluateResourceCountExpressionKnown(expr hcl.Expression, ctx EvalContext) (count int, known bool, diags tfdiags.Diagnostics) {
 	if expr == nil {

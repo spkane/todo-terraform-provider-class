@@ -279,12 +279,12 @@ func (d *decodeState) decodeHeader(frame *http2.MetaHeadersFrame) error {
 		}
 		if d.data.rawStatusCode == nil && d.data.statusGen == nil {
 			// gRPC status doesn't exist.
-			// Set rawStatusCode to be myuser and return nil error.
-			// So that, if the stream has ended this myuser status
+			// Set rawStatusCode to be unknown and return nil error.
+			// So that, if the stream has ended this Unknown status
 			// will be propagated to the user.
 			// Otherwise, it will be ignored. In which case, status from
 			// a later trailer, that has StreamEnded flag set, is propagated.
-			code := int(codes.myuser)
+			code := int(codes.Unknown)
 			d.data.rawStatusCode = &code
 		}
 		return nil
@@ -303,7 +303,7 @@ func (d *decodeState) decodeHeader(frame *http2.MetaHeadersFrame) error {
 	if d.data.httpStatus != nil {
 		code, ok = HTTPStatusConvTab[*(d.data.httpStatus)]
 		if !ok {
-			code = codes.myuser
+			code = codes.Unknown
 		}
 	}
 
@@ -667,6 +667,7 @@ func newFramer(conn net.Conn, writeBufferSize, readBufferSize int, maxHeaderList
 		writer: w,
 		fr:     http2.NewFramer(w, r),
 	}
+	f.fr.SetMaxReadFrameSize(http2MaxFrameLen)
 	// Opt-in to Frame reuse API on framer to reduce garbage.
 	// Frames aren't safe to read from after a subsequent call to ReadFrame.
 	f.fr.SetReuseFrames()

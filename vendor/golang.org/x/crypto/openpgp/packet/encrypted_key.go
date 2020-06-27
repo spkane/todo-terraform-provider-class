@@ -5,6 +5,7 @@
 package packet
 
 import (
+	"crypto"
 	"crypto/rsa"
 	"encoding/binary"
 	"io"
@@ -35,7 +36,7 @@ func (e *EncryptedKey) parse(r io.Reader) (err error) {
 		return
 	}
 	if buf[0] != encryptedKeyVersion {
-		return errors.UnsupportedError("myuser EncryptedKey version " + strconv.Itoa(int(buf[0])))
+		return errors.UnsupportedError("unknown EncryptedKey version " + strconv.Itoa(int(buf[0])))
 	}
 	e.KeyId = binary.BigEndian.Uint64(buf[1:9])
 	e.Algo = PublicKeyAlgorithm(buf[9])
@@ -78,8 +79,9 @@ func (e *EncryptedKey) Decrypt(priv *PrivateKey, config *Config) error {
 	// padding oracle attacks.
 	switch priv.PubKeyAlgo {
 	case PubKeyAlgoRSA, PubKeyAlgoRSAEncryptOnly:
-		k := priv.PrivateKey.(*rsa.PrivateKey)
-		b, err = rsa.DecryptPKCS1v15(config.Random(), k, padToKeySize(&k.PublicKey, e.encryptedMPI1.bytes))
+		// Supports both *rsa.PrivateKey and crypto.Decrypter
+		k := priv.PrivateKey.(crypto.Decrypter)
+		b, err = k.Decrypt(config.Random(), padToKeySize(k.Public().(*rsa.PublicKey), e.encryptedMPI1.bytes), nil)
 	case PubKeyAlgoElGamal:
 		c1 := new(big.Int).SetBytes(e.encryptedMPI1.bytes)
 		c2 := new(big.Int).SetBytes(e.encryptedMPI2.bytes)

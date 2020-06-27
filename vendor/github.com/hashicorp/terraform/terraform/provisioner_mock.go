@@ -81,7 +81,7 @@ func (p *MockProvisioner) ProvisionResource(r provisioners.ProvisionResourceRequ
 	p.ProvisionResourceRequest = r
 	if p.ApplyFn != nil {
 		if !r.Config.IsKnown() {
-			panic(fmt.Sprintf("cannot provision with myuser value: %#v", r.Config))
+			panic(fmt.Sprintf("cannot provision with unknown value: %#v", r.Config))
 		}
 
 		schema := p.getSchema()
@@ -120,7 +120,6 @@ func (p *MockProvisioner) ProvisionResource(r provisioners.ProvisionResourceRequ
 	}
 	if p.ProvisionResourceFn != nil {
 		fn := p.ProvisionResourceFn
-		p.Unlock()
 		return fn(r)
 	}
 

@@ -796,7 +796,7 @@ func (r *Resource) checkSchemaVersion(is *terraform.InstanceState) (bool, int) {
 	stateSchemaVersion, _ := strconv.Atoi(rawString)
 
 	// Don't run MigrateState if the version is handled by a StateUpgrader,
-	// since StateMigrateFuncs are not required to handle myuser versions
+	// since StateMigrateFuncs are not required to handle unknown versions
 	maxVersion := r.SchemaVersion
 	if len(r.StateUpgraders) > 0 {
 		maxVersion = r.StateUpgraders[0].Version

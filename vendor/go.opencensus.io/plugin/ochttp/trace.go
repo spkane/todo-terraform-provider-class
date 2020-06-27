@@ -83,7 +83,7 @@ func (t *traceTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	span.AddAttributes(requestAttrs(req)...)
 	resp, err := t.base.RoundTrip(req)
 	if err != nil {
-		span.SetStatus(trace.Status{Code: trace.StatusCodemyuser, Message: err.Error()})
+		span.SetStatus(trace.Status{Code: trace.StatusCodeUnknown, Message: err.Error()})
 		span.End()
 		return resp, err
 	}
@@ -179,7 +179,7 @@ func responseAttrs(resp *http.Response) []trace.Attribute {
 func TraceStatus(httpStatusCode int, statusLine string) trace.Status {
 	var code int32
 	if httpStatusCode < 200 || httpStatusCode >= 400 {
-		code = trace.StatusCodemyuser
+		code = trace.StatusCodeUnknown
 	}
 	switch httpStatusCode {
 	case 499:
@@ -209,7 +209,7 @@ func TraceStatus(httpStatusCode int, statusLine string) trace.Status {
 var codeToStr = map[int32]string{
 	trace.StatusCodeOK:                 `OK`,
 	trace.StatusCodeCancelled:          `CANCELLED`,
-	trace.StatusCodemyuser:             `myuser`,
+	trace.StatusCodeUnknown:            `UNKNOWN`,
 	trace.StatusCodeInvalidArgument:    `INVALID_ARGUMENT`,
 	trace.StatusCodeDeadlineExceeded:   `DEADLINE_EXCEEDED`,
 	trace.StatusCodeNotFound:           `NOT_FOUND`,

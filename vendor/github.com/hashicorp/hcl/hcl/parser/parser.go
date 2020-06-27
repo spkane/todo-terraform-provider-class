@@ -296,7 +296,7 @@ func (p *Parser) object() (ast.Node, error) {
 
 	return nil, &PosError{
 		Pos: tok.Pos,
-		Err: fmt.Errorf("myuser token: %+v", tok),
+		Err: fmt.Errorf("Unknown token: %+v", tok),
 	}
 }
 

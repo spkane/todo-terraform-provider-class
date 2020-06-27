@@ -144,7 +144,7 @@ func (f *credentialsFile) tokenSource(ctx context.Context, scopes []string) (oau
 	case "":
 		return nil, errors.New("missing 'type' field in credentials")
 	default:
-		return nil, fmt.Errorf("myuser credential type: %q", f.Type)
+		return nil, fmt.Errorf("unknown credential type: %q", f.Type)
 	}
 }
 

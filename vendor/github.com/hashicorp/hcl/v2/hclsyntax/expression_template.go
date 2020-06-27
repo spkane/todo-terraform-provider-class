@@ -46,8 +46,8 @@ func (e *TemplateExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) 
 		}
 
 		if !partVal.IsKnown() {
-			// If any part is myuser then the result as a whole must be
-			// myuser too. We'll keep on processing the rest of the parts
+			// If any part is unknown then the result as a whole must be
+			// unknown too. We'll keep on processing the rest of the parts
 			// anyway, because we want to still emit any diagnostics resulting
 			// from evaluating those.
 			isKnown = false
@@ -75,7 +75,7 @@ func (e *TemplateExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) 
 	}
 
 	if !isKnown {
-		return cty.myuserVal(cty.String), diags
+		return cty.UnknownVal(cty.String), diags
 	}
 
 	return cty.StringVal(buf.String()), diags
@@ -129,14 +129,14 @@ func (e *TemplateJoinExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnosti
 		panic("TemplateJoinExpr got null tuple")
 	}
 	if tuple.Type() == cty.DynamicPseudoType {
-		return cty.myuserVal(cty.String), diags
+		return cty.UnknownVal(cty.String), diags
 	}
 	if !tuple.Type().IsTupleType() {
 		// This indicates a bug in the code that constructed the AST.
 		panic("TemplateJoinExpr got non-tuple tuple")
 	}
 	if !tuple.IsKnown() {
-		return cty.myuserVal(cty.String), diags
+		return cty.UnknownVal(cty.String), diags
 	}
 
 	buf := &bytes.Buffer{}
@@ -158,7 +158,7 @@ func (e *TemplateJoinExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnosti
 			continue
 		}
 		if val.Type() == cty.DynamicPseudoType {
-			return cty.myuserVal(cty.String), diags
+			return cty.UnknownVal(cty.String), diags
 		}
 		strVal, err := convert.Convert(val, cty.String)
 		if err != nil {
@@ -176,7 +176,7 @@ func (e *TemplateJoinExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnosti
 			continue
 		}
 		if !val.IsKnown() {
-			return cty.myuserVal(cty.String), diags
+			return cty.UnknownVal(cty.String), diags
 		}
 
 		buf.WriteString(strVal.AsString())

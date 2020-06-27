@@ -58,7 +58,7 @@ func FormatTime(name string, t time.Time) string {
 	case UnixTimeFormatName:
 		return strconv.FormatInt(t.Unix(), 10)
 	default:
-		panic("myuser timestamp format name, " + name)
+		panic("unknown timestamp format name, " + name)
 	}
 }
 
@@ -79,6 +79,6 @@ func ParseTime(formatName, value string) (time.Time, error) {
 		}
 		return time.Unix(int64(v), int64(dec*(1e9))), nil
 	default:
-		panic("myuser timestamp format name, " + formatName)
+		panic("unknown timestamp format name, " + formatName)
 	}
 }

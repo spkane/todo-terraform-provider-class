@@ -45,8 +45,8 @@ func (v *TypeCheck) Visit(root ast.Node) error {
 	defer v.reset()
 	root.Accept(v.visit)
 
-	// If the resulting type is myuser, then just let the whole thing go.
-	if v.err == errExitmyuser {
+	// If the resulting type is unknown, then just let the whole thing go.
+	if v.err == errExitUnknown {
 		v.err = nil
 	}
 
@@ -85,7 +85,7 @@ func (v *TypeCheck) visit(raw ast.Node) ast.Node {
 	default:
 		tc, ok := raw.(TypeCheckNode)
 		if !ok {
-			err = fmt.Errorf("myuser node for type check: %#v", raw)
+			err = fmt.Errorf("unknown node for type check: %#v", raw)
 			break
 		}
 
@@ -112,10 +112,10 @@ func (tc *typeCheckArithmetic) TypeCheck(v *TypeCheck) (ast.Node, error) {
 		exprs[len(tc.n.Exprs)-1-i] = v.StackPop()
 	}
 
-	// If any operand is myuser then our result is automatically myuser
+	// If any operand is unknown then our result is automatically unknown
 	for _, ty := range exprs {
-		if ty == ast.Typemyuser {
-			v.StackPush(ast.Typemyuser)
+		if ty == ast.TypeUnknown {
+			v.StackPush(ast.TypeUnknown)
 			return tc.n, nil
 		}
 	}
@@ -322,7 +322,7 @@ func (tc *typeCheckCall) TypeCheck(v *TypeCheck) (ast.Node, error) {
 	// Look up the function in the map
 	function, ok := v.Scope.LookupFunc(tc.n.Func)
 	if !ok {
-		return nil, fmt.Errorf("myuser function called: %s", tc.n.Func)
+		return nil, fmt.Errorf("unknown function called: %s", tc.n.Func)
 	}
 
 	// The arguments are on the stack in reverse order, so pop them off.
@@ -337,8 +337,8 @@ func (tc *typeCheckCall) TypeCheck(v *TypeCheck) (ast.Node, error) {
 			continue
 		}
 
-		if args[i] == ast.Typemyuser {
-			v.StackPush(ast.Typemyuser)
+		if args[i] == ast.TypeUnknown {
+			v.StackPush(ast.TypeUnknown)
 			return tc.n, nil
 		}
 
@@ -359,8 +359,8 @@ func (tc *typeCheckCall) TypeCheck(v *TypeCheck) (ast.Node, error) {
 	if function.Variadic && function.VariadicType != ast.TypeAny {
 		args = args[len(function.ArgTypes):]
 		for i, t := range args {
-			if t == ast.Typemyuser {
-				v.StackPush(ast.Typemyuser)
+			if t == ast.TypeUnknown {
+				v.StackPush(ast.TypeUnknown)
 				return tc.n, nil
 			}
 
@@ -398,8 +398,8 @@ func (tc *typeCheckConditional) TypeCheck(v *TypeCheck) (ast.Node, error) {
 	trueType := v.StackPop()
 	condType := v.StackPop()
 
-	if condType == ast.Typemyuser {
-		v.StackPush(ast.Typemyuser)
+	if condType == ast.TypeUnknown {
+		v.StackPush(ast.TypeUnknown)
 		return tc.n, nil
 	}
 
@@ -414,7 +414,7 @@ func (tc *typeCheckConditional) TypeCheck(v *TypeCheck) (ast.Node, error) {
 	}
 
 	// The types of the true and false expression must match
-	if trueType != falseType && trueType != ast.Typemyuser && falseType != ast.Typemyuser {
+	if trueType != falseType && trueType != ast.TypeUnknown && falseType != ast.TypeUnknown {
 
 		// Since passing around stringified versions of other types is
 		// common, we pragmatically allow the false expression to dictate
@@ -460,9 +460,9 @@ func (tc *typeCheckConditional) TypeCheck(v *TypeCheck) (ast.Node, error) {
 	}
 
 	// Result type (guaranteed to also match falseType due to the above)
-	if trueType == ast.Typemyuser {
-		// falseType may also be myuser, but that's okay because two
-		// myusers means our result is myuser anyway.
+	if trueType == ast.TypeUnknown {
+		// falseType may also be unknown, but that's okay because two
+		// unknowns means our result is unknown anyway.
 		v.StackPush(falseType)
 	} else {
 		v.StackPush(trueType)
@@ -483,8 +483,8 @@ func (tc *typeCheckOutput) TypeCheck(v *TypeCheck) (ast.Node, error) {
 	}
 
 	for _, ty := range types {
-		if ty == ast.Typemyuser {
-			v.StackPush(ast.Typemyuser)
+		if ty == ast.TypeUnknown {
+			v.StackPush(ast.TypeUnknown)
 			return tc.n, nil
 		}
 	}
@@ -504,8 +504,8 @@ func (tc *typeCheckOutput) TypeCheck(v *TypeCheck) (ast.Node, error) {
 	resultType := ast.TypeString
 	for i, t := range types {
 
-		if t == ast.Typemyuser {
-			resultType = ast.Typemyuser
+		if t == ast.TypeUnknown {
+			resultType = ast.TypeUnknown
 			continue
 		}
 
@@ -521,7 +521,7 @@ func (tc *typeCheckOutput) TypeCheck(v *TypeCheck) (ast.Node, error) {
 		}
 	}
 
-	// This always results in type string, unless there are myusers
+	// This always results in type string, unless there are unknowns
 	v.StackPush(resultType)
 
 	return n, nil
@@ -545,7 +545,7 @@ func (tc *typeCheckVariableAccess) TypeCheck(v *TypeCheck) (ast.Node, error) {
 	variable, ok := v.Scope.LookupVar(tc.n.Name)
 	if !ok {
 		return nil, fmt.Errorf(
-			"myuser variable accessed: %s", tc.n.Name)
+			"unknown variable accessed: %s", tc.n.Name)
 	}
 
 	// Add the type to the stack
@@ -562,8 +562,8 @@ func (tc *typeCheckIndex) TypeCheck(v *TypeCheck) (ast.Node, error) {
 	keyType := v.StackPop()
 	targetType := v.StackPop()
 
-	if keyType == ast.Typemyuser || targetType == ast.Typemyuser {
-		v.StackPush(ast.Typemyuser)
+	if keyType == ast.TypeUnknown || targetType == ast.TypeUnknown {
+		v.StackPush(ast.TypeUnknown)
 		return tc.n, nil
 	}
 
@@ -578,7 +578,7 @@ func (tc *typeCheckIndex) TypeCheck(v *TypeCheck) (ast.Node, error) {
 	variable, ok := v.Scope.LookupVar(varAccessNode.Name)
 	if !ok {
 		return nil, fmt.Errorf(
-			"myuser variable accessed: %s", varAccessNode.Name)
+			"unknown variable accessed: %s", varAccessNode.Name)
 	}
 
 	switch targetType {

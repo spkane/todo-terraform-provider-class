@@ -5,9 +5,8 @@ package descriptor
 
 import (
 	fmt "fmt"
-	math "math"
-
 	proto "github.com/golang/protobuf/proto"
+	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -42,7 +41,7 @@ const (
 	// Tag-delimited aggregate.
 	// Group type is deprecated and not supported in proto3. However, Proto3
 	// implementations should still be able to parse the group wire format and
-	// treat group fields as myuser fields.
+	// treat group fields as unknown fields.
 	FieldDescriptorProto_TYPE_GROUP   FieldDescriptorProto_Type = 10
 	FieldDescriptorProto_TYPE_MESSAGE FieldDescriptorProto_Type = 11
 	// New in version 2.
@@ -305,21 +304,21 @@ func (FieldOptions_JSType) EnumDescriptor() ([]byte, []int) {
 type MethodOptions_IdempotencyLevel int32
 
 const (
-	MethodOptions_IDEMPOTENCY_myuser MethodOptions_IdempotencyLevel = 0
-	MethodOptions_NO_SIDE_EFFECTS    MethodOptions_IdempotencyLevel = 1
-	MethodOptions_IDEMPOTENT         MethodOptions_IdempotencyLevel = 2
+	MethodOptions_IDEMPOTENCY_UNKNOWN MethodOptions_IdempotencyLevel = 0
+	MethodOptions_NO_SIDE_EFFECTS     MethodOptions_IdempotencyLevel = 1
+	MethodOptions_IDEMPOTENT          MethodOptions_IdempotencyLevel = 2
 )
 
 var MethodOptions_IdempotencyLevel_name = map[int32]string{
-	0: "IDEMPOTENCY_myuser",
+	0: "IDEMPOTENCY_UNKNOWN",
 	1: "NO_SIDE_EFFECTS",
 	2: "IDEMPOTENT",
 }
 
 var MethodOptions_IdempotencyLevel_value = map[string]int32{
-	"IDEMPOTENCY_myuser": 0,
-	"NO_SIDE_EFFECTS":    1,
-	"IDEMPOTENT":         2,
+	"IDEMPOTENCY_UNKNOWN": 0,
+	"NO_SIDE_EFFECTS":     1,
+	"IDEMPOTENT":          2,
 }
 
 func (x MethodOptions_IdempotencyLevel) Enum() *MethodOptions_IdempotencyLevel {
@@ -373,8 +372,8 @@ func (m *FileDescriptorSet) XXX_Merge(src proto.Message) {
 func (m *FileDescriptorSet) XXX_Size() int {
 	return xxx_messageInfo_FileDescriptorSet.Size(m)
 }
-func (m *FileDescriptorSet) XXX_Discardmyuser() {
-	xxx_messageInfo_FileDescriptorSet.Discardmyuser(m)
+func (m *FileDescriptorSet) XXX_DiscardUnknown() {
+	xxx_messageInfo_FileDescriptorSet.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_FileDescriptorSet proto.InternalMessageInfo
@@ -435,8 +434,8 @@ func (m *FileDescriptorProto) XXX_Merge(src proto.Message) {
 func (m *FileDescriptorProto) XXX_Size() int {
 	return xxx_messageInfo_FileDescriptorProto.Size(m)
 }
-func (m *FileDescriptorProto) XXX_Discardmyuser() {
-	xxx_messageInfo_FileDescriptorProto.Discardmyuser(m)
+func (m *FileDescriptorProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_FileDescriptorProto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_FileDescriptorProto proto.InternalMessageInfo
@@ -563,8 +562,8 @@ func (m *DescriptorProto) XXX_Merge(src proto.Message) {
 func (m *DescriptorProto) XXX_Size() int {
 	return xxx_messageInfo_DescriptorProto.Size(m)
 }
-func (m *DescriptorProto) XXX_Discardmyuser() {
-	xxx_messageInfo_DescriptorProto.Discardmyuser(m)
+func (m *DescriptorProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_DescriptorProto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_DescriptorProto proto.InternalMessageInfo
@@ -667,8 +666,8 @@ func (m *DescriptorProto_ExtensionRange) XXX_Merge(src proto.Message) {
 func (m *DescriptorProto_ExtensionRange) XXX_Size() int {
 	return xxx_messageInfo_DescriptorProto_ExtensionRange.Size(m)
 }
-func (m *DescriptorProto_ExtensionRange) XXX_Discardmyuser() {
-	xxx_messageInfo_DescriptorProto_ExtensionRange.Discardmyuser(m)
+func (m *DescriptorProto_ExtensionRange) XXX_DiscardUnknown() {
+	xxx_messageInfo_DescriptorProto_ExtensionRange.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_DescriptorProto_ExtensionRange proto.InternalMessageInfo
@@ -724,8 +723,8 @@ func (m *DescriptorProto_ReservedRange) XXX_Merge(src proto.Message) {
 func (m *DescriptorProto_ReservedRange) XXX_Size() int {
 	return xxx_messageInfo_DescriptorProto_ReservedRange.Size(m)
 }
-func (m *DescriptorProto_ReservedRange) XXX_Discardmyuser() {
-	xxx_messageInfo_DescriptorProto_ReservedRange.Discardmyuser(m)
+func (m *DescriptorProto_ReservedRange) XXX_DiscardUnknown() {
+	xxx_messageInfo_DescriptorProto_ReservedRange.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_DescriptorProto_ReservedRange proto.InternalMessageInfo
@@ -780,8 +779,8 @@ func (m *ExtensionRangeOptions) XXX_Merge(src proto.Message) {
 func (m *ExtensionRangeOptions) XXX_Size() int {
 	return xxx_messageInfo_ExtensionRangeOptions.Size(m)
 }
-func (m *ExtensionRangeOptions) XXX_Discardmyuser() {
-	xxx_messageInfo_ExtensionRangeOptions.Discardmyuser(m)
+func (m *ExtensionRangeOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_ExtensionRangeOptions.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ExtensionRangeOptions proto.InternalMessageInfo
@@ -849,8 +848,8 @@ func (m *FieldDescriptorProto) XXX_Merge(src proto.Message) {
 func (m *FieldDescriptorProto) XXX_Size() int {
 	return xxx_messageInfo_FieldDescriptorProto.Size(m)
 }
-func (m *FieldDescriptorProto) XXX_Discardmyuser() {
-	xxx_messageInfo_FieldDescriptorProto.Discardmyuser(m)
+func (m *FieldDescriptorProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_FieldDescriptorProto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_FieldDescriptorProto proto.InternalMessageInfo
@@ -953,8 +952,8 @@ func (m *OneofDescriptorProto) XXX_Merge(src proto.Message) {
 func (m *OneofDescriptorProto) XXX_Size() int {
 	return xxx_messageInfo_OneofDescriptorProto.Size(m)
 }
-func (m *OneofDescriptorProto) XXX_Discardmyuser() {
-	xxx_messageInfo_OneofDescriptorProto.Discardmyuser(m)
+func (m *OneofDescriptorProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_OneofDescriptorProto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_OneofDescriptorProto proto.InternalMessageInfo
@@ -1009,8 +1008,8 @@ func (m *EnumDescriptorProto) XXX_Merge(src proto.Message) {
 func (m *EnumDescriptorProto) XXX_Size() int {
 	return xxx_messageInfo_EnumDescriptorProto.Size(m)
 }
-func (m *EnumDescriptorProto) XXX_Discardmyuser() {
-	xxx_messageInfo_EnumDescriptorProto.Discardmyuser(m)
+func (m *EnumDescriptorProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_EnumDescriptorProto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_EnumDescriptorProto proto.InternalMessageInfo
@@ -1083,8 +1082,8 @@ func (m *EnumDescriptorProto_EnumReservedRange) XXX_Merge(src proto.Message) {
 func (m *EnumDescriptorProto_EnumReservedRange) XXX_Size() int {
 	return xxx_messageInfo_EnumDescriptorProto_EnumReservedRange.Size(m)
 }
-func (m *EnumDescriptorProto_EnumReservedRange) XXX_Discardmyuser() {
-	xxx_messageInfo_EnumDescriptorProto_EnumReservedRange.Discardmyuser(m)
+func (m *EnumDescriptorProto_EnumReservedRange) XXX_DiscardUnknown() {
+	xxx_messageInfo_EnumDescriptorProto_EnumReservedRange.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_EnumDescriptorProto_EnumReservedRange proto.InternalMessageInfo
@@ -1132,8 +1131,8 @@ func (m *EnumValueDescriptorProto) XXX_Merge(src proto.Message) {
 func (m *EnumValueDescriptorProto) XXX_Size() int {
 	return xxx_messageInfo_EnumValueDescriptorProto.Size(m)
 }
-func (m *EnumValueDescriptorProto) XXX_Discardmyuser() {
-	xxx_messageInfo_EnumValueDescriptorProto.Discardmyuser(m)
+func (m *EnumValueDescriptorProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_EnumValueDescriptorProto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_EnumValueDescriptorProto proto.InternalMessageInfo
@@ -1188,8 +1187,8 @@ func (m *ServiceDescriptorProto) XXX_Merge(src proto.Message) {
 func (m *ServiceDescriptorProto) XXX_Size() int {
 	return xxx_messageInfo_ServiceDescriptorProto.Size(m)
 }
-func (m *ServiceDescriptorProto) XXX_Discardmyuser() {
-	xxx_messageInfo_ServiceDescriptorProto.Discardmyuser(m)
+func (m *ServiceDescriptorProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServiceDescriptorProto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ServiceDescriptorProto proto.InternalMessageInfo
@@ -1251,8 +1250,8 @@ func (m *MethodDescriptorProto) XXX_Merge(src proto.Message) {
 func (m *MethodDescriptorProto) XXX_Size() int {
 	return xxx_messageInfo_MethodDescriptorProto.Size(m)
 }
-func (m *MethodDescriptorProto) XXX_Discardmyuser() {
-	xxx_messageInfo_MethodDescriptorProto.Discardmyuser(m)
+func (m *MethodDescriptorProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_MethodDescriptorProto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_MethodDescriptorProto proto.InternalMessageInfo
@@ -1377,8 +1376,8 @@ type FileOptions struct {
 	// determining the namespace.
 	PhpNamespace *string `protobuf:"bytes,41,opt,name=php_namespace,json=phpNamespace" json:"php_namespace,omitempty"`
 	// Use this option to change the namespace of php generated metadata classes.
-	// Default is empty. When this option is empty, the proto file name will be used
-	// for determining the namespace.
+	// Default is empty. When this option is empty, the proto file name will be
+	// used for determining the namespace.
 	PhpMetadataNamespace *string `protobuf:"bytes,44,opt,name=php_metadata_namespace,json=phpMetadataNamespace" json:"php_metadata_namespace,omitempty"`
 	// Use this option to change the package of ruby generated classes. Default
 	// is empty. When this option is not set, the package name will be used for
@@ -1420,8 +1419,8 @@ func (m *FileOptions) XXX_Merge(src proto.Message) {
 func (m *FileOptions) XXX_Size() int {
 	return xxx_messageInfo_FileOptions.Size(m)
 }
-func (m *FileOptions) XXX_Discardmyuser() {
-	xxx_messageInfo_FileOptions.Discardmyuser(m)
+func (m *FileOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_FileOptions.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_FileOptions proto.InternalMessageInfo
@@ -1628,7 +1627,7 @@ type MessageOptions struct {
 	//
 	// Implementations may choose not to generate the map_entry=true message, but
 	// use a native map in the target language to hold the keys and values.
-	// The reflection APIs in such implementions still need to work as
+	// The reflection APIs in such implementations still need to work as
 	// if the field is a repeated message field.
 	//
 	// NOTE: Do not set the option in .proto files. Always use the maps syntax
@@ -1670,8 +1669,8 @@ func (m *MessageOptions) XXX_Merge(src proto.Message) {
 func (m *MessageOptions) XXX_Size() int {
 	return xxx_messageInfo_MessageOptions.Size(m)
 }
-func (m *MessageOptions) XXX_Discardmyuser() {
-	xxx_messageInfo_MessageOptions.Discardmyuser(m)
+func (m *MessageOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_MessageOptions.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_MessageOptions proto.InternalMessageInfo
@@ -1810,8 +1809,8 @@ func (m *FieldOptions) XXX_Merge(src proto.Message) {
 func (m *FieldOptions) XXX_Size() int {
 	return xxx_messageInfo_FieldOptions.Size(m)
 }
-func (m *FieldOptions) XXX_Discardmyuser() {
-	xxx_messageInfo_FieldOptions.Discardmyuser(m)
+func (m *FieldOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_FieldOptions.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_FieldOptions proto.InternalMessageInfo
@@ -1907,8 +1906,8 @@ func (m *OneofOptions) XXX_Merge(src proto.Message) {
 func (m *OneofOptions) XXX_Size() int {
 	return xxx_messageInfo_OneofOptions.Size(m)
 }
-func (m *OneofOptions) XXX_Discardmyuser() {
-	xxx_messageInfo_OneofOptions.Discardmyuser(m)
+func (m *OneofOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_OneofOptions.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_OneofOptions proto.InternalMessageInfo
@@ -1964,8 +1963,8 @@ func (m *EnumOptions) XXX_Merge(src proto.Message) {
 func (m *EnumOptions) XXX_Size() int {
 	return xxx_messageInfo_EnumOptions.Size(m)
 }
-func (m *EnumOptions) XXX_Discardmyuser() {
-	xxx_messageInfo_EnumOptions.Discardmyuser(m)
+func (m *EnumOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_EnumOptions.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_EnumOptions proto.InternalMessageInfo
@@ -2034,8 +2033,8 @@ func (m *EnumValueOptions) XXX_Merge(src proto.Message) {
 func (m *EnumValueOptions) XXX_Size() int {
 	return xxx_messageInfo_EnumValueOptions.Size(m)
 }
-func (m *EnumValueOptions) XXX_Discardmyuser() {
-	xxx_messageInfo_EnumValueOptions.Discardmyuser(m)
+func (m *EnumValueOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_EnumValueOptions.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_EnumValueOptions proto.InternalMessageInfo
@@ -2097,8 +2096,8 @@ func (m *ServiceOptions) XXX_Merge(src proto.Message) {
 func (m *ServiceOptions) XXX_Size() int {
 	return xxx_messageInfo_ServiceOptions.Size(m)
 }
-func (m *ServiceOptions) XXX_Discardmyuser() {
-	xxx_messageInfo_ServiceOptions.Discardmyuser(m)
+func (m *ServiceOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServiceOptions.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ServiceOptions proto.InternalMessageInfo
@@ -2161,14 +2160,14 @@ func (m *MethodOptions) XXX_Merge(src proto.Message) {
 func (m *MethodOptions) XXX_Size() int {
 	return xxx_messageInfo_MethodOptions.Size(m)
 }
-func (m *MethodOptions) XXX_Discardmyuser() {
-	xxx_messageInfo_MethodOptions.Discardmyuser(m)
+func (m *MethodOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_MethodOptions.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_MethodOptions proto.InternalMessageInfo
 
 const Default_MethodOptions_Deprecated bool = false
-const Default_MethodOptions_IdempotencyLevel MethodOptions_IdempotencyLevel = MethodOptions_IDEMPOTENCY_myuser
+const Default_MethodOptions_IdempotencyLevel MethodOptions_IdempotencyLevel = MethodOptions_IDEMPOTENCY_UNKNOWN
 
 func (m *MethodOptions) GetDeprecated() bool {
 	if m != nil && m.Deprecated != nil {
@@ -2231,8 +2230,8 @@ func (m *UninterpretedOption) XXX_Merge(src proto.Message) {
 func (m *UninterpretedOption) XXX_Size() int {
 	return xxx_messageInfo_UninterpretedOption.Size(m)
 }
-func (m *UninterpretedOption) XXX_Discardmyuser() {
-	xxx_messageInfo_UninterpretedOption.Discardmyuser(m)
+func (m *UninterpretedOption) XXX_DiscardUnknown() {
+	xxx_messageInfo_UninterpretedOption.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_UninterpretedOption proto.InternalMessageInfo
@@ -2318,8 +2317,8 @@ func (m *UninterpretedOption_NamePart) XXX_Merge(src proto.Message) {
 func (m *UninterpretedOption_NamePart) XXX_Size() int {
 	return xxx_messageInfo_UninterpretedOption_NamePart.Size(m)
 }
-func (m *UninterpretedOption_NamePart) XXX_Discardmyuser() {
-	xxx_messageInfo_UninterpretedOption_NamePart.Discardmyuser(m)
+func (m *UninterpretedOption_NamePart) XXX_DiscardUnknown() {
+	xxx_messageInfo_UninterpretedOption_NamePart.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_UninterpretedOption_NamePart proto.InternalMessageInfo
@@ -2378,7 +2377,7 @@ type SourceCodeInfo struct {
 	//   beginning of the "extend" block and is shared by all extensions within
 	//   the block.
 	// - Just because a location's span is a subset of some other location's span
-	//   does not mean that it is a descendent.  For example, a "group" defines
+	//   does not mean that it is a descendant.  For example, a "group" defines
 	//   both a type and a field in a single declaration.  Thus, the locations
 	//   corresponding to the type and field and their components will overlap.
 	// - Code which tries to interpret locations should probably be designed to
@@ -2409,8 +2408,8 @@ func (m *SourceCodeInfo) XXX_Merge(src proto.Message) {
 func (m *SourceCodeInfo) XXX_Size() int {
 	return xxx_messageInfo_SourceCodeInfo.Size(m)
 }
-func (m *SourceCodeInfo) XXX_Discardmyuser() {
-	xxx_messageInfo_SourceCodeInfo.Discardmyuser(m)
+func (m *SourceCodeInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_SourceCodeInfo.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_SourceCodeInfo proto.InternalMessageInfo
@@ -2527,8 +2526,8 @@ func (m *SourceCodeInfo_Location) XXX_Merge(src proto.Message) {
 func (m *SourceCodeInfo_Location) XXX_Size() int {
 	return xxx_messageInfo_SourceCodeInfo_Location.Size(m)
 }
-func (m *SourceCodeInfo_Location) XXX_Discardmyuser() {
-	xxx_messageInfo_SourceCodeInfo_Location.Discardmyuser(m)
+func (m *SourceCodeInfo_Location) XXX_DiscardUnknown() {
+	xxx_messageInfo_SourceCodeInfo_Location.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_SourceCodeInfo_Location proto.InternalMessageInfo
@@ -2599,8 +2598,8 @@ func (m *GeneratedCodeInfo) XXX_Merge(src proto.Message) {
 func (m *GeneratedCodeInfo) XXX_Size() int {
 	return xxx_messageInfo_GeneratedCodeInfo.Size(m)
 }
-func (m *GeneratedCodeInfo) XXX_Discardmyuser() {
-	xxx_messageInfo_GeneratedCodeInfo.Discardmyuser(m)
+func (m *GeneratedCodeInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_GeneratedCodeInfo.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GeneratedCodeInfo proto.InternalMessageInfo
@@ -2649,8 +2648,8 @@ func (m *GeneratedCodeInfo_Annotation) XXX_Merge(src proto.Message) {
 func (m *GeneratedCodeInfo_Annotation) XXX_Size() int {
 	return xxx_messageInfo_GeneratedCodeInfo_Annotation.Size(m)
 }
-func (m *GeneratedCodeInfo_Annotation) XXX_Discardmyuser() {
-	xxx_messageInfo_GeneratedCodeInfo_Annotation.Discardmyuser(m)
+func (m *GeneratedCodeInfo_Annotation) XXX_DiscardUnknown() {
+	xxx_messageInfo_GeneratedCodeInfo_Annotation.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GeneratedCodeInfo_Annotation proto.InternalMessageInfo
@@ -2719,7 +2718,9 @@ func init() {
 	proto.RegisterType((*GeneratedCodeInfo_Annotation)(nil), "google.protobuf.GeneratedCodeInfo.Annotation")
 }
 
-func init() { proto.RegisterFile("google/protobuf/descriptor.proto", fileDescriptor_e5baabe45344a177) }
+func init() {
+	proto.RegisterFile("google/protobuf/descriptor.proto", fileDescriptor_e5baabe45344a177)
+}
 
 var fileDescriptor_e5baabe45344a177 = []byte{
 	// 2589 bytes of a gzipped FileDescriptorProto

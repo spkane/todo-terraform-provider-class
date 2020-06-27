@@ -322,7 +322,7 @@ func (w *walker) visit(v reflect.Value, opts *visitOpts) (uint64, error) {
 		return w.h.Sum64(), err
 
 	default:
-		return 0, fmt.Errorf("myuser kind to hash: %s", k)
+		return 0, fmt.Errorf("unknown kind to hash: %s", k)
 	}
 
 }

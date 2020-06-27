@@ -60,8 +60,8 @@ func (m *Http) XXX_Merge(src proto.Message) {
 func (m *Http) XXX_Size() int {
 	return xxx_messageInfo_Http.Size(m)
 }
-func (m *Http) XXX_Discardmyuser() {
-	xxx_messageInfo_Http.Discardmyuser(m)
+func (m *Http) XXX_DiscardUnknown() {
+	xxx_messageInfo_Http.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Http proto.InternalMessageInfo
@@ -408,8 +408,8 @@ func (m *HttpRule) XXX_Merge(src proto.Message) {
 func (m *HttpRule) XXX_Size() int {
 	return xxx_messageInfo_HttpRule.Size(m)
 }
-func (m *HttpRule) XXX_Discardmyuser() {
-	xxx_messageInfo_HttpRule.Discardmyuser(m)
+func (m *HttpRule) XXX_DiscardUnknown() {
+	xxx_messageInfo_HttpRule.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_HttpRule proto.InternalMessageInfo
@@ -573,8 +573,8 @@ func (m *CustomHttpPattern) XXX_Merge(src proto.Message) {
 func (m *CustomHttpPattern) XXX_Size() int {
 	return xxx_messageInfo_CustomHttpPattern.Size(m)
 }
-func (m *CustomHttpPattern) XXX_Discardmyuser() {
-	xxx_messageInfo_CustomHttpPattern.Discardmyuser(m)
+func (m *CustomHttpPattern) XXX_DiscardUnknown() {
+	xxx_messageInfo_CustomHttpPattern.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_CustomHttpPattern proto.InternalMessageInfo
@@ -599,7 +599,9 @@ func init() {
 	proto.RegisterType((*CustomHttpPattern)(nil), "google.api.CustomHttpPattern")
 }
 
-func init() { proto.RegisterFile("google/api/http.proto", fileDescriptor_ff9994be407cdcc9) }
+func init() {
+	proto.RegisterFile("google/api/http.proto", fileDescriptor_ff9994be407cdcc9)
+}
 
 var fileDescriptor_ff9994be407cdcc9 = []byte{
 	// 419 bytes of a gzipped FileDescriptorProto

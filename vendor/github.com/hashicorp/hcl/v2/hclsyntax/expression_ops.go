@@ -174,7 +174,7 @@ func (e *BinaryOpExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) 
 	if diags.HasErrors() {
 		// Don't actually try the call if we have errors already, since the
 		// this will probably just produce a confusing duplicative diagnostic.
-		return cty.myuserVal(e.Op.Type), diags
+		return cty.UnknownVal(e.Op.Type), diags
 	}
 
 	args := []cty.Value{lhsVal, rhsVal}
@@ -189,7 +189,7 @@ func (e *BinaryOpExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) 
 			Expression:  e,
 			EvalContext: ctx,
 		})
-		return cty.myuserVal(e.Op.Type), diags
+		return cty.UnknownVal(e.Op.Type), diags
 	}
 
 	return result, diags
@@ -238,7 +238,7 @@ func (e *UnaryOpExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) {
 	if diags.HasErrors() {
 		// Don't actually try the call if we have errors already, since the
 		// this will probably just produce a confusing duplicative diagnostic.
-		return cty.myuserVal(e.Op.Type), diags
+		return cty.UnknownVal(e.Op.Type), diags
 	}
 
 	args := []cty.Value{val}
@@ -253,7 +253,7 @@ func (e *UnaryOpExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) {
 			Expression:  e,
 			EvalContext: ctx,
 		})
-		return cty.myuserVal(e.Op.Type), diags
+		return cty.UnknownVal(e.Op.Type), diags
 	}
 
 	return result, diags

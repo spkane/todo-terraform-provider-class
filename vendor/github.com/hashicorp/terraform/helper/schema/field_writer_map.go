@@ -108,7 +108,7 @@ func (w *MapFieldWriter) set(addr []string, value interface{}) error {
 	case typeObject:
 		return w.setObject(addr, value, schema)
 	default:
-		panic(fmt.Sprintf("myuser type: %#v", schema.Type))
+		panic(fmt.Sprintf("Unknown type: %#v", schema.Type))
 	}
 }
 
@@ -273,7 +273,7 @@ func (w *MapFieldWriter) setPrimitive(
 		}
 		set = strconv.FormatFloat(float64(n), 'G', -1, 64)
 	default:
-		return fmt.Errorf("myuser type: %#v", schema.Type)
+		return fmt.Errorf("Unknown type: %#v", schema.Type)
 	}
 
 	w.result[k] = set

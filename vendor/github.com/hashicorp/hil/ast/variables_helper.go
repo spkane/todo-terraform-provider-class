@@ -7,13 +7,13 @@ func VariableListElementTypesAreHomogenous(variableName string, list []Variable)
 		return TypeInvalid, fmt.Errorf("list %q does not have any elements so cannot determine type.", variableName)
 	}
 
-	elemType := Typemyuser
+	elemType := TypeUnknown
 	for _, v := range list {
-		if v.Type == Typemyuser {
+		if v.Type == TypeUnknown {
 			continue
 		}
 
-		if elemType == Typemyuser {
+		if elemType == TypeUnknown {
 			elemType = v.Type
 			continue
 		}
@@ -37,13 +37,13 @@ func VariableMapValueTypesAreHomogenous(variableName string, vmap map[string]Var
 		return TypeInvalid, fmt.Errorf("map %q does not have any elements so cannot determine type.", variableName)
 	}
 
-	elemType := Typemyuser
+	elemType := TypeUnknown
 	for _, v := range vmap {
-		if v.Type == Typemyuser {
+		if v.Type == TypeUnknown {
 			continue
 		}
 
-		if elemType == Typemyuser {
+		if elemType == TypeUnknown {
 			elemType = v.Type
 			continue
 		}

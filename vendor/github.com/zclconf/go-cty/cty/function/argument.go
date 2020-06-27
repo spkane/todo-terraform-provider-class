@@ -22,12 +22,12 @@ type Parameter struct {
 	// checking rules.
 	AllowNull bool
 
-	// If Allowmyuser is set then myuser values may be passed into this
+	// If AllowUnknown is set then unknown values may be passed into this
 	// argument's slot in the implementation function. If not set, any
-	// myuser values will cause the function to immediately return
+	// unknown values will cause the function to immediately return
 	// an unkonwn value without calling the implementation function, thus
 	// freeing the function implementer from dealing with this case.
-	Allowmyuser bool
+	AllowUnknown bool
 
 	// If AllowDynamicType is set then DynamicVal may be passed into this
 	// argument's slot in the implementation function. If not set, any
@@ -35,16 +35,36 @@ type Parameter struct {
 	// DynamicVal value without calling the implementation function, thus
 	// freeing the function implementer from dealing with this case.
 	//
-	// Note that DynamicVal is also myuser, so in order to receive dynamic
-	// *values* it is also necessary to set Allowmyuser.
+	// Note that DynamicVal is also unknown, so in order to receive dynamic
+	// *values* it is also necessary to set AllowUnknown.
 	//
-	// However, it is valid to set AllowDynamicType without Allowmyuser, in
+	// However, it is valid to set AllowDynamicType without AllowUnknown, in
 	// which case a dynamic value may be passed to the type checking function
 	// but will not make it to the *implementation* function. Instead, an
-	// myuser value of the type returned by the type-check function will be
+	// unknown value of the type returned by the type-check function will be
 	// returned. This is suggested for functions that have a static return
 	// type since it allows the return value to be typed even if the input
 	// values are not, thus improving the type-check accuracy of derived
 	// values.
 	AllowDynamicType bool
+
+	// If AllowMarked is set then marked values may be passed into this
+	// argument's slot in the implementation function. If not set, any
+	// marked value will be unmarked before calling and then the markings
+	// from that value will be applied automatically to the function result,
+	// ensuring that the marks get propagated in a simplistic way even if
+	// a function is unable to handle them.
+	//
+	// For any argument whose parameter has AllowMarked set, it's the
+	// function implementation's responsibility to Unmark the given value
+	// and propagate the marks appropriatedly to the result in order to
+	// avoid losing the marks. Application-specific functions might use
+	// special rules to selectively propagate particular marks.
+	//
+	// The automatic unmarking of values applies only to the main
+	// implementation function. In an application that uses marked values,
+	// the Type implementation for a function must always be prepared to accept
+	// marked values, which is easy to achieve by consulting only the type
+	// and ignoring the value itself.
+	AllowMarked bool
 }

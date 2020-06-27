@@ -26,8 +26,8 @@ func (c Code) String() string {
 		return "OK"
 	case Canceled:
 		return "Canceled"
-	case myuser:
-		return "myuser"
+	case Unknown:
+		return "Unknown"
 	case InvalidArgument:
 		return "InvalidArgument"
 	case DeadlineExceeded:

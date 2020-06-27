@@ -383,7 +383,7 @@ func (b *GRPCBroker) Dial(id uint32) (conn *grpc.ClientConn, err error) {
 	case "unix":
 		addr, err = net.ResolveUnixAddr("unix", c.Address)
 	default:
-		err = fmt.Errorf("myuser address type: %s", c.Address)
+		err = fmt.Errorf("Unknown address type: %s", c.Address)
 	}
 	if err != nil {
 		return nil, err

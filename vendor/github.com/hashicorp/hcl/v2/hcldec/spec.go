@@ -6,6 +6,7 @@ import (
 	"sort"
 
 	"github.com/hashicorp/hcl/v2"
+	"github.com/hashicorp/hcl/v2/ext/customdecode"
 	"github.com/zclconf/go-cty/cty"
 	"github.com/zclconf/go-cty/cty/convert"
 	"github.com/zclconf/go-cty/cty/function"
@@ -193,6 +194,14 @@ func (s *AttrSpec) decode(content *hcl.BodyContent, blockLabels []blockLabel, ct
 		return cty.NullVal(s.Type), nil
 	}
 
+	if decodeFn := customdecode.CustomExpressionDecoderForType(s.Type); decodeFn != nil {
+		v, diags := decodeFn(attr.Expr, ctx)
+		if v == cty.NilVal {
+			v = cty.UnknownVal(s.Type)
+		}
+		return v, diags
+	}
+
 	val, diags := attr.Expr.Value(ctx)
 
 	convVal, err := convert.Convert(val, s.Type)
@@ -204,12 +213,14 @@ func (s *AttrSpec) decode(content *hcl.BodyContent, blockLabels []blockLabel, ct
 				"Inappropriate value for attribute %q: %s.",
 				s.Name, err.Error(),
 			),
-			Subject: attr.Expr.StartRange().Ptr(),
-			Context: hcl.RangeBetween(attr.NameRange, attr.Expr.StartRange()).Ptr(),
+			Subject:     attr.Expr.Range().Ptr(),
+			Context:     hcl.RangeBetween(attr.NameRange, attr.Expr.Range()).Ptr(),
+			Expression:  attr.Expr,
+			EvalContext: ctx,
 		})
-		// We'll return an myuser value of the _correct_ type so that the
+		// We'll return an unknown value of the _correct_ type so that the
 		// incomplete result can still be used for some analysis use-cases.
-		val = cty.myuserVal(s.Type)
+		val = cty.UnknownVal(s.Type)
 	} else {
 		val = convVal
 	}
@@ -243,7 +254,7 @@ func (s *LiteralSpec) sourceRange(content *hcl.BodyContent, blockLabels []blockL
 	// No sensible range to return for a literal, so the caller had better
 	// ensure it doesn't cause any diagnostics.
 	return hcl.Range{
-		Filename: "<myuser>",
+		Filename: "<unknown>",
 	}
 }
 
@@ -1221,18 +1232,31 @@ func (s *BlockAttrsSpec) decode(content *hcl.BodyContent, blockLabels []blockLab
 
 	vals := make(map[string]cty.Value, len(attrs))
 	for name, attr := range attrs {
+		if decodeFn := customdecode.CustomExpressionDecoderForType(s.ElementType); decodeFn != nil {
+			attrVal, attrDiags := decodeFn(attr.Expr, ctx)
+			diags = append(diags, attrDiags...)
+			if attrVal == cty.NilVal {
+				attrVal = cty.UnknownVal(s.ElementType)
+			}
+			vals[name] = attrVal
+			continue
+		}
+
 		attrVal, attrDiags := attr.Expr.Value(ctx)
 		diags = append(diags, attrDiags...)
 
 		attrVal, err := convert.Convert(attrVal, s.ElementType)
 		if err != nil {
 			diags = append(diags, &hcl.Diagnostic{
-				Severity: hcl.DiagError,
-				Summary:  "Invalid attribute value",
-				Detail:   fmt.Sprintf("Invalid value for attribute of %q block: %s.", s.TypeName, err),
-				Subject:  attr.Expr.Range().Ptr(),
+				Severity:    hcl.DiagError,
+				Summary:     "Invalid attribute value",
+				Detail:      fmt.Sprintf("Invalid value for attribute of %q block: %s.", s.TypeName, err),
+				Subject:     attr.Expr.Range().Ptr(),
+				Context:     hcl.RangeBetween(attr.NameRange, attr.Expr.Range()).Ptr(),
+				Expression:  attr.Expr,
+				EvalContext: ctx,
 			})
-			attrVal = cty.myuserVal(s.ElementType)
+			attrVal = cty.UnknownVal(s.ElementType)
 		}
 
 		vals[name] = attrVal
@@ -1428,7 +1452,7 @@ func (s *DefaultSpec) sourceRange(content *hcl.BodyContent, blockLabels []blockL
 // hcl.Expression on the result.
 //
 // The implied type of this spec is determined by evaluating the expression
-// with an myuser value of the nested spec's implied type, which may cause
+// with an unknown value of the nested spec's implied type, which may cause
 // the result to be imprecise. This spec should not be used in situations where
 // precise result type information is needed.
 type TransformExprSpec struct {
@@ -1448,7 +1472,7 @@ func (s *TransformExprSpec) decode(content *hcl.BodyContent, blockLabels []block
 		// We won't try to run our function in this case, because it'll probably
 		// generate confusing additional errors that will distract from the
 		// root cause.
-		return cty.myuserVal(s.impliedType()), diags
+		return cty.UnknownVal(s.impliedType()), diags
 	}
 
 	chiCtx := s.TransformCtx.NewChild()
@@ -1464,7 +1488,7 @@ func (s *TransformExprSpec) impliedType() cty.Type {
 	wrappedTy := s.Wrapped.impliedType()
 	chiCtx := s.TransformCtx.NewChild()
 	chiCtx.Variables = map[string]cty.Value{
-		s.VarName: cty.myuserVal(wrappedTy),
+		s.VarName: cty.UnknownVal(wrappedTy),
 	}
 	resultVal, _ := s.Expr.Value(chiCtx)
 	return resultVal.Type()
@@ -1481,7 +1505,7 @@ func (s *TransformExprSpec) sourceRange(content *hcl.BodyContent, blockLabels []
 // argument, where the result of the wrapped spec will be passed.
 //
 // The implied type of this spec is determined by type-checking the function
-// with an myuser value of the nested spec's implied type, which may cause
+// with an unknown value of the nested spec's implied type, which may cause
 // the result to be imprecise. This spec should not be used in situations where
 // precise result type information is needed.
 //
@@ -1504,7 +1528,7 @@ func (s *TransformFuncSpec) decode(content *hcl.BodyContent, blockLabels []block
 		// We won't try to run our function in this case, because it'll probably
 		// generate confusing additional errors that will distract from the
 		// root cause.
-		return cty.myuserVal(s.impliedType()), diags
+		return cty.UnknownVal(s.impliedType()), diags
 	}
 
 	resultVal, err := s.Func.Call([]cty.Value{wrappedVal})
@@ -1518,7 +1542,7 @@ func (s *TransformFuncSpec) decode(content *hcl.BodyContent, blockLabels []block
 			Detail:   fmt.Sprintf("Decoder transform returned an error: %s", err),
 			Subject:  s.sourceRange(content, blockLabels).Ptr(),
 		})
-		return cty.myuserVal(s.impliedType()), diags
+		return cty.UnknownVal(s.impliedType()), diags
 	}
 
 	return resultVal, diags

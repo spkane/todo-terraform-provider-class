@@ -78,10 +78,10 @@ func (n *LiteralNode) Type(Scope) (Type, error) {
 	return n.Typex, nil
 }
 
-// Ismyuser returns true either if the node's value is itself myuser
-// of if it is a collection containing any myuser elements, deeply.
-func (n *LiteralNode) Ismyuser() bool {
-	return Ismyuser(Variable{
+// IsUnknown returns true either if the node's value is itself unknown
+// of if it is a collection containing any unknown elements, deeply.
+func (n *LiteralNode) IsUnknown() bool {
+	return IsUnknown(Variable{
 		Type:  n.Typex,
 		Value: n.Value,
 	})

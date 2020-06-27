@@ -99,7 +99,7 @@ func (mux *serveMux) handler(method, path string) (HandlerFunc, []Param) {
 }
 
 // NotFound replies to the request with an HTTP 404 not found error.
-// NotFound is called when myuser HTTP method or a handler not found.
+// NotFound is called when unknown HTTP method or a handler not found.
 // If you want to use the your own NotFound handler, please overwrite this variable.
 var NotFound = func(w http.ResponseWriter, r *http.Request, _ Params) {
 	http.NotFound(w, r)

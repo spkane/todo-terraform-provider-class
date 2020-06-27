@@ -228,7 +228,7 @@ func (p *paragraph) determineMatchingIsolates() {
 // Determines the paragraph level based on rules P2, P3. This is also used
 // in rule X5c to find if an FSI should resolve to LRI or RLI.
 func (p *paragraph) determineParagraphEmbeddingLevel(start, end int) level {
-	var strongType Class = myuserClass
+	var strongType Class = unknownClass
 
 	// Rule P2.
 	for i := start; i < end; i++ {
@@ -244,7 +244,7 @@ func (p *paragraph) determineParagraphEmbeddingLevel(start, end int) level {
 	}
 	// Rule P3.
 	switch strongType {
-	case myuserClass: // none found
+	case unknownClass: // none found
 		// default embedding level when no strong types found is 0.
 		return 0
 	case L:

@@ -65,12 +65,12 @@ const (
 	TypeList
 	TypeMap
 
-	// This is a special type used by Terraform to mark "myuser" values.
+	// This is a special type used by Terraform to mark "unknown" values.
 	// It is impossible for this type to be introduced into your HIL programs
 	// unless you explicitly set a variable to this value. In that case,
-	// any operation including the variable will return "Typemyuser" as the
+	// any operation including the variable will return "TypeUnknown" as the
 	// type.
-	Typemyuser
+	TypeUnknown
 )
 
 func (t Type) Printable() string {
@@ -91,9 +91,9 @@ func (t Type) Printable() string {
 		return "type list"
 	case TypeMap:
 		return "type map"
-	case Typemyuser:
-		return "type myuser"
+	case TypeUnknown:
+		return "type unknown"
 	default:
-		return "myuser type"
+		return "unknown type"
 	}
 }

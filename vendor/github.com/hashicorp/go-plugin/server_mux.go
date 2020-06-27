@@ -23,7 +23,7 @@ func ServeMux(m ServeMuxMap) {
 
 	opts, ok := m[os.Args[1]]
 	if !ok {
-		fmt.Fprintf(os.Stderr, "myuser plugin: %s\n", os.Args[1])
+		fmt.Fprintf(os.Stderr, "Unknown plugin: %s\n", os.Args[1])
 		os.Exit(1)
 	}
 

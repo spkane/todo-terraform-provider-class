@@ -177,7 +177,7 @@ func newChecksumFromValue(checksumValue, filename string) (*FileChecksum, error)
 		c.Hash = sha512.New()
 		c.Type = "sha512"
 	default:
-		return nil, fmt.Errorf("myuser type for checksum %s", checksumValue)
+		return nil, fmt.Errorf("Unknown type for checksum %s", checksumValue)
 	}
 
 	return c, nil

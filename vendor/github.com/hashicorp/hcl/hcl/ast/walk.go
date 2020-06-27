@@ -44,7 +44,7 @@ func Walk(node Node, fn WalkFunc) Node {
 		n.List = Walk(n.List, fn).(*ObjectList)
 	default:
 		// should we panic here?
-		fmt.Printf("myuser type: %T\n", n)
+		fmt.Printf("unknown type: %T\n", n)
 	}
 
 	fn(nil)

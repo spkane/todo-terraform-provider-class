@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/hashicorp/terraform/configs/hcl2shim"
 	"github.com/hashicorp/terraform/terraform"
 	"github.com/mitchellh/copystructure"
 )
@@ -41,7 +42,7 @@ func DefaultTimeout(tx interface{}) *time.Duration {
 	case float64:
 		td = time.Duration(int64(raw))
 	default:
-		log.Printf("[WARN] myuser type in DefaultTimeout: %#v", tx)
+		log.Printf("[WARN] Unknown type in DefaultTimeout: %#v", tx)
 	}
 	return &td
 }
@@ -69,7 +70,7 @@ func (t *ResourceTimeout) ConfigDecode(s *Resource, c *terraform.ResourceConfig)
 		case []map[string]interface{}:
 			rawTimeouts = raw
 		case string:
-			if raw == hcl2shim.myuserVariableValue {
+			if raw == hcl2shim.UnknownVariableValue {
 				// Timeout is not defined in the config
 				// Defaults will be used instead
 				return nil
@@ -234,7 +235,7 @@ func (t *ResourceTimeout) metaDecode(ids interface{}) error {
 			return nil
 		}
 	default:
-		return fmt.Errorf("myuser or unsupported type in metaDecode: %#v", ids)
+		return fmt.Errorf("Unknown or unsupported type in metaDecode: %#v", ids)
 	}
 
 	times := rawMeta.(map[string]interface{})

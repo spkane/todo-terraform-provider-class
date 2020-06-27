@@ -3,13 +3,9 @@
 
 package modules
 
-import (
-	fmt "fmt"
-
-	proto "github.com/golang/protobuf/proto"
-
-	math "math"
-)
+import proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -94,8 +90,8 @@ func (dst *ModulesServiceError) XXX_Merge(src proto.Message) {
 func (m *ModulesServiceError) XXX_Size() int {
 	return xxx_messageInfo_ModulesServiceError.Size(m)
 }
-func (m *ModulesServiceError) XXX_Discardmyuser() {
-	xxx_messageInfo_ModulesServiceError.Discardmyuser(m)
+func (m *ModulesServiceError) XXX_DiscardUnknown() {
+	xxx_messageInfo_ModulesServiceError.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_ModulesServiceError proto.InternalMessageInfo
@@ -124,8 +120,8 @@ func (dst *GetModulesRequest) XXX_Merge(src proto.Message) {
 func (m *GetModulesRequest) XXX_Size() int {
 	return xxx_messageInfo_GetModulesRequest.Size(m)
 }
-func (m *GetModulesRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_GetModulesRequest.Discardmyuser(m)
+func (m *GetModulesRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetModulesRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetModulesRequest proto.InternalMessageInfo
@@ -155,8 +151,8 @@ func (dst *GetModulesResponse) XXX_Merge(src proto.Message) {
 func (m *GetModulesResponse) XXX_Size() int {
 	return xxx_messageInfo_GetModulesResponse.Size(m)
 }
-func (m *GetModulesResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_GetModulesResponse.Discardmyuser(m)
+func (m *GetModulesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetModulesResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetModulesResponse proto.InternalMessageInfo
@@ -193,8 +189,8 @@ func (dst *GetVersionsRequest) XXX_Merge(src proto.Message) {
 func (m *GetVersionsRequest) XXX_Size() int {
 	return xxx_messageInfo_GetVersionsRequest.Size(m)
 }
-func (m *GetVersionsRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_GetVersionsRequest.Discardmyuser(m)
+func (m *GetVersionsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetVersionsRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetVersionsRequest proto.InternalMessageInfo
@@ -231,8 +227,8 @@ func (dst *GetVersionsResponse) XXX_Merge(src proto.Message) {
 func (m *GetVersionsResponse) XXX_Size() int {
 	return xxx_messageInfo_GetVersionsResponse.Size(m)
 }
-func (m *GetVersionsResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_GetVersionsResponse.Discardmyuser(m)
+func (m *GetVersionsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetVersionsResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetVersionsResponse proto.InternalMessageInfo
@@ -269,8 +265,8 @@ func (dst *GetDefaultVersionRequest) XXX_Merge(src proto.Message) {
 func (m *GetDefaultVersionRequest) XXX_Size() int {
 	return xxx_messageInfo_GetDefaultVersionRequest.Size(m)
 }
-func (m *GetDefaultVersionRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_GetDefaultVersionRequest.Discardmyuser(m)
+func (m *GetDefaultVersionRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetDefaultVersionRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetDefaultVersionRequest proto.InternalMessageInfo
@@ -307,8 +303,8 @@ func (dst *GetDefaultVersionResponse) XXX_Merge(src proto.Message) {
 func (m *GetDefaultVersionResponse) XXX_Size() int {
 	return xxx_messageInfo_GetDefaultVersionResponse.Size(m)
 }
-func (m *GetDefaultVersionResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_GetDefaultVersionResponse.Discardmyuser(m)
+func (m *GetDefaultVersionResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetDefaultVersionResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetDefaultVersionResponse proto.InternalMessageInfo
@@ -346,8 +342,8 @@ func (dst *GetNumInstancesRequest) XXX_Merge(src proto.Message) {
 func (m *GetNumInstancesRequest) XXX_Size() int {
 	return xxx_messageInfo_GetNumInstancesRequest.Size(m)
 }
-func (m *GetNumInstancesRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_GetNumInstancesRequest.Discardmyuser(m)
+func (m *GetNumInstancesRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetNumInstancesRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetNumInstancesRequest proto.InternalMessageInfo
@@ -391,8 +387,8 @@ func (dst *GetNumInstancesResponse) XXX_Merge(src proto.Message) {
 func (m *GetNumInstancesResponse) XXX_Size() int {
 	return xxx_messageInfo_GetNumInstancesResponse.Size(m)
 }
-func (m *GetNumInstancesResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_GetNumInstancesResponse.Discardmyuser(m)
+func (m *GetNumInstancesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetNumInstancesResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetNumInstancesResponse proto.InternalMessageInfo
@@ -431,8 +427,8 @@ func (dst *SetNumInstancesRequest) XXX_Merge(src proto.Message) {
 func (m *SetNumInstancesRequest) XXX_Size() int {
 	return xxx_messageInfo_SetNumInstancesRequest.Size(m)
 }
-func (m *SetNumInstancesRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_SetNumInstancesRequest.Discardmyuser(m)
+func (m *SetNumInstancesRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetNumInstancesRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_SetNumInstancesRequest proto.InternalMessageInfo
@@ -482,8 +478,8 @@ func (dst *SetNumInstancesResponse) XXX_Merge(src proto.Message) {
 func (m *SetNumInstancesResponse) XXX_Size() int {
 	return xxx_messageInfo_SetNumInstancesResponse.Size(m)
 }
-func (m *SetNumInstancesResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_SetNumInstancesResponse.Discardmyuser(m)
+func (m *SetNumInstancesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetNumInstancesResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_SetNumInstancesResponse proto.InternalMessageInfo
@@ -514,8 +510,8 @@ func (dst *StartModuleRequest) XXX_Merge(src proto.Message) {
 func (m *StartModuleRequest) XXX_Size() int {
 	return xxx_messageInfo_StartModuleRequest.Size(m)
 }
-func (m *StartModuleRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_StartModuleRequest.Discardmyuser(m)
+func (m *StartModuleRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_StartModuleRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_StartModuleRequest proto.InternalMessageInfo
@@ -558,8 +554,8 @@ func (dst *StartModuleResponse) XXX_Merge(src proto.Message) {
 func (m *StartModuleResponse) XXX_Size() int {
 	return xxx_messageInfo_StartModuleResponse.Size(m)
 }
-func (m *StartModuleResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_StartModuleResponse.Discardmyuser(m)
+func (m *StartModuleResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_StartModuleResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_StartModuleResponse proto.InternalMessageInfo
@@ -590,8 +586,8 @@ func (dst *StopModuleRequest) XXX_Merge(src proto.Message) {
 func (m *StopModuleRequest) XXX_Size() int {
 	return xxx_messageInfo_StopModuleRequest.Size(m)
 }
-func (m *StopModuleRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_StopModuleRequest.Discardmyuser(m)
+func (m *StopModuleRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_StopModuleRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_StopModuleRequest proto.InternalMessageInfo
@@ -634,8 +630,8 @@ func (dst *StopModuleResponse) XXX_Merge(src proto.Message) {
 func (m *StopModuleResponse) XXX_Size() int {
 	return xxx_messageInfo_StopModuleResponse.Size(m)
 }
-func (m *StopModuleResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_StopModuleResponse.Discardmyuser(m)
+func (m *StopModuleResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_StopModuleResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_StopModuleResponse proto.InternalMessageInfo
@@ -667,8 +663,8 @@ func (dst *GetHostnameRequest) XXX_Merge(src proto.Message) {
 func (m *GetHostnameRequest) XXX_Size() int {
 	return xxx_messageInfo_GetHostnameRequest.Size(m)
 }
-func (m *GetHostnameRequest) XXX_Discardmyuser() {
-	xxx_messageInfo_GetHostnameRequest.Discardmyuser(m)
+func (m *GetHostnameRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetHostnameRequest.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetHostnameRequest proto.InternalMessageInfo
@@ -719,8 +715,8 @@ func (dst *GetHostnameResponse) XXX_Merge(src proto.Message) {
 func (m *GetHostnameResponse) XXX_Size() int {
 	return xxx_messageInfo_GetHostnameResponse.Size(m)
 }
-func (m *GetHostnameResponse) XXX_Discardmyuser() {
-	xxx_messageInfo_GetHostnameResponse.Discardmyuser(m)
+func (m *GetHostnameResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetHostnameResponse.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_GetHostnameResponse proto.InternalMessageInfo

@@ -44,9 +44,9 @@ type EvaluationResult struct {
 // The error is described out of band in the accompanying error return value.
 var InvalidResult = EvaluationResult{Type: TypeInvalid, Value: nil}
 
-// errExitmyuser is an internal error that when returned means the result
-// is an myuser value. We use this for early exit.
-var errExitmyuser = errors.New("myuser value")
+// errExitUnknown is an internal error that when returned means the result
+// is an unknown value. We use this for early exit.
+var errExitUnknown = errors.New("unknown value")
 
 func Eval(root ast.Node, config *EvalConfig) (EvaluationResult, error) {
 	output, outputType, err := internalEval(root, config)
@@ -54,12 +54,12 @@ func Eval(root ast.Node, config *EvalConfig) (EvaluationResult, error) {
 		return InvalidResult, err
 	}
 
-	// If the result contains any nested myusers then the result as a whole
-	// is myuser, so that callers only have to deal with "entirely known"
-	// or "entirely myuser" as outcomes.
-	if ast.Ismyuser(ast.Variable{Type: outputType, Value: output}) {
-		outputType = ast.Typemyuser
-		output = myuserValue
+	// If the result contains any nested unknowns then the result as a whole
+	// is unknown, so that callers only have to deal with "entirely known"
+	// or "entirely unknown" as outcomes.
+	if ast.IsUnknown(ast.Variable{Type: outputType, Value: output}) {
+		outputType = ast.TypeUnknown
+		output = UnknownValue
 	}
 
 	switch outputType {
@@ -91,13 +91,13 @@ func Eval(root ast.Node, config *EvalConfig) (EvaluationResult, error) {
 			Type:  TypeBool,
 			Value: output,
 		}, nil
-	case ast.Typemyuser:
+	case ast.TypeUnknown:
 		return EvaluationResult{
-			Type:  Typemyuser,
-			Value: myuserValue,
+			Type:  TypeUnknown,
+			Value: UnknownValue,
 		}, nil
 	default:
-		return InvalidResult, fmt.Errorf("myuser type %s as interpolation output", outputType)
+		return InvalidResult, fmt.Errorf("unknown type %s as interpolation output", outputType)
 	}
 }
 
@@ -182,10 +182,10 @@ func (v *evalVisitor) Visit(root ast.Node) (interface{}, ast.Type, error) {
 		result = new(ast.LiteralNode)
 	}
 	resultErr := v.err
-	if resultErr == errExitmyuser {
-		// This means the return value is myuser and we used the error
+	if resultErr == errExitUnknown {
+		// This means the return value is unknown and we used the error
 		// as an early exit mechanism. Reset since the value on the stack
-		// should be the myuser value.
+		// should be the unknown value.
 		resultErr = nil
 	}
 
@@ -223,9 +223,9 @@ func (v *evalVisitor) visit(raw ast.Node) ast.Node {
 		Typex: outType,
 	})
 
-	if outType == ast.Typemyuser {
+	if outType == ast.TypeUnknown {
 		// Halt immediately
-		v.err = errExitmyuser
+		v.err = errExitUnknown
 		return raw
 	}
 
@@ -265,16 +265,16 @@ func (v *evalCall) Eval(s ast.Scope, stack *ast.Stack) (interface{}, ast.Type, e
 	function, ok := s.LookupFunc(v.Func)
 	if !ok {
 		return nil, ast.TypeInvalid, fmt.Errorf(
-			"myuser function called: %s", v.Func)
+			"unknown function called: %s", v.Func)
 	}
 
 	// The arguments are on the stack in reverse order, so pop them off.
 	args := make([]interface{}, len(v.Args))
 	for i, _ := range v.Args {
 		node := stack.Pop().(*ast.LiteralNode)
-		if node.Ismyuser() {
-			// If any arguments are myuser then the result is automatically myuser
-			return myuserValue, ast.Typemyuser, nil
+		if node.IsUnknown() {
+			// If any arguments are unknown then the result is automatically unknown
+			return UnknownValue, ast.TypeUnknown, nil
 		}
 		args[len(v.Args)-1-i] = node.Value
 	}
@@ -298,9 +298,9 @@ func (v *evalConditional) Eval(s ast.Scope, stack *ast.Stack) (interface{}, ast.
 	trueLit := stack.Pop().(*ast.LiteralNode)
 	condLit := stack.Pop().(*ast.LiteralNode)
 
-	if condLit.Ismyuser() {
-		// If our conditional is myuser then our result is also myuser
-		return myuserValue, ast.Typemyuser, nil
+	if condLit.IsUnknown() {
+		// If our conditional is unknown then our result is also unknown
+		return UnknownValue, ast.TypeUnknown, nil
 	}
 
 	if condLit.Value.(bool) {
@@ -318,15 +318,15 @@ func (v *evalIndex) Eval(scope ast.Scope, stack *ast.Stack) (interface{}, ast.Ty
 
 	variableName := v.Index.Target.(*ast.VariableAccess).Name
 
-	if key.Ismyuser() {
-		// If our key is myuser then our result is also myuser
-		return myuserValue, ast.Typemyuser, nil
+	if key.IsUnknown() {
+		// If our key is unknown then our result is also unknown
+		return UnknownValue, ast.TypeUnknown, nil
 	}
 
-	// For target, we'll accept collections containing myuser values but
-	// we still need to catch when the collection itself is myuser, shallowly.
-	if target.Typex == ast.Typemyuser {
-		return myuserValue, ast.Typemyuser, nil
+	// For target, we'll accept collections containing unknown values but
+	// we still need to catch when the collection itself is unknown, shallowly.
+	if target.Typex == ast.TypeUnknown {
+		return UnknownValue, ast.TypeUnknown, nil
 	}
 
 	switch target.Typex {
@@ -405,22 +405,22 @@ func (v *evalOutput) Eval(s ast.Scope, stack *ast.Stack) (interface{}, ast.Type,
 	// The expressions should all be on the stack in reverse
 	// order. So pop them off, reverse their order, and concatenate.
 	nodes := make([]*ast.LiteralNode, 0, len(v.Exprs))
-	havemyuser := false
+	haveUnknown := false
 	for range v.Exprs {
 		n := stack.Pop().(*ast.LiteralNode)
 		nodes = append(nodes, n)
 
-		// If we have any myusers then the whole result is myuser
+		// If we have any unknowns then the whole result is unknown
 		// (we must deal with this first, because the type checker can
-		// skip type conversions in the presence of myusers, and thus
+		// skip type conversions in the presence of unknowns, and thus
 		// any of our other nodes may be incorrectly typed.)
-		if n.Ismyuser() {
-			havemyuser = true
+		if n.IsUnknown() {
+			haveUnknown = true
 		}
 	}
 
-	if havemyuser {
-		return myuserValue, ast.Typemyuser, nil
+	if haveUnknown {
+		return UnknownValue, ast.TypeUnknown, nil
 	}
 
 	// Special case the single list and map
@@ -430,7 +430,7 @@ func (v *evalOutput) Eval(s ast.Scope, stack *ast.Stack) (interface{}, ast.Type,
 			fallthrough
 		case ast.TypeMap:
 			fallthrough
-		case ast.Typemyuser:
+		case ast.TypeUnknown:
 			return nodes[0].Value, t, nil
 		}
 	}
@@ -465,7 +465,7 @@ func (v *evalVariableAccess) Eval(scope ast.Scope, _ *ast.Stack) (interface{}, a
 	variable, ok := scope.LookupVar(v.Name)
 	if !ok {
 		return nil, ast.TypeInvalid, fmt.Errorf(
-			"myuser variable accessed: %s", v.Name)
+			"unknown variable accessed: %s", v.Name)
 	}
 
 	return variable.Value, variable.Type, nil

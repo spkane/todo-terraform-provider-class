@@ -12,21 +12,21 @@ package config
 func Append(c1, c2 *Config) (*Config, error) {
 	c := new(Config)
 
-	// Append myuser keys, but keep them unique since it is a set
-	myusers := make(map[string]struct{})
-	for _, k := range c1.myuserKeys {
-		_, present := myusers[k]
+	// Append unknown keys, but keep them unique since it is a set
+	unknowns := make(map[string]struct{})
+	for _, k := range c1.unknownKeys {
+		_, present := unknowns[k]
 		if !present {
-			myusers[k] = struct{}{}
-			c.myuserKeys = append(c.myuserKeys, k)
+			unknowns[k] = struct{}{}
+			c.unknownKeys = append(c.unknownKeys, k)
 		}
 	}
 
-	for _, k := range c2.myuserKeys {
-		_, present := myusers[k]
+	for _, k := range c2.unknownKeys {
+		_, present := unknowns[k]
 		if !present {
-			myusers[k] = struct{}{}
-			c.myuserKeys = append(c.myuserKeys, k)
+			unknowns[k] = struct{}{}
+			c.unknownKeys = append(c.unknownKeys, k)
 		}
 	}
 

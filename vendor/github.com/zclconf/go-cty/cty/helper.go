@@ -4,11 +4,11 @@ import (
 	"fmt"
 )
 
-// anymyuser is a helper to easily check if a set of values contains any
-// myusers, for operations that short-circuit to return myuser in that case.
-func anymyuser(values ...Value) bool {
+// anyUnknown is a helper to easily check if a set of values contains any
+// unknowns, for operations that short-circuit to return unknown in that case.
+func anyUnknown(values ...Value) bool {
 	for _, val := range values {
-		if val.v == myuser {
+		if val.v == unknown {
 			return true
 		}
 	}
@@ -18,12 +18,12 @@ func anymyuser(values ...Value) bool {
 // typeCheck tests whether all of the given values belong to the given type.
 // If the given types are a mixture of the given type and the dynamic
 // pseudo-type then a short-circuit dynamic value is returned. If the given
-// values are all of the correct type but at least one is myuser then
-// a short-circuit myuser value is returned. If any other types appear then
+// values are all of the correct type but at least one is unknown then
+// a short-circuit unknown value is returned. If any other types appear then
 // an error is returned. Otherwise (finally!) the result is nil, nil.
 func typeCheck(required Type, ret Type, values ...Value) (shortCircuit *Value, err error) {
 	hasDynamic := false
-	hasmyuser := false
+	hasUnknown := false
 
 	for i, val := range values {
 		if val.ty == DynamicPseudoType {
@@ -39,8 +39,8 @@ func typeCheck(required Type, ret Type, values ...Value) (shortCircuit *Value, e
 			)
 		}
 
-		if val.v == myuser {
-			hasmyuser = true
+		if val.v == unknown {
+			hasUnknown = true
 		}
 	}
 
@@ -48,8 +48,8 @@ func typeCheck(required Type, ret Type, values ...Value) (shortCircuit *Value, e
 		return &DynamicVal, nil
 	}
 
-	if hasmyuser {
-		ret := myuserVal(ret)
+	if hasUnknown {
+		ret := UnknownVal(ret)
 		return &ret, nil
 	}
 
@@ -67,12 +67,12 @@ func mustTypeCheck(required Type, ret Type, values ...Value) *Value {
 }
 
 // shortCircuitForceType takes the return value from mustTypeCheck and
-// replaces it with an myuser of the given type if the original value was
+// replaces it with an unknown of the given type if the original value was
 // DynamicVal.
 //
 // This is useful for operations that are specified to always return a
 // particular type, since then a dynamic result can safely be "upgrade" to
-// a strongly-typed myuser, which then allows subsequent operations to
+// a strongly-typed unknown, which then allows subsequent operations to
 // be actually type-checked.
 //
 // It is safe to use this only if the operation in question is defined as
@@ -87,7 +87,7 @@ func forceShortCircuitType(shortCircuit *Value, ty Type) *Value {
 	}
 
 	if shortCircuit.ty == DynamicPseudoType {
-		ret := myuserVal(ty)
+		ret := UnknownVal(ty)
 		return &ret
 	}
 

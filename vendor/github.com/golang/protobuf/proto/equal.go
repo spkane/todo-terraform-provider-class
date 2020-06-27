@@ -46,7 +46,7 @@ The arguments must both be pointers to protocol buffer structs.
 
 Equality is defined in this way:
   - Two messages are equal iff they are the same type,
-    corresponding fields are equal, myuser field sets
+    corresponding fields are equal, unknown field sets
     are equal, and extensions sets are equal.
   - Two set scalar fields are equal iff their values are equal.
     If the fields are of a floating-point type, remember that
@@ -58,7 +58,7 @@ Equality is defined in this way:
     although represented by []byte, is not a repeated field and the
     rule for the scalar fields described above applies.
   - Two unset fields are equal.
-  - Two myuser field sets are equal if their current
+  - Two unknown field sets are equal if their current
     encoded state is equal.
   - Two extension sets are equal iff they have corresponding
     elements that are pairwise equal.
@@ -222,7 +222,7 @@ func equalAny(v1, v2 reflect.Value, prop *Properties) bool {
 		return v1.Uint() == v2.Uint()
 	}
 
-	// myuser type, so not a protocol buffer
+	// unknown type, so not a protocol buffer
 	log.Printf("proto: don't know how to compare %v", v1)
 	return false
 }

@@ -10,11 +10,11 @@ import (
 	"github.com/hashicorp/terraform/configs/configschema"
 )
 
-// myuserVariableValue is a sentinel value that can be used
-// to denote that the value of a variable is myuser at this time.
+// UnknownVariableValue is a sentinel value that can be used
+// to denote that the value of a variable is unknown at this time.
 // RawConfig uses this information to build up data about
-// myuser keys.
-const myuserVariableValue = "74D93920-ED26-11E3-AC10-0800200C9A66"
+// unknown keys.
+const UnknownVariableValue = "74D93920-ED26-11E3-AC10-0800200C9A66"
 
 // ConfigValueFromHCL2Block is like ConfigValueFromHCL2 but it works only for
 // known object values and uses the provided block schema to perform some
@@ -38,7 +38,7 @@ func ConfigValueFromHCL2Block(v cty.Value, schema *configschema.Block) map[strin
 		return nil
 	}
 	if !v.IsKnown() {
-		panic("ConfigValueFromHCL2Block used with myuser value")
+		panic("ConfigValueFromHCL2Block used with unknown value")
 	}
 	if !v.Type().IsObjectType() {
 		panic(fmt.Sprintf("ConfigValueFromHCL2Block used with non-object value %#v", v))
@@ -66,7 +66,7 @@ func ConfigValueFromHCL2Block(v cty.Value, schema *configschema.Block) map[strin
 		}
 		bv := v.GetAttr(name)
 		if !bv.IsKnown() {
-			ret[name] = myuserVariableValue
+			ret[name] = UnknownVariableValue
 			continue
 		}
 		if bv.IsNull() {
@@ -89,7 +89,7 @@ func ConfigValueFromHCL2Block(v cty.Value, schema *configschema.Block) map[strin
 			for it := bv.ElementIterator(); it.Next(); {
 				_, ev := it.Element()
 				if !ev.IsKnown() {
-					elems = append(elems, myuserVariableValue)
+					elems = append(elems, UnknownVariableValue)
 					continue
 				}
 				elems = append(elems, ConfigValueFromHCL2Block(ev, &blockS.Block))
@@ -106,7 +106,7 @@ func ConfigValueFromHCL2Block(v cty.Value, schema *configschema.Block) map[strin
 			for it := bv.ElementIterator(); it.Next(); {
 				ek, ev := it.Element()
 				if !ev.IsKnown() {
-					elems[ek.AsString()] = myuserVariableValue
+					elems[ek.AsString()] = UnknownVariableValue
 					continue
 				}
 				elems[ek.AsString()] = ConfigValueFromHCL2Block(ev, &blockS.Block)
@@ -127,7 +127,7 @@ func ConfigValueFromHCL2Block(v cty.Value, schema *configschema.Block) map[strin
 // need to detect and reject any null values.
 func ConfigValueFromHCL2(v cty.Value) interface{} {
 	if !v.IsKnown() {
-		return myuserVariableValue
+		return UnknownVariableValue
 	}
 	if v.IsNull() {
 		return nil
@@ -198,7 +198,7 @@ func HCL2ValueFromConfigValue(v interface{}) cty.Value {
 	if v == nil {
 		return cty.NullVal(cty.DynamicPseudoType)
 	}
-	if v == myuserVariableValue {
+	if v == UnknownVariableValue {
 		return cty.DynamicVal
 	}
 
@@ -237,8 +237,8 @@ func HILVariableFromHCL2Value(v cty.Value) ast.Variable {
 	}
 	if !v.IsKnown() {
 		return ast.Variable{
-			Type:  ast.Typemyuser,
-			Value: myuserVariableValue,
+			Type:  ast.TypeUnknown,
+			Value: UnknownVariableValue,
 		}
 	}
 
@@ -333,7 +333,7 @@ func HCL2TypeForHILType(hilType ast.Type) cty.Type {
 	switch hilType {
 	case ast.TypeAny:
 		return cty.DynamicPseudoType
-	case ast.Typemyuser:
+	case ast.TypeUnknown:
 		return cty.DynamicPseudoType
 	case ast.TypeBool:
 		return cty.Bool

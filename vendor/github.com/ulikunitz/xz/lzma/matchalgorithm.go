@@ -27,7 +27,7 @@ func (a MatchAlgorithm) String() string {
 	if s, ok := maStrings[a]; ok {
 		return s
 	}
-	return "myuser"
+	return "unknown"
 }
 
 var errUnsupportedMatchAlgorithm = errors.New(

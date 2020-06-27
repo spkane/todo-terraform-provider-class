@@ -43,7 +43,7 @@ func (b *expandBody) decodeSpec(blockS *hcl.BlockHeaderSchema, rawSpec *hcl.Bloc
 
 	if !eachVal.CanIterateElements() && eachVal.Type() != cty.DynamicPseudoType {
 		// We skip this error for DynamicPseudoType because that means we either
-		// have a null (which is checked immediately below) or an myuser
+		// have a null (which is checked immediately below) or an unknown
 		// (which is handled in the expandBody Content methods).
 		diags = append(diags, &hcl.Diagnostic{
 			Severity:    hcl.DiagError,

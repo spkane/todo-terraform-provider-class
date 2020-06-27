@@ -123,7 +123,7 @@ func (pk *PublicKeyV3) SerializeSignaturePrefix(w io.Writer) {
 		pLength += 2 + uint16(len(pk.n.bytes))
 		pLength += 2 + uint16(len(pk.e.bytes))
 	default:
-		panic("myuser public key algorithm")
+		panic("unknown public key algorithm")
 	}
 	pLength += 6
 	w.Write([]byte{0x99, byte(pLength >> 8), byte(pLength)})
@@ -138,7 +138,7 @@ func (pk *PublicKeyV3) Serialize(w io.Writer) (err error) {
 		length += 2 + len(pk.n.bytes)
 		length += 2 + len(pk.e.bytes)
 	default:
-		panic("myuser public key algorithm")
+		panic("unknown public key algorithm")
 	}
 
 	packetType := packetTypePublicKey

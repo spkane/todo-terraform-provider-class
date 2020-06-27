@@ -22,6 +22,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/hashicorp/terraform/configs/hcl2shim"
 	"github.com/hashicorp/terraform/terraform"
 	"github.com/mitchellh/copystructure"
 	"github.com/mitchellh/mapstructure"
@@ -657,7 +658,7 @@ func (m schemaMap) Input(
 		case TypeString:
 			value, err = m.inputString(input, k, v)
 		default:
-			panic(fmt.Sprintf("myuser type for input: %#v", v.Type))
+			panic(fmt.Sprintf("Unknown type for input: %#v", v.Type))
 		}
 
 		if err != nil {
@@ -761,7 +762,7 @@ func (m schemaMap) internalValidate(topSchemaMap schemaMap, attrsOnly bool) erro
 
 					var ok bool
 					if target, ok = sm[part]; !ok {
-						return fmt.Errorf("%s: ConflictsWith references myuser attribute (%s) at part (%s)", k, key, part)
+						return fmt.Errorf("%s: ConflictsWith references unknown attribute (%s) at part (%s)", k, key, part)
 					}
 
 					if subResource, ok := target.Elem.(*Resource); ok {
@@ -882,7 +883,7 @@ func (m schemaMap) diff(
 	case TypeSet:
 		err = m.diffSet(k, schema, unsupressedDiff, d, all)
 	default:
-		err = fmt.Errorf("%s: myuser type %#v", k, schema.Type)
+		err = fmt.Errorf("%s: unknown type %#v", k, schema.Type)
 	}
 
 	for attrK, attrV := range unsupressedDiff.Attributes {
@@ -1025,7 +1026,7 @@ func (m schemaMap) diffList(
 			}
 		}
 	default:
-		return fmt.Errorf("%s: myuser element type (internal)", k)
+		return fmt.Errorf("%s: unknown element type (internal)", k)
 	}
 
 	return nil
@@ -1251,7 +1252,7 @@ func (m schemaMap) diffSet(
 					return err
 				}
 			default:
-				return fmt.Errorf("%s: myuser element type (internal)", k)
+				return fmt.Errorf("%s: unknown element type (internal)", k)
 			}
 		}
 	}
@@ -1364,10 +1365,10 @@ func (m schemaMap) validate(
 			"%q: this field cannot be set", k)}
 	}
 
-	// If the value is myuser then we can't validate it yet.
+	// If the value is unknown then we can't validate it yet.
 	// In particular, this avoids spurious type errors where downstream
-	// validation code sees myuserVariableValue as being just a string.
-	// The SDK has to allow the myuser value through initially, so that
+	// validation code sees UnknownVariableValue as being just a string.
+	// The SDK has to allow the unknown value through initially, so that
 	// Required fields set via an interpolated value are accepted.
 	if !isWhollyKnown(raw) {
 		if schema.Deprecated != "" {
@@ -1384,11 +1385,11 @@ func (m schemaMap) validate(
 	return m.validateType(k, raw, schema, c)
 }
 
-// isWhollyKnown returns false if the argument contains an myuserVariableValue
+// isWhollyKnown returns false if the argument contains an UnknownVariableValue
 func isWhollyKnown(raw interface{}) bool {
 	switch raw := raw.(type) {
 	case string:
-		if raw == hcl2shim.myuserVariableValue {
+		if raw == hcl2shim.UnknownVariableValue {
 			return false
 		}
 	case []interface{}:
@@ -1417,8 +1418,8 @@ func (m schemaMap) validateConflictingAttributes(
 
 	for _, conflictingKey := range schema.ConflictsWith {
 		if raw, ok := c.Get(conflictingKey); ok {
-			if raw == hcl2shim.myuserVariableValue {
-				// An myuser value might become unset (null) once known, so
+			if raw == hcl2shim.UnknownVariableValue {
+				// An unknown value might become unset (null) once known, so
 				// we must defer validation until it's known.
 				continue
 			}
@@ -1435,9 +1436,9 @@ func (m schemaMap) validateList(
 	raw interface{},
 	schema *Schema,
 	c *terraform.ResourceConfig) ([]string, []error) {
-	// first check if the list is wholly myuser
+	// first check if the list is wholly unknown
 	if s, ok := raw.(string); ok {
-		if s == hcl2shim.myuserVariableValue {
+		if s == hcl2shim.UnknownVariableValue {
 			return nil, nil
 		}
 	}
@@ -1466,7 +1467,7 @@ func (m schemaMap) validateList(
 	// We can't validate list length if this came from a dynamic block.
 	// Since there's no way to determine if something was from a dynamic block
 	// at this point, we're going to skip validation in the new protocol if
-	// there are any myusers. Validate will eventually be called again once
+	// there are any unknowns. Validate will eventually be called again once
 	// all values are known.
 	if isProto5() && !isWhollyKnown(raw) {
 		return nil, nil
@@ -1527,9 +1528,9 @@ func (m schemaMap) validateMap(
 	raw interface{},
 	schema *Schema,
 	c *terraform.ResourceConfig) ([]string, []error) {
-	// first check if the list is wholly myuser
+	// first check if the list is wholly unknown
 	if s, ok := raw.(string); ok {
-		if s == hcl2shim.myuserVariableValue {
+		if s == hcl2shim.UnknownVariableValue {
 			return nil, nil
 		}
 	}
@@ -1630,7 +1631,7 @@ func validateMapValues(k string, m map[string]interface{}, schema *Schema) ([]st
 				return nil, []error{fmt.Errorf("%s (%s): %s", k, key, err)}
 			}
 		default:
-			panic(fmt.Sprintf("myuser validation type: %#v", schema.Type))
+			panic(fmt.Sprintf("Unknown validation type: %#v", schema.Type))
 		}
 	}
 	return nil, nil
@@ -1693,7 +1694,7 @@ func (m schemaMap) validateObject(
 		}
 	}
 
-	// Detect any extra/myuser keys and report those as errors.
+	// Detect any extra/unknown keys and report those as errors.
 	if m, ok := raw.(map[string]interface{}); ok {
 		for subk, _ := range m {
 			if _, ok := schema[subk]; !ok {
@@ -1701,7 +1702,7 @@ func (m schemaMap) validateObject(
 					continue
 				}
 				es = append(es, fmt.Errorf(
-					"%s: invalid or myuser key: %s", k, subk))
+					"%s: invalid or unknown key: %s", k, subk))
 			}
 		}
 	}
@@ -1787,7 +1788,7 @@ func (m schemaMap) validatePrimitive(
 		}
 		decoded = n
 	default:
-		panic(fmt.Sprintf("myuser validation type: %#v", schema.Type))
+		panic(fmt.Sprintf("Unknown validation type: %#v", schema.Type))
 	}
 
 	if schema.ValidateFunc != nil {
@@ -1848,6 +1849,6 @@ func (t ValueType) Zero() interface{} {
 	case typeObject:
 		return map[string]interface{}{}
 	default:
-		panic(fmt.Sprintf("myuser type %s", t))
+		panic(fmt.Sprintf("unknown type %s", t))
 	}
 }

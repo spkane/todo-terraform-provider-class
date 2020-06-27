@@ -142,7 +142,7 @@ func decodeHeaderValue(r io.Reader) (Value, error) {
 		err = tv.decode(r)
 		v = tv
 	default:
-		panic(fmt.Sprintf("myuser value type %d", raw.Type))
+		panic(fmt.Sprintf("unknown value type %d", raw.Type))
 	}
 
 	// Error could be EOF, let caller deal with it

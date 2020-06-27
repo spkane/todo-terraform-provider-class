@@ -369,7 +369,7 @@ func (r *Reader) Size() int64 {
 	return r.Attrs.Size
 }
 
-// Remain returns the number of bytes left to read, or -1 if myuser.
+// Remain returns the number of bytes left to read, or -1 if unknown.
 func (r *Reader) Remain() int64 {
 	return r.remain
 }

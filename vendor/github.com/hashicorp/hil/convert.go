@@ -8,10 +8,10 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-// myuserValue is a sentinel value that can be used to denote
+// UnknownValue is a sentinel value that can be used to denote
 // that a value of a variable (or map element, list element, etc.)
-// is myuser. This will always have the type ast.Typemyuser.
-const myuserValue = "74D93920-ED26-11E3-AC10-0800200C9A66"
+// is unknown. This will always have the type ast.TypeUnknown.
+const UnknownValue = "74D93920-ED26-11E3-AC10-0800200C9A66"
 
 var hilMapstructureDecodeHookSlice []interface{}
 var hilMapstructureDecodeHookStringSlice []string
@@ -68,9 +68,9 @@ func InterfaceToVariable(input interface{}) (ast.Variable, error) {
 
 	var stringVal string
 	if err := hilMapstructureWeakDecode(input, &stringVal); err == nil {
-		// Special case the myuser value to turn into "myuser"
-		if stringVal == myuserValue {
-			return ast.Variable{Value: myuserValue, Type: ast.Typemyuser}, nil
+		// Special case the unknown value to turn into "unknown"
+		if stringVal == UnknownValue {
+			return ast.Variable{Value: UnknownValue, Type: ast.TypeUnknown}, nil
 		}
 
 		// Otherwise return the string value
@@ -170,5 +170,5 @@ func VariableToInterface(input ast.Variable) (interface{}, error) {
 		return result, nil
 	}
 
-	return nil, fmt.Errorf("myuser input type: %s", input.Type)
+	return nil, fmt.Errorf("unknown input type: %s", input.Type)
 }

@@ -390,7 +390,7 @@ func (p *MockProvider) ApplyResourceChange(r providers.ApplyResourceChangeReques
 			for k, new := range plannedMap {
 				old := priorMap[k]
 				newComputed := false
-				if new == hcl2shim.myuserVariableValue {
+				if new == hcl2shim.UnknownVariableValue {
 					new = ""
 					newComputed = true
 				}

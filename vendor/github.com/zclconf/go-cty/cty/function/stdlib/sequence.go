@@ -49,7 +49,7 @@ var ConcatFunc = function.New(&function.Spec{
 			case ety.IsListType():
 				if !val.IsKnown() {
 					// We need to know the list to count its elements to
-					// build our tuple type, so any concat of an myuser
+					// build our tuple type, so any concat of an unknown
 					// list can't be typed yet.
 					return cty.DynamicPseudoType, nil
 				}
@@ -97,7 +97,7 @@ var ConcatFunc = function.New(&function.Spec{
 		case retType.IsTupleType():
 			// If retType is a tuple type then we could have a mixture of
 			// lists and tuples but we know they all have known values
-			// (because our params don't Allowmyuser) and we know that
+			// (because our params don't AllowUnknown) and we know that
 			// concatenating them all together will produce a tuple of
 			// retType because of the work we did in the Type function above.
 			vals := make([]cty.Value, 0, len(args))

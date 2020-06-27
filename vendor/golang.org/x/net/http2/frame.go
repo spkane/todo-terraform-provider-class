@@ -56,7 +56,7 @@ func (t FrameType) String() string {
 	if s, ok := frameName[t]; ok {
 		return s
 	}
-	return fmt.Sprintf("myuser_FRAME_TYPE_%d", uint8(t))
+	return fmt.Sprintf("UNKNOWN_FRAME_TYPE_%d", uint8(t))
 }
 
 // Flags is a bitmask of HTTP/2 flags.
@@ -141,7 +141,7 @@ func typeFrameParser(t FrameType) frameParser {
 	if f := frameParsers[t]; f != nil {
 		return f
 	}
-	return parsemyuserFrame
+	return parseUnknownFrame
 }
 
 // A FrameHeader is the 9 byte header of all HTTP/2 frames.
@@ -152,7 +152,7 @@ type FrameHeader struct {
 
 	// Type is the 1 byte frame type. There are ten standard frame
 	// types, but extension frame types may be written by WriteRawFrame
-	// and will be returned by ReadFrame (as myuserFrame).
+	// and will be returned by ReadFrame (as UnknownFrame).
 	Type FrameType
 
 	// Flags are the 1 byte of 8 potential bit flags per frame.
@@ -895,9 +895,9 @@ func (f *Framer) WriteGoAway(maxStreamID uint32, code ErrCode, debugData []byte)
 	return f.endWrite()
 }
 
-// An myuserFrame is the frame type returned when the frame type is myuser
+// An UnknownFrame is the frame type returned when the frame type is unknown
 // or no specific frame type parser exists.
-type myuserFrame struct {
+type UnknownFrame struct {
 	FrameHeader
 	p []byte
 }
@@ -907,13 +907,13 @@ type myuserFrame struct {
 // Framer.ReadFrame, nor is it valid to retain the returned slice.
 // The memory is owned by the Framer and is invalidated when the next
 // frame is read.
-func (f *myuserFrame) Payload() []byte {
+func (f *UnknownFrame) Payload() []byte {
 	f.checkValid()
 	return f.p
 }
 
-func parsemyuserFrame(_ *frameCache, fh FrameHeader, p []byte) (Frame, error) {
-	return &myuserFrame{fh, p}, nil
+func parseUnknownFrame(_ *frameCache, fh FrameHeader, p []byte) (Frame, error) {
+	return &UnknownFrame{fh, p}, nil
 }
 
 // A WindowUpdateFrame is used to implement flow control.
@@ -1342,7 +1342,7 @@ func (f *Framer) WritePushPromise(p PushPromiseParam) error {
 }
 
 // WriteRawFrame writes a raw frame. This can be used to write
-// extension frames myuser to this package.
+// extension frames unknown to this package.
 func (f *Framer) WriteRawFrame(t FrameType, flags Flags, streamID uint32, payload []byte) error {
 	f.startWrite(t, flags, streamID)
 	f.writeBytes(payload)
@@ -1391,7 +1391,7 @@ type MetaHeadersFrame struct {
 	// ReadFrame.
 	//
 	// Fields are guaranteed to be in the correct http2 order and
-	// not have myuser pseudo header fields or invalid header
+	// not have unknown pseudo header fields or invalid header
 	// field names or values. Required pseudo header fields may be
 	// missing, however. Use the MetaHeadersFrame.Pseudo accessor
 	// method access pseudo headers.

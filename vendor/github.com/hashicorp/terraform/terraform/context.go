@@ -159,7 +159,7 @@ func NewContext(opts *ContextOpts) (*Context, tfdiags.Diagnostics) {
 	variables = variables.Override(opts.Variables)
 
 	// Bind available provider plugins to the constraints in config
-	var providerFactories map[string]providers.Factory
+	var providerFactories map[addrs.Provider]providers.Factory
 	if opts.ProviderResolver != nil {
 		deps := ConfigTreeDependencies(opts.Config, state)
 		reqd := deps.AllPluginRequirements()
@@ -167,7 +167,6 @@ func NewContext(opts *ContextOpts) (*Context, tfdiags.Diagnostics) {
 			reqd.LockExecutables(opts.ProviderSHA256s)
 		}
 		log.Printf("[TRACE] terraform.NewContext: resolving provider version selections")
-
 		var providerDiags tfdiags.Diagnostics
 		providerFactories, providerDiags = resourceProviderFactories(opts.ProviderResolver, reqd)
 		diags = diags.Append(providerDiags)
@@ -176,7 +175,7 @@ func NewContext(opts *ContextOpts) (*Context, tfdiags.Diagnostics) {
 			return nil, diags
 		}
 	} else {
-		providerFactories = make(map[string]providers.Factory)
+		providerFactories = make(map[addrs.Provider]providers.Factory)
 	}
 
 	components := &basicComponentFactory{
@@ -204,7 +203,7 @@ func NewContext(opts *ContextOpts) (*Context, tfdiags.Diagnostics) {
 	log.Printf("[TRACE] terraform.NewContext: complete")
 
 	// By the time we get here, we should have values defined for all of
-	// the root module variables, even if some of them are "myuser". It's the
+	// the root module variables, even if some of them are "unknown". It's the
 	// caller's responsibility to have already handled the decoding of these
 	// from the various ways the CLI allows them to be set and to produce
 	// user-friendly error messages if they are not all present, and so
@@ -465,7 +464,7 @@ func (c *Context) Apply() (*states.State, tfdiags.Diagnostics) {
 		// be okay because it doesn't throw away anything we can't recompute
 		// on a subsequent "terraform plan" run, if the resources are still
 		// present in the configuration. However, this _will_ cause "count = 0"
-		// resources to read as myuser during the next refresh walk, which
+		// resources to read as unknown during the next refresh walk, which
 		// may cause some additional churn if used in a data resource or
 		// provider block, until we remove refreshing as a separate walk and
 		// just do it as part of the plan walk.)

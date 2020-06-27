@@ -36,7 +36,7 @@ func (e *xmlResponseError) UnmarshalXML(d *xml.Decoder, start xml.StartElement) 
 		return d.DecodeElement(&e.xmlErrorResponse, &start)
 
 	default:
-		return fmt.Errorf("myuser error response tag, %v", start)
+		return fmt.Errorf("unknown error response tag, %v", start)
 	}
 }
 

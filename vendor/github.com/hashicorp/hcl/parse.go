@@ -28,7 +28,7 @@ func parse(in []byte) (*ast.File, error) {
 		return jsonParser.Parse(in)
 	}
 
-	return nil, fmt.Errorf("myuser config format")
+	return nil, fmt.Errorf("unknown config format")
 }
 
 // Parse parses the given input and returns the root object.

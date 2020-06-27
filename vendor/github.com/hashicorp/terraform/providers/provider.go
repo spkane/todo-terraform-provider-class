@@ -55,7 +55,7 @@ type Interface interface {
 	PlanResourceChange(PlanResourceChangeRequest) PlanResourceChangeResponse
 
 	// ApplyResourceChange takes the planned state for a resource, which may
-	// yet contain myuser computed values, and applies the changes returning
+	// yet contain unknown computed values, and applies the changes returning
 	// the final state.
 	ApplyResourceChange(ApplyResourceChangeRequest) ApplyResourceChangeResponse
 
@@ -106,7 +106,7 @@ type ValidateResourceTypeConfigRequest struct {
 	// TypeName is the name of the resource type to validate.
 	TypeName string
 
-	// Config is the configuration value to validate, which may contain myuser
+	// Config is the configuration value to validate, which may contain unknown
 	// values.
 	Config cty.Value
 }
@@ -120,7 +120,7 @@ type ValidateDataSourceConfigRequest struct {
 	// TypeName is the name of the data source type to validate.
 	TypeName string
 
-	// Config is the configuration value to validate, which may contain myuser
+	// Config is the configuration value to validate, which may contain unknown
 	// values.
 	Config cty.Value
 }
@@ -139,7 +139,7 @@ type UpgradeResourceStateRequest struct {
 
 	// RawStateJSON and RawStateFlatmap contiain the state that needs to be
 	// upgraded to match the current schema version. Because the schema is
-	// myuser, this contains only the raw data as stored in the state.
+	// unknown, this contains only the raw data as stored in the state.
 	// RawStateJSON is the current json state encoding.
 	// RawStateFlatmap is the legacy flatmap encoding.
 	// Only on of these fields may be set for the upgrade request.

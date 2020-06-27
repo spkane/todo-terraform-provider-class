@@ -5,9 +5,8 @@ package duration
 
 import (
 	fmt "fmt"
-	math "math"
-
 	proto "github.com/golang/protobuf/proto"
+	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -42,7 +41,7 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 //     if (duration.seconds < 0 && duration.nanos > 0) {
 //       duration.seconds += 1;
 //       duration.nanos -= 1000000000;
-//     } else if (durations.seconds > 0 && duration.nanos < 0) {
+//     } else if (duration.seconds > 0 && duration.nanos < 0) {
 //       duration.seconds -= 1;
 //       duration.nanos += 1000000000;
 //     }
@@ -119,8 +118,8 @@ func (m *Duration) XXX_Merge(src proto.Message) {
 func (m *Duration) XXX_Size() int {
 	return xxx_messageInfo_Duration.Size(m)
 }
-func (m *Duration) XXX_Discardmyuser() {
-	xxx_messageInfo_Duration.Discardmyuser(m)
+func (m *Duration) XXX_DiscardUnknown() {
+	xxx_messageInfo_Duration.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Duration proto.InternalMessageInfo
@@ -143,7 +142,9 @@ func init() {
 	proto.RegisterType((*Duration)(nil), "google.protobuf.Duration")
 }
 
-func init() { proto.RegisterFile("google/protobuf/duration.proto", fileDescriptor_23597b2ebd7ac6c5) }
+func init() {
+	proto.RegisterFile("google/protobuf/duration.proto", fileDescriptor_23597b2ebd7ac6c5)
+}
 
 var fileDescriptor_23597b2ebd7ac6c5 = []byte{
 	// 190 bytes of a gzipped FileDescriptorProto

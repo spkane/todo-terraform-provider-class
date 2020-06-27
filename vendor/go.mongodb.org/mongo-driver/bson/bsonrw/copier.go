@@ -324,7 +324,7 @@ func (c Copier) CopyValue(dst ValueWriter, src ValueReader) error {
 		}
 		err = dst.WriteMaxKey()
 	default:
-		err = fmt.Errorf("Cannot copy myuser BSON type %s", src.Type())
+		err = fmt.Errorf("Cannot copy unknown BSON type %s", src.Type())
 	}
 
 	return err

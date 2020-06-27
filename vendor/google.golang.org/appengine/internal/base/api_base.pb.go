@@ -3,13 +3,9 @@
 
 package base
 
-import (
-	fmt "fmt"
-
-	proto "github.com/golang/protobuf/proto"
-
-	math "math"
-)
+import proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -47,8 +43,8 @@ func (dst *StringProto) XXX_Merge(src proto.Message) {
 func (m *StringProto) XXX_Size() int {
 	return xxx_messageInfo_StringProto.Size(m)
 }
-func (m *StringProto) XXX_Discardmyuser() {
-	xxx_messageInfo_StringProto.Discardmyuser(m)
+func (m *StringProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_StringProto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_StringProto proto.InternalMessageInfo
@@ -85,8 +81,8 @@ func (dst *Integer32Proto) XXX_Merge(src proto.Message) {
 func (m *Integer32Proto) XXX_Size() int {
 	return xxx_messageInfo_Integer32Proto.Size(m)
 }
-func (m *Integer32Proto) XXX_Discardmyuser() {
-	xxx_messageInfo_Integer32Proto.Discardmyuser(m)
+func (m *Integer32Proto) XXX_DiscardUnknown() {
+	xxx_messageInfo_Integer32Proto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Integer32Proto proto.InternalMessageInfo
@@ -123,8 +119,8 @@ func (dst *Integer64Proto) XXX_Merge(src proto.Message) {
 func (m *Integer64Proto) XXX_Size() int {
 	return xxx_messageInfo_Integer64Proto.Size(m)
 }
-func (m *Integer64Proto) XXX_Discardmyuser() {
-	xxx_messageInfo_Integer64Proto.Discardmyuser(m)
+func (m *Integer64Proto) XXX_DiscardUnknown() {
+	xxx_messageInfo_Integer64Proto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Integer64Proto proto.InternalMessageInfo
@@ -161,8 +157,8 @@ func (dst *BoolProto) XXX_Merge(src proto.Message) {
 func (m *BoolProto) XXX_Size() int {
 	return xxx_messageInfo_BoolProto.Size(m)
 }
-func (m *BoolProto) XXX_Discardmyuser() {
-	xxx_messageInfo_BoolProto.Discardmyuser(m)
+func (m *BoolProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_BoolProto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_BoolProto proto.InternalMessageInfo
@@ -199,8 +195,8 @@ func (dst *DoubleProto) XXX_Merge(src proto.Message) {
 func (m *DoubleProto) XXX_Size() int {
 	return xxx_messageInfo_DoubleProto.Size(m)
 }
-func (m *DoubleProto) XXX_Discardmyuser() {
-	xxx_messageInfo_DoubleProto.Discardmyuser(m)
+func (m *DoubleProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_DoubleProto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_DoubleProto proto.InternalMessageInfo
@@ -237,8 +233,8 @@ func (dst *BytesProto) XXX_Merge(src proto.Message) {
 func (m *BytesProto) XXX_Size() int {
 	return xxx_messageInfo_BytesProto.Size(m)
 }
-func (m *BytesProto) XXX_Discardmyuser() {
-	xxx_messageInfo_BytesProto.Discardmyuser(m)
+func (m *BytesProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_BytesProto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_BytesProto proto.InternalMessageInfo
@@ -274,8 +270,8 @@ func (dst *VoidProto) XXX_Merge(src proto.Message) {
 func (m *VoidProto) XXX_Size() int {
 	return xxx_messageInfo_VoidProto.Size(m)
 }
-func (m *VoidProto) XXX_Discardmyuser() {
-	xxx_messageInfo_VoidProto.Discardmyuser(m)
+func (m *VoidProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_VoidProto.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_VoidProto proto.InternalMessageInfo

@@ -80,7 +80,7 @@ func (e *encoder) must(ok bool) {
 	if !ok {
 		msg := e.emitter.problem
 		if msg == "" {
-			msg = "myuser problem generating YAML content"
+			msg = "unknown problem generating YAML content"
 		}
 		failf("%s", msg)
 	}

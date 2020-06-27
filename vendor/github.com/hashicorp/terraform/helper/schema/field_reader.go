@@ -336,7 +336,7 @@ func stringToPrimitive(
 	case TypeString:
 		returnVal = value
 	default:
-		panic(fmt.Sprintf("myuser type: %s", schema.Type))
+		panic(fmt.Sprintf("Unknown type: %s", schema.Type))
 	}
 
 	return returnVal, nil

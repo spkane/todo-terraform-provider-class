@@ -17,7 +17,7 @@ message ApplicationError {
 
 message RpcError {
   enum ErrorCode {
-    myuser = 0;
+    UNKNOWN = 0;
     CALL_NOT_FOUND = 1;
     PARSE_ERROR = 2;
     SECURITY_VIOLATION = 3;

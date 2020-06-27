@@ -29,13 +29,13 @@ type Parser struct {
 	// NamespaceDelimiter separates group namespaces and option long names
 	NamespaceDelimiter string
 
-	// myuserOptionsHandler is a function which gets called when the parser
-	// encounters an myuser option. The function receives the myuser option
+	// UnknownOptionsHandler is a function which gets called when the parser
+	// encounters an unknown option. The function receives the unknown option
 	// name, a SplitArgument which specifies its value if set with an argument
 	// separator, and the remaining command line arguments.
 	// It should return a new list of remaining arguments to continue parsing,
 	// or an error to indicate a parse failure.
-	myuserOptionHandler func(option string, arg SplitArgument, args []string) ([]string, error)
+	UnknownOptionHandler func(option string, arg SplitArgument, args []string) ([]string, error)
 
 	// CompletionHandler is a function gets called to handle the completion of
 	// items. By default, the items are printed and the application is exited.
@@ -95,9 +95,9 @@ const (
 	// flags).
 	PassDoubleDash
 
-	// Ignoremyuser ignores any myuser options and passes them as
+	// IgnoreUnknown ignores any unknown options and passes them as
 	// remaining command line arguments instead of generating an error.
-	Ignoremyuser
+	IgnoreUnknown
 
 	// PrintErrors prints any errors which occurred during parsing to
 	// os.Stderr. In the special case of ErrHelp, the message will be printed
@@ -268,18 +268,18 @@ func (p *Parser) ParseArgs(args []string) ([]string, error) {
 		}
 
 		if err != nil {
-			ignoremyuser := (p.Options & Ignoremyuser) != None
+			ignoreUnknown := (p.Options & IgnoreUnknown) != None
 			parseErr := wrapError(err)
 
-			if parseErr.Type != ErrmyuserFlag || (!ignoremyuser && p.myuserOptionHandler == nil) {
+			if parseErr.Type != ErrUnknownFlag || (!ignoreUnknown && p.UnknownOptionHandler == nil) {
 				s.err = parseErr
 				break
 			}
 
-			if ignoremyuser {
+			if ignoreUnknown {
 				s.addArgs(arg)
-			} else if p.myuserOptionHandler != nil {
-				modifiedArgs, err := p.myuserOptionHandler(optname, strArgument{argument}, s.args)
+			} else if p.UnknownOptionHandler != nil {
+				modifiedArgs, err := p.UnknownOptionHandler(optname, strArgument{argument}, s.args)
 
 				if err != nil {
 					s.err = err
@@ -470,8 +470,8 @@ func (p *parseState) estimateCommand() error {
 
 	if len(p.retargs) != 0 {
 		c, l := closestChoice(p.retargs[0], cmdnames)
-		msg = fmt.Sprintf("myuser command `%s'", p.retargs[0])
-		errtype = ErrmyuserCommand
+		msg = fmt.Sprintf("Unknown command `%s'", p.retargs[0])
+		errtype = ErrUnknownCommand
 
 		if float32(l)/float32(len(c)) < 0.5 {
 			msg = fmt.Sprintf("%s, did you mean `%s'?", msg, c)
@@ -564,7 +564,7 @@ func (p *Parser) parseLong(s *parseState, name string, argument *string) error {
 		return p.parseOption(s, name, option, canarg, argument)
 	}
 
-	return newErrorf(ErrmyuserFlag, "myuser flag `%s'", name)
+	return newErrorf(ErrUnknownFlag, "unknown flag `%s'", name)
 }
 
 func (p *Parser) splitShortConcatArg(s *parseState, optname string) (string, *string) {
@@ -601,7 +601,7 @@ func (p *Parser) parseShort(s *parseState, optname string, argument *string) err
 				return err
 			}
 		} else {
-			return newErrorf(ErrmyuserFlag, "myuser flag `%s'", shortname)
+			return newErrorf(ErrUnknownFlag, "unknown flag `%s'", shortname)
 		}
 
 		// Only the first option can have a concatted argument, so just
@@ -645,7 +645,7 @@ func (p *Parser) parseNonOption(s *parseState) error {
 			return nil
 		} else if !s.command.SubcommandsOptional {
 			s.addArgs(s.arg)
-			return newErrorf(ErrmyuserCommand, "myuser command `%s'", s.arg)
+			return newErrorf(ErrUnknownCommand, "Unknown command `%s'", s.arg)
 		}
 	}
 

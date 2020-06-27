@@ -110,7 +110,7 @@ func (t Traversal) TraverseAbs(ctx *EvalContext) (cty.Value, Diagnostics) {
 	return cty.DynamicVal, Diagnostics{
 		{
 			Severity: DiagError,
-			Summary:  "myuser variable",
+			Summary:  "Unknown variable",
 			Detail:   fmt.Sprintf("There is no variable named %q.%s", name, suggestion),
 			Subject:  &root.SrcRange,
 		},

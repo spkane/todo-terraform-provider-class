@@ -47,7 +47,7 @@ func toStatus(err error) trace.Status {
 	} else if s, ok := status.FromError(err); ok {
 		return trace.Status{Code: int32(s.Code()), Message: s.Message()}
 	} else {
-		return trace.Status{Code: int32(code.Code_myuser), Message: err.Error()}
+		return trace.Status{Code: int32(code.Code_UNKNOWN), Message: err.Error()}
 	}
 }
 
@@ -60,7 +60,7 @@ func httpStatusCodeToOCCode(httpStatusCode int) int32 {
 	case 499:
 		return int32(code.Code_CANCELLED)
 	case 500:
-		return int32(code.Code_myuser) // Could also be Code_INTERNAL, Code_DATA_LOSS
+		return int32(code.Code_UNKNOWN) // Could also be Code_INTERNAL, Code_DATA_LOSS
 	case 400:
 		return int32(code.Code_INVALID_ARGUMENT) // Could also be Code_OUT_OF_RANGE
 	case 504:
@@ -80,7 +80,7 @@ func httpStatusCodeToOCCode(httpStatusCode int) int32 {
 	case 503:
 		return int32(code.Code_UNAVAILABLE)
 	default:
-		return int32(code.Code_myuser)
+		return int32(code.Code_UNKNOWN)
 	}
 }
 

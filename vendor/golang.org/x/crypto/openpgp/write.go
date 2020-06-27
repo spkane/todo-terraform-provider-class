@@ -159,7 +159,7 @@ func intersectPreferences(a []uint8, b []uint8) (intersection []uint8) {
 func hashToHashId(h crypto.Hash) uint8 {
 	v, ok := s2k.HashToHashId(h)
 	if !ok {
-		panic("tried to convert myuser hash")
+		panic("tried to convert unknown hash")
 	}
 	return v
 }

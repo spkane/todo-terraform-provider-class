@@ -61,8 +61,8 @@ func (dst *PartitionId) XXX_Merge(src proto.Message) {
 func (m *PartitionId) XXX_Size() int {
 	return xxx_messageInfo_PartitionId.Size(m)
 }
-func (m *PartitionId) XXX_Discardmyuser() {
-	xxx_messageInfo_PartitionId.Discardmyuser(m)
+func (m *PartitionId) XXX_DiscardUnknown() {
+	xxx_messageInfo_PartitionId.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_PartitionId proto.InternalMessageInfo
@@ -130,8 +130,8 @@ func (dst *Key) XXX_Merge(src proto.Message) {
 func (m *Key) XXX_Size() int {
 	return xxx_messageInfo_Key.Size(m)
 }
-func (m *Key) XXX_Discardmyuser() {
-	xxx_messageInfo_Key.Discardmyuser(m)
+func (m *Key) XXX_DiscardUnknown() {
+	xxx_messageInfo_Key.DiscardUnknown(m)
 }
 
 // A (kind, ID/name) pair used to construct a key path.
@@ -173,8 +173,8 @@ func (dst *Key_PathElement) XXX_Merge(src proto.Message) {
 func (m *Key_PathElement) XXX_Size() int {
 	return xxx_messageInfo_Key_PathElement.Size(m)
 }
-func (m *Key_PathElement) XXX_Discardmyuser() {
-	xxx_messageInfo_Key_PathElement.Discardmyuser(m)
+func (m *Key_PathElement) XXX_DiscardUnknown() {
+	xxx_messageInfo_Key_PathElement.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_Key_PathElement proto.InternalMessageInfo

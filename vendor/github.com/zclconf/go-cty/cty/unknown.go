@@ -1,32 +1,32 @@
 package cty
 
-// myuserType is the placeholder type used for the sigil value representing
-// "myuser", to make it unambigiously distinct from any other possible value.
-type myuserType struct {
+// unknownType is the placeholder type used for the sigil value representing
+// "Unknown", to make it unambigiously distinct from any other possible value.
+type unknownType struct {
 }
 
-// myuser is a special value that can be
-var myuser interface{} = &myuserType{}
+// Unknown is a special value that can be
+var unknown interface{} = &unknownType{}
 
-// myuserVal returns an Value that represents an myuser value of the given
-// type. myuser values can be used to represent a value that is
+// UnknownVal returns an Value that represents an unknown value of the given
+// type. Unknown values can be used to represent a value that is
 // not yet known. Its meaning is undefined in cty, but it could be used by
 // an calling application to allow partial evaluation.
 //
-// myuser values of any type can be created of any type. All operations on
-// myuser values themselves return myuser.
-func myuserVal(t Type) Value {
+// Unknown values of any type can be created of any type. All operations on
+// Unknown values themselves return Unknown.
+func UnknownVal(t Type) Value {
 	return Value{
 		ty: t,
-		v:  myuser,
+		v:  unknown,
 	}
 }
 
-func (t myuserType) GoString() string {
-	// This is the stringification of our internal myuser marker. The
-	// stringification of the public representation of myusers is in
+func (t unknownType) GoString() string {
+	// This is the stringification of our internal unknown marker. The
+	// stringification of the public representation of unknowns is in
 	// Value.GoString.
-	return "cty.myuser"
+	return "cty.unknown"
 }
 
 type pseudoTypeDynamic struct {
@@ -44,7 +44,7 @@ type pseudoTypeDynamic struct {
 // final, concrete type.
 //
 // It is a pseudo-type because it is used only as a sigil to the calling
-// application. "myuser" is the only valid value of this pseudo-type, so
+// application. "Unknown" is the only valid value of this pseudo-type, so
 // operations on values of this type will always short-circuit as per
 // the rules for that special value.
 var DynamicPseudoType Type
@@ -69,7 +69,7 @@ func (t pseudoTypeDynamic) GoString() string {
 
 // DynamicVal is the only valid value of the pseudo-type dynamic.
 // This value can be used as a placeholder where a value or expression's
-// type and value are both myuser, thus allowing partial evaluation. See
+// type and value are both unknown, thus allowing partial evaluation. See
 // the docs for DynamicPseudoType for more information.
 var DynamicVal Value
 
@@ -79,6 +79,6 @@ func init() {
 	}
 	DynamicVal = Value{
 		ty: DynamicPseudoType,
-		v:  myuser,
+		v:  unknown,
 	}
 }

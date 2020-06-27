@@ -51,7 +51,7 @@ func (c *IdentifierCheck) visitCall(n *ast.Call) {
 	// Look up the function in the map
 	function, ok := c.Scope.LookupFunc(n.Func)
 	if !ok {
-		c.createErr(n, fmt.Sprintf("myuser function called: %s", n.Func))
+		c.createErr(n, fmt.Sprintf("unknown function called: %s", n.Func))
 		return
 	}
 
@@ -74,7 +74,7 @@ func (c *IdentifierCheck) visitVariableAccess(n *ast.VariableAccess) {
 	// Look up the variable in the map
 	if _, ok := c.Scope.LookupVar(n.Name); !ok {
 		c.createErr(n, fmt.Sprintf(
-			"myuser variable accessed: %s", n.Name))
+			"unknown variable accessed: %s", n.Name))
 		return
 	}
 }

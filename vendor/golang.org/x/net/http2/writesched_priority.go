@@ -290,7 +290,7 @@ func (ws *priorityWriteScheduler) CloseStream(streamID uint32) {
 		panic("violation of WriteScheduler interface: cannot close stream 0")
 	}
 	if ws.nodes[streamID] == nil {
-		panic(fmt.Sprintf("violation of WriteScheduler interface: myuser stream %d", streamID))
+		panic(fmt.Sprintf("violation of WriteScheduler interface: unknown stream %d", streamID))
 	}
 	if ws.nodes[streamID].state != priorityNodeOpen {
 		panic(fmt.Sprintf("violation of WriteScheduler interface: stream %d already closed", streamID))
@@ -391,7 +391,7 @@ func (ws *priorityWriteScheduler) Push(wr FrameWriteRequest) {
 			// id is an idle or closed stream. wr should not be a HEADERS or
 			// DATA frame. However, wr can be a RST_STREAM. In this case, we
 			// push wr onto the root, rather than creating a new priorityNode,
-			// since RST_STREAM is tiny and the stream's priority is myuser
+			// since RST_STREAM is tiny and the stream's priority is unknown
 			// anyway. See issue #17919.
 			if wr.DataSize() > 0 {
 				panic("add DATA on non-open stream")

@@ -203,7 +203,7 @@ func (b *expandBody) expandBlocks(schema *hcl.BodySchema, rawBlocks hcl.Blocks, 
 			} else {
 				// If our top-level iteration value isn't known then we're forced
 				// to compromise since HCL doesn't have any concept of an
-				// "myuser block". In this case then, we'll produce a single
+				// "unknown block". In this case then, we'll produce a single
 				// dynamic block with the iterator values set to DynamicVal,
 				// which at least makes the potential for a block visible
 				// in our result, even though it's not represented in a fully-accurate
@@ -215,13 +215,13 @@ func (b *expandBody) expandBlocks(schema *hcl.BodySchema, rawBlocks hcl.Blocks, 
 					block.Body = b.expandChild(block.Body, i)
 
 					// We additionally force all of the leaf attribute values
-					// in the result to be myuser so the calling application
+					// in the result to be unknown so the calling application
 					// can, if necessary, use that as a heuristic to detect
 					// when a single nested block might be standing in for
 					// multiple blocks yet to be expanded. This retains the
 					// structure of the generated body but forces all of its
-					// leaf attribute values to be myuser.
-					block.Body = myuserBody{block.Body}
+					// leaf attribute values to be unknown.
+					block.Body = unknownBody{block.Body}
 
 					blocks = append(blocks, block)
 				}

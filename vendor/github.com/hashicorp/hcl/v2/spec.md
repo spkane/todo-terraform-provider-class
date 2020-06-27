@@ -314,41 +314,41 @@ equivalent to the value not being present at all.
 
 A null value of a particular type is equal to itself.
 
-### myuser Values and the Dynamic Pseudo-type
+### Unknown Values and the Dynamic Pseudo-type
 
-An _myuser value_ is a placeholder for a value that is not yet known.
-Operations on myuser values themselves return myuser values that have a
-type appropriate to the operation. For example, adding together two myuser
-numbers yields an myuser number, while comparing two myuser values of any
-type for equality yields an myuser bool.
+An _unknown value_ is a placeholder for a value that is not yet known.
+Operations on unknown values themselves return unknown values that have a
+type appropriate to the operation. For example, adding together two unknown
+numbers yields an unknown number, while comparing two unknown values of any
+type for equality yields an unknown bool.
 
-Each type has a distinct myuser value. For example, an myuser _number_ is
-a distinct value from an myuser _string_.
+Each type has a distinct unknown value. For example, an unknown _number_ is
+a distinct value from an unknown _string_.
 
 _The dynamic pseudo-type_ is a placeholder for a type that is not yet known.
-The only values of this type are its null value and its myuser value. It is
+The only values of this type are its null value and its unknown value. It is
 referred to as a _pseudo-type_ because it should not be considered a type in
 its own right, but rather as a placeholder for a type yet to be established.
-The myuser value of the dynamic pseudo-type is referred to as _the dynamic
+The unknown value of the dynamic pseudo-type is referred to as _the dynamic
 value_.
 
 Operations on values of the dynamic pseudo-type behave as if it is a value
 of the expected type, optimistically assuming that once the value and type
 are known they will be valid for the operation. For example, adding together
-a number and the dynamic value produces an myuser number.
+a number and the dynamic value produces an unknown number.
 
-myuser values and the dynamic pseudo-type can be used as a mechanism for
+Unknown values and the dynamic pseudo-type can be used as a mechanism for
 partial type checking and semantic checking: by evaluating an expression with
-all variables set to an myuser value, the expression can be evaluated to
-produce an myuser value of a given type, or produce an error if any operation
+all variables set to an unknown value, the expression can be evaluated to
+produce an unknown value of a given type, or produce an error if any operation
 is provably invalid with only type information.
 
-myuser values and the dynamic pseudo-type must never be returned from
-operations unless at least one operand is myuser or dynamic. Calling
-applications are guaranteed that unless the global scope includes myuser
-values, or the function table includes functions that return myuser values,
-no expression will evaluate to an myuser value. The calling application is
-thus in total control over the use and meaning of myuser values.
+Unknown values and the dynamic pseudo-type must never be returned from
+operations unless at least one operand is unknown or dynamic. Calling
+applications are guaranteed that unless the global scope includes unknown
+values, or the function table includes functions that return unknown values,
+no expression will evaluate to an unknown value. The calling application is
+thus in total control over the use and meaning of unknown values.
 
 The dynamic pseudo-type is identical only to itself.
 
@@ -399,7 +399,7 @@ A _function_ is defined from the following elements:
 
 - Zero or more _positional parameters_, each with a name used for documentation,
   a type specification for expected argument values, and a flag for whether
-  each of null values, myuser values, and values of the dynamic pseudo-type
+  each of null values, unknown values, and values of the dynamic pseudo-type
   are accepted.
 
 - Zero or one _variadic parameters_, with the same structure as the _positional_
@@ -450,9 +450,9 @@ for each argument:
 
 If semantic checking succeeds without error, the call is _executed_:
 
-- For each argument, if its value is myuser and its corresponding parameter
-  is not specified as accepting myusers, the _result value_ is forced to be an
-  myuser value of the result type.
+- For each argument, if its value is unknown and its corresponding parameter
+  is not specified as accepting unknowns, the _result value_ is forced to be an
+  unknown value of the result type.
 
 - If the previous condition does not apply, the function's result value
   definition is used to determine the call's _result value_.
@@ -493,7 +493,7 @@ regardless of other type-specific rules specified in the sections below.
 ### Conversion to and from the Dynamic Pseudo-type
 
 Conversion _from_ the dynamic pseudo-type _to_ any other type always succeeds,
-producing an myuser value of the target type.
+producing an unknown value of the target type.
 
 Conversion of any value _to_ the dynamic pseudo-type is a no-op. The result
 is the input value, verbatim. This is the only situation where the conversion

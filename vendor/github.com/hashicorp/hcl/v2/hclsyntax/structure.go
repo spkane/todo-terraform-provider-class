@@ -310,7 +310,7 @@ func (a Attributes) Range() hcl.Range {
 		return attr.Range()
 	}
 	return hcl.Range{
-		Filename: "<myuser>",
+		Filename: "<unknown>",
 	}
 }
 
@@ -365,7 +365,7 @@ func (bs Blocks) Range() hcl.Range {
 		return bs[0].Range()
 	}
 	return hcl.Range{
-		Filename: "<myuser>",
+		Filename: "<unknown>",
 	}
 }
 

@@ -377,7 +377,7 @@ EachPacket:
 				return nil, err
 			}
 		default:
-			// we ignore myuser packets
+			// we ignore unknown packets
 		}
 	}
 

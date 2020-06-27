@@ -342,7 +342,7 @@ func (d *Decoder) DecodeInterface() (interface{}, error) {
 		return d.extInterface(c)
 	}
 
-	return 0, fmt.Errorf("msgpack: myuser code %x decoding interface{}", c)
+	return 0, fmt.Errorf("msgpack: unknown code %x decoding interface{}", c)
 }
 
 // DecodeInterfaceLoose is like DecodeInterface except that:
@@ -400,7 +400,7 @@ func (d *Decoder) DecodeInterfaceLoose() (interface{}, error) {
 		return d.extInterface(c)
 	}
 
-	return 0, fmt.Errorf("msgpack: myuser code %x decoding interface{}", c)
+	return 0, fmt.Errorf("msgpack: unknown code %x decoding interface{}", c)
 }
 
 // Skip skips next value.
@@ -444,7 +444,7 @@ func (d *Decoder) Skip() error {
 		return d.skipExt(c)
 	}
 
-	return fmt.Errorf("msgpack: myuser code %x", c)
+	return fmt.Errorf("msgpack: unknown code %x", c)
 }
 
 // PeekCode returns the next MessagePack code without advancing the reader.

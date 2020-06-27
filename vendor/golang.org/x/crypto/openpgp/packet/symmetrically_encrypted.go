@@ -8,11 +8,10 @@ import (
 	"crypto/cipher"
 	"crypto/sha1"
 	"crypto/subtle"
+	"golang.org/x/crypto/openpgp/errors"
 	"hash"
 	"io"
 	"strconv"
-
-	"golang.org/x/crypto/openpgp/errors"
 )
 
 // SymmetricallyEncrypted represents a symmetrically encrypted byte string. The
@@ -35,7 +34,7 @@ func (se *SymmetricallyEncrypted) parse(r io.Reader) error {
 			return err
 		}
 		if buf[0] != symmetricallyEncryptedVersion {
-			return errors.UnsupportedError("myuser SymmetricallyEncrypted version")
+			return errors.UnsupportedError("unknown SymmetricallyEncrypted version")
 		}
 	}
 	se.contents = r
@@ -48,7 +47,7 @@ func (se *SymmetricallyEncrypted) parse(r io.Reader) error {
 func (se *SymmetricallyEncrypted) Decrypt(c CipherFunction, key []byte) (io.ReadCloser, error) {
 	keySize := c.KeySize()
 	if keySize == 0 {
-		return nil, errors.UnsupportedError("myuser cipher: " + strconv.Itoa(int(c)))
+		return nil, errors.UnsupportedError("unknown cipher: " + strconv.Itoa(int(c)))
 	}
 	if len(key) != keySize {
 		return nil, errors.InvalidArgumentError("SymmetricallyEncrypted: incorrect key length")

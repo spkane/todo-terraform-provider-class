@@ -223,7 +223,7 @@ const (
 	DT_LNK                            = 0xa
 	DT_REG                            = 0x8
 	DT_SOCK                           = 0xc
-	DT_myuser                         = 0x0
+	DT_UNKNOWN                        = 0x0
 	ECHO                              = 0x8
 	ECHOCTL                           = 0x40
 	ECHOE                             = 0x2
@@ -996,6 +996,7 @@ const (
 	NET_RT_MAXID                      = 0x7
 	NET_RT_STATS                      = 0x4
 	NET_RT_TABLE                      = 0x5
+	NFDBITS                           = 0x20
 	NOFLSH                            = 0x80000000
 	NOKERNINFO                        = 0x2000000
 	NOTE_ATTRIB                       = 0x8

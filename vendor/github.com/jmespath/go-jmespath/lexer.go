@@ -50,7 +50,7 @@ func (e SyntaxError) HighlightLocation() string {
 
 //go:generate stringer -type=tokType
 const (
-	tmyuser tokType = iota
+	tUnknown tokType = iota
 	tStar
 	tDot
 	tFilter
@@ -198,7 +198,7 @@ loop:
 			t := lexer.matchOrElse(r, '=', tNE, tNot)
 			tokens = append(tokens, t)
 		} else if r == '=' {
-			t := lexer.matchOrElse(r, '=', tEQ, tmyuser)
+			t := lexer.matchOrElse(r, '=', tEQ, tUnknown)
 			tokens = append(tokens, t)
 		} else if r == '&' {
 			t := lexer.matchOrElse(r, '&', tAnd, tExpref)
@@ -208,7 +208,7 @@ loop:
 		} else if _, ok := whiteSpace[r]; ok {
 			// Ignore whitespace
 		} else {
-			return tokens, lexer.syntaxError(fmt.Sprintf("myuser char: %s", strconv.QuoteRuneToASCII(r)))
+			return tokens, lexer.syntaxError(fmt.Sprintf("Unknown char: %s", strconv.QuoteRuneToASCII(r)))
 		}
 	}
 	tokens = append(tokens, token{tEOF, "", len(lexer.expression), 0})

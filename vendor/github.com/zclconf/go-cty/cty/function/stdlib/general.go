@@ -13,14 +13,14 @@ var EqualFunc = function.New(&function.Spec{
 		{
 			Name:             "a",
 			Type:             cty.DynamicPseudoType,
-			Allowmyuser:      true,
+			AllowUnknown:     true,
 			AllowDynamicType: true,
 			AllowNull:        true,
 		},
 		{
 			Name:             "b",
 			Type:             cty.DynamicPseudoType,
-			Allowmyuser:      true,
+			AllowUnknown:     true,
 			AllowDynamicType: true,
 			AllowNull:        true,
 		},
@@ -36,14 +36,14 @@ var NotEqualFunc = function.New(&function.Spec{
 		{
 			Name:             "a",
 			Type:             cty.DynamicPseudoType,
-			Allowmyuser:      true,
+			AllowUnknown:     true,
 			AllowDynamicType: true,
 			AllowNull:        true,
 		},
 		{
 			Name:             "b",
 			Type:             cty.DynamicPseudoType,
-			Allowmyuser:      true,
+			AllowUnknown:     true,
 			AllowDynamicType: true,
 			AllowNull:        true,
 		},
@@ -59,7 +59,7 @@ var CoalesceFunc = function.New(&function.Spec{
 	VarParam: &function.Parameter{
 		Name:             "vals",
 		Type:             cty.DynamicPseudoType,
-		Allowmyuser:      true,
+		AllowUnknown:     true,
 		AllowDynamicType: true,
 		AllowNull:        true,
 	},
@@ -77,7 +77,7 @@ var CoalesceFunc = function.New(&function.Spec{
 	Impl: func(args []cty.Value, retType cty.Type) (ret cty.Value, err error) {
 		for _, argVal := range args {
 			if !argVal.IsKnown() {
-				return cty.myuserVal(retType), nil
+				return cty.UnknownVal(retType), nil
 			}
 			if argVal.IsNull() {
 				continue

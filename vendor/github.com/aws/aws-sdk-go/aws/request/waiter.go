@@ -105,7 +105,7 @@ func (s WaiterState) String() string {
 	case RetryWaiterState:
 		return "retry"
 	default:
-		return "myuser waiter state"
+		return "unknown waiter state"
 	}
 }
 
@@ -147,7 +147,7 @@ func (m WaiterMatchMode) String() string {
 	case ErrorWaiterMatch:
 		return "error"
 	default:
-		return "myuser waiter match mode"
+		return "unknown waiter match mode"
 	}
 }
 

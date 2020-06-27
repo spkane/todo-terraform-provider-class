@@ -505,7 +505,7 @@ func (i *IniParser) parse(ini *ini) error {
 		groups := i.matchingGroups(name)
 
 		if len(groups) == 0 {
-			return newErrorf(ErrmyuserGroup, "could not find option group `%s'", name)
+			return newErrorf(ErrUnknownGroup, "could not find option group `%s'", name)
 		}
 
 		for _, inival := range section {
@@ -526,9 +526,9 @@ func (i *IniParser) parse(ini *ini) error {
 			}
 
 			if opt == nil {
-				if (p.Options & Ignoremyuser) == None {
+				if (p.Options & IgnoreUnknown) == None {
 					return &IniError{
-						Message:    fmt.Sprintf("myuser option: %s", inival.Name),
+						Message:    fmt.Sprintf("unknown option: %s", inival.Name),
 						File:       ini.File,
 						LineNumber: inival.LineNumber,
 					}

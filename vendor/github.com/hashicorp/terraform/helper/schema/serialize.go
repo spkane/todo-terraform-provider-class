@@ -58,7 +58,7 @@ func SerializeValueForHash(buf *bytes.Buffer, val interface{}, schema *Schema) {
 			case string:
 				buf.WriteString(innerVal)
 			default:
-				panic(fmt.Sprintf("myuser value type in TypeMap %T", innerVal))
+				panic(fmt.Sprintf("unknown value type in TypeMap %T", innerVal))
 			}
 
 			buf.WriteRune(';')
@@ -72,7 +72,7 @@ func SerializeValueForHash(buf *bytes.Buffer, val interface{}, schema *Schema) {
 		}
 		buf.WriteRune('}')
 	default:
-		panic("myuser schema type to serialize")
+		panic("unknown schema type to serialize")
 	}
 	buf.WriteRune(';')
 }

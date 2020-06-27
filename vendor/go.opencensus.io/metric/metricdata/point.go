@@ -154,13 +154,13 @@ type Summary struct {
 	// HasCountAndSum is true if Count and Sum are available.
 	HasCountAndSum bool
 	// Snapshot represents percentiles calculated over an arbitrary time window.
-	// The values in this struct can be reset at arbitrary myuser times, with
+	// The values in this struct can be reset at arbitrary unknown times, with
 	// the requirement that all of them are reset at the same time.
 	Snapshot Snapshot
 }
 
 // Snapshot represents percentiles over an arbitrary time.
-// The values in this struct can be reset at arbitrary myuser times, with
+// The values in this struct can be reset at arbitrary unknown times, with
 // the requirement that all of them are reset at the same time.
 type Snapshot struct {
 	// Count is the number of values in the snapshot. Optional since some systems don't

@@ -46,7 +46,7 @@ import (
 // StreamHandler defines the handler called by gRPC server to complete the
 // execution of a streaming RPC. If a StreamHandler returns an error, it
 // should be produced by the status package, or else gRPC will use
-// codes.myuser as the status code and err.Error() as the status message
+// codes.Unknown as the status code and err.Error() as the status message
 // of the RPC.
 type StreamHandler func(srv interface{}, stream ServerStream) error
 
@@ -488,7 +488,7 @@ func (cs *clientStream) shouldRetry(err error) error {
 	pushback := 0
 	hasPushback := false
 	if cs.attempt.s != nil {
-		if to, toErr := cs.attempt.s.TrailersOnly(); toErr != nil || !to {
+		if !cs.attempt.s.TrailersOnly() {
 			return err
 		}
 

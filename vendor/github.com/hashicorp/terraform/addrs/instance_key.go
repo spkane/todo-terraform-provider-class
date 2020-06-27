@@ -18,15 +18,19 @@ import (
 type InstanceKey interface {
 	instanceKeySigil()
 	String() string
+
+	// Value returns the cty.Value of the appropriate type for the InstanceKey
+	// value.
+	Value() cty.Value
 }
 
 // ParseInstanceKey returns the instance key corresponding to the given value,
 // which must be known and non-null.
 //
-// If an myuser or null value is provided then this function will panic. This
+// If an unknown or null value is provided then this function will panic. This
 // function is intended to deal with the values that would naturally be found
 // in a hcl.TraverseIndex, which (when parsed from source, at least) can never
-// contain myuser or null values.
+// contain unknown or null values.
 func ParseInstanceKey(key cty.Value) (InstanceKey, error) {
 	switch key.Type() {
 	case cty.String:
@@ -56,6 +60,10 @@ func (k IntKey) String() string {
 	return fmt.Sprintf("[%d]", int(k))
 }
 
+func (k IntKey) Value() cty.Value {
+	return cty.NumberIntVal(int64(k))
+}
+
 // StringKey is the InstanceKey representation representing string indices, as
 // used when the "for_each" argument is specified with a map or object type.
 type StringKey string
@@ -67,6 +75,10 @@ func (k StringKey) String() string {
 	// FIXME: This isn't _quite_ right because Go's quoted string syntax is
 	// slightly different than HCL's, but we'll accept it for now.
 	return fmt.Sprintf("[%q]", string(k))
+}
+
+func (k StringKey) Value() cty.Value {
+	return cty.StringVal(string(k))
 }
 
 // InstanceKeyLess returns true if the first given instance key i should sort

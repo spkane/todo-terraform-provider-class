@@ -5,9 +5,8 @@
 package packet
 
 import (
-	"io"
-
 	"golang.org/x/crypto/openpgp/errors"
+	"io"
 )
 
 // Reader reads packets from an io.Reader and allows packets to be 'unread' so
@@ -26,7 +25,7 @@ type Reader struct {
 const maxReaders = 32
 
 // Next returns the most recently unread Packet, or reads another packet from
-// the top-most io.Reader. myuser packet types are skipped.
+// the top-most io.Reader. Unknown packet types are skipped.
 func (r *Reader) Next() (p Packet, err error) {
 	if len(r.q) > 0 {
 		p = r.q[len(r.q)-1]
@@ -43,7 +42,7 @@ func (r *Reader) Next() (p Packet, err error) {
 			r.readers = r.readers[:len(r.readers)-1]
 			continue
 		}
-		if _, ok := err.(errors.myuserPacketTypeError); !ok {
+		if _, ok := err.(errors.UnknownPacketTypeError); !ok {
 			return nil, err
 		}
 	}

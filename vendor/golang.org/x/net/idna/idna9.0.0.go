@@ -397,7 +397,7 @@ func validateRegistration(p *Profile, s string) (string, error) {
 		// TODO: handle the NV8 defined in the Unicode idna data set to allow
 		// for strict conformance to IDNA2008.
 		case valid, deviation:
-		case disallowed, mapped, myuser, ignored:
+		case disallowed, mapped, unknown, ignored:
 			r, _ := utf8.DecodeRuneInString(s[i:])
 			return s, runeError(r)
 		}
@@ -432,7 +432,7 @@ func validateAndMap(p *Profile, s string) (string, error) {
 		case ignored:
 			b = append(b, s[k:start]...)
 			// drop the rune
-		case myuser:
+		case unknown:
 			b = append(b, s[k:start]...)
 			b = append(b, "\ufffd"...)
 		}

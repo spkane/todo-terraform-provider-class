@@ -1537,10 +1537,10 @@ func yaml_parser_scan_directive(parser *yaml_parser_t, token *yaml_token_t) bool
 			prefix:     prefix,
 		}
 
-		// myuser directive.
+		// Unknown directive.
 	} else {
 		yaml_parser_set_scanner_error(parser, "while scanning a directive",
-			start_mark, "found myuser directive name")
+			start_mark, "found unknown directive name")
 		return false
 	}
 
@@ -2409,7 +2409,7 @@ func yaml_parser_scan_flow_scalar(parser *yaml_parser_t, token *yaml_token_t, si
 					code_length = 8
 				default:
 					yaml_parser_set_scanner_error(parser, "while parsing a quoted scalar",
-						start_mark, "found myuser escape character")
+						start_mark, "found unknown escape character")
 					return false
 				}
 

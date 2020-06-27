@@ -130,7 +130,7 @@ func outputsStr(os []*Output) string {
 		if len(o.RawConfig.Variables) > 0 {
 			result += fmt.Sprintf("  vars\n")
 			for _, rawV := range o.RawConfig.Variables {
-				kind := "myuser"
+				kind := "unknown"
 				str := rawV.FullKey()
 
 				switch rawV.(type) {
@@ -170,7 +170,7 @@ func localsStr(ls []*Local) string {
 		if len(l.RawConfig.Variables) > 0 {
 			result += fmt.Sprintf("  vars\n")
 			for _, rawV := range l.RawConfig.Variables {
-				kind := "myuser"
+				kind := "unknown"
 				str := rawV.FullKey()
 
 				switch rawV.(type) {
@@ -219,7 +219,7 @@ func providerConfigsStr(pcs []*ProviderConfig) string {
 		if len(pc.RawConfig.Variables) > 0 {
 			result += fmt.Sprintf("  vars\n")
 			for _, rawV := range pc.RawConfig.Variables {
-				kind := "myuser"
+				kind := "unknown"
 				str := rawV.FullKey()
 
 				switch rawV.(type) {
@@ -315,7 +315,7 @@ func resourcesStr(rs []*Resource) string {
 
 			for _, k := range ks {
 				rawV := r.RawConfig.Variables[k]
-				kind := "myuser"
+				kind := "unknown"
 				str := rawV.FullKey()
 
 				switch rawV.(type) {

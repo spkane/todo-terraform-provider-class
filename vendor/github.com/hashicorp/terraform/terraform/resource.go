@@ -199,7 +199,7 @@ func NewResourceConfig(c *config.RawConfig) *ResourceConfig {
 // NewResourceConfigRaw constructs a ResourceConfig whose content is exactly
 // the given value.
 //
-// The given value may contain hcl2shim.myuserVariableValue to signal that
+// The given value may contain hcl2shim.UnknownVariableValue to signal that
 // something is computed, but it must not contain unprocessed interpolation
 // sequences as we might've seen in Terraform v0.11 and prior.
 func NewResourceConfigRaw(raw map[string]interface{}) *ResourceConfig {
@@ -242,11 +242,11 @@ func NewResourceConfigShimmed(val cty.Value, schema *configschema.Block) *Resour
 	if legacyVal != nil {
 		ret.Config = legacyVal
 
-		// Now we need to walk through our structure and find any myuser values,
+		// Now we need to walk through our structure and find any unknown values,
 		// producing the separate list ComputedKeys to represent these. We use the
 		// schema here so that we can preserve the expected invariant
-		// that an attribute is always either wholly known or wholly myuser, while
-		// a child block can be partially myuser.
+		// that an attribute is always either wholly known or wholly unknown, while
+		// a child block can be partially unknown.
 		ret.ComputedKeys = newResourceConfigShimmedComputedKeys(val, "")
 	} else {
 		ret.Config = make(map[string]interface{})
@@ -258,8 +258,8 @@ func NewResourceConfigShimmed(val cty.Value, schema *configschema.Block) *Resour
 
 // Record the any config values in ComputedKeys. This field had been unused in
 // helper/schema, but in the new protocol we're using this so that the SDK can
-// now handle having an myuser collection. The legacy diff code doesn't
-// properly handle the myuser, because it can't be expressed in the same way
+// now handle having an unknown collection. The legacy diff code doesn't
+// properly handle the unknown, because it can't be expressed in the same way
 // between the config and diff.
 func newResourceConfigShimmedComputedKeys(val cty.Value, path string) []string {
 	var ret []string
@@ -270,7 +270,7 @@ func newResourceConfigShimmedComputedKeys(val cty.Value, path string) []string {
 	}
 
 	if !val.IsKnown() {
-		// we shouldn't have an entirely myuser resource, but prevent empty
+		// we shouldn't have an entirely unknown resource, but prevent empty
 		// strings just in case
 		if len(path) > 0 {
 			ret = append(ret, path)
@@ -406,17 +406,17 @@ func (c *ResourceConfig) IsComputed(k string) bool {
 		return false
 	}
 
-	// Test if the value contains an myuser value
-	var w myuserCheckWalker
+	// Test if the value contains an unknown value
+	var w unknownCheckWalker
 	if err := reflectwalk.Walk(v, &w); err != nil {
 		panic(err)
 	}
 
-	return w.myuser
+	return w.Unknown
 }
 
 // IsSet checks if the key in the configuration is set. A key is set if
-// it has a value or the value is being computed (is myuser currently).
+// it has a value or the value is being computed (is unknown currently).
 //
 // This function should be used rather than checking the keys of the
 // raw configuration itself, since a key may be omitted from the raw
@@ -478,7 +478,7 @@ func (c *ResourceConfig) get(
 				// If any value in a list is computed, this whole thing
 				// is computed and we can't read any part of it.
 				for i := 0; i < cv.Len(); i++ {
-					if v := cv.Index(i).Interface(); v == hcl2shim.myuserVariableValue {
+					if v := cv.Index(i).Interface(); v == hcl2shim.UnknownVariableValue {
 						return v, true
 					}
 				}
@@ -505,7 +505,7 @@ func (c *ResourceConfig) get(
 
 			return nil, false
 		default:
-			panic(fmt.Sprintf("myuser kind: %s", cv.Kind()))
+			panic(fmt.Sprintf("Unknown kind: %s", cv.Kind()))
 		}
 	}
 
@@ -532,19 +532,19 @@ func (c *ResourceConfig) interpolateForce() {
 		}
 	}
 
-	c.ComputedKeys = c.raw.myuserKeys()
+	c.ComputedKeys = c.raw.UnknownKeys()
 	c.Raw = c.raw.RawMap()
 	c.Config = c.raw.Config()
 }
 
-// myuserCheckWalker
-type myuserCheckWalker struct {
-	myuser bool
+// unknownCheckWalker
+type unknownCheckWalker struct {
+	Unknown bool
 }
 
-func (w *myuserCheckWalker) Primitive(v reflect.Value) error {
-	if v.Interface() == hcl2shim.myuserVariableValue {
-		w.myuser = true
+func (w *unknownCheckWalker) Primitive(v reflect.Value) error {
+	if v.Interface() == hcl2shim.UnknownVariableValue {
+		w.Unknown = true
 	}
 
 	return nil

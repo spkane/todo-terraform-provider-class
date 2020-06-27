@@ -106,16 +106,16 @@ func (n *EvalReadData) Eval(ctx EvalContext) (interface{}, error) {
 
 	proposedNewVal := objchange.PlannedDataResourceObject(schema, configVal)
 
-	// If our configuration contains any myuser values then we must defer the
+	// If our configuration contains any unknown values then we must defer the
 	// read to the apply phase by producing a "Read" change for this resource,
 	// and a placeholder value for it in the state.
 	if n.ForcePlanRead || !configVal.IsWhollyKnown() {
-		// If the configuration is still myuser when we're applying a planned
+		// If the configuration is still unknown when we're applying a planned
 		// change then that indicates a bug in Terraform, since we should have
 		// everything resolved by now.
 		if n.Planned != nil && *n.Planned != nil {
 			return nil, fmt.Errorf(
-				"configuration for %s still contains myuser values during apply (this is a bug in Terraform; please report it!)",
+				"configuration for %s still contains unknown values during apply (this is a bug in Terraform; please report it!)",
 				absAddr,
 			)
 		}
@@ -251,13 +251,13 @@ func (n *EvalReadData) Eval(ctx EvalContext) (interface{}, error) {
 			),
 		))
 
-		// We'll still save the object, but we need to eliminate any myuser
+		// We'll still save the object, but we need to eliminate any unknown
 		// values first because we can't serialize them in the state file.
 		// Note that this may cause set elements to be coalesced if they
-		// differed only by having myuser values, but we don't worry about
+		// differed only by having unknown values, but we don't worry about
 		// that here because we're saving the value only for inspection
 		// purposes; the error we added above will halt the graph walk.
-		newVal = cty.myuserAsNull(newVal)
+		newVal = cty.UnknownAsNull(newVal)
 	}
 
 	// Since we've completed the read, we actually have no change to make, but

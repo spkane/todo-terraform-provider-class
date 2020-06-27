@@ -527,7 +527,7 @@ type serverConn struct {
 	initialStreamSendWindowSize int32
 	maxFrameSize                int32
 	headerTableSize             uint32
-	peerMaxHeaderListSize       uint32            // zero means myuser (default)
+	peerMaxHeaderListSize       uint32            // zero means unknown (default)
 	canonHeader                 map[string]string // http2-lower-case -> Go-Canonical-Case
 	writingFrame                bool              // started writing a frame (on serve goroutine or separate)
 	writingFrameAsync           bool              // started a frame on its own goroutine but haven't heard back on wroteFrameCh
@@ -581,13 +581,10 @@ type stream struct {
 	cancelCtx func()
 
 	// owned by serverConn's serve loop:
-	bodyBytes        int64   // body bytes seen so far
-	declBodyBytes    int64   // or -1 if undeclared
-	flow             flow    // limits writing from Handler to client
-	inflow           flow    // what the client is allowed to POST/etc to us
-	parent           *stream // or nil
-	numTrailerValues int64
-	weight           uint8
+	bodyBytes        int64 // body bytes seen so far
+	declBodyBytes    int64 // or -1 if undeclared
+	flow             flow  // limits writing from Handler to client
+	inflow           flow  // what the client is allowed to POST/etc to us
 	state            streamState
 	resetQueued      bool        // RST_STREAM queued for write; set by sc.resetStream
 	gotTrailerHeader bool        // HEADER frame for trailers was seen
@@ -764,6 +761,7 @@ func (sc *serverConn) readFrames() {
 
 // frameWriteResult is the message passed from writeFrameAsync to the serve goroutine.
 type frameWriteResult struct {
+	_   incomparable
 	wr  FrameWriteRequest // what was written (or attempted)
 	err error             // result of the writeFrame call
 }
@@ -774,7 +772,7 @@ type frameWriteResult struct {
 // serverConn.
 func (sc *serverConn) writeFrameAsync(wr FrameWriteRequest) {
 	err := wr.write.writeFrame(sc)
-	sc.wroteFrameCh <- frameWriteResult{wr, err}
+	sc.wroteFrameCh <- frameWriteResult{wr: wr, err: err}
 }
 
 func (sc *serverConn) closeAllStreamsOnConnClose() {
@@ -896,7 +894,7 @@ func (sc *serverConn) serve() {
 				case gracefulShutdownMsg:
 					sc.startGracefulShutdownInternal()
 				default:
-					panic("myuser timer")
+					panic("unknown timer")
 				}
 			case *startPushRequest:
 				sc.startPush(v)
@@ -1164,7 +1162,7 @@ func (sc *serverConn) startFrameWrite(wr FrameWriteRequest) {
 	if wr.write.staysWithinBuffer(sc.bw.Available()) {
 		sc.writingFrameAsync = false
 		err := wr.write.writeFrame(sc)
-		sc.wroteFrame(frameWriteResult{wr, err})
+		sc.wroteFrame(frameWriteResult{wr: wr, err: err})
 	} else {
 		sc.writingFrameAsync = true
 		go sc.writeFrameAsync(wr)
@@ -1217,7 +1215,7 @@ func (sc *serverConn) wroteFrame(res frameWriteResult) {
 	} else {
 		switch v := wr.write.(type) {
 		case StreamError:
-			// st may be myuser if the RST_STREAM was generated to reject bad input.
+			// st may be unknown if the RST_STREAM was generated to reject bad input.
 			if st, ok := sc.streams[v.StreamID]; ok {
 				sc.closeStream(st, v)
 			}
@@ -1591,11 +1589,11 @@ func (sc *serverConn) processSetting(s Setting) error {
 	case SettingMaxHeaderListSize:
 		sc.peerMaxHeaderListSize = s.Val
 	default:
-		// myuser setting: "An endpoint that receives a SETTINGS
-		// frame with any myuser or unsupported identifier MUST
+		// Unknown setting: "An endpoint that receives a SETTINGS
+		// frame with any unknown or unsupported identifier MUST
 		// ignore that setting."
 		if VerboseLogs {
-			sc.vlogf("http2: server ignoring myuser setting %v", s)
+			sc.vlogf("http2: server ignoring unknown setting %v", s)
 		}
 	}
 	return nil
@@ -2060,7 +2058,7 @@ func (sc *serverConn) newWriterAndRequestNoBody(st *stream, rp requestParam) (*r
 	var trailer http.Header
 	for _, v := range rp.header["Trailer"] {
 		for _, key := range strings.Split(v, ",") {
-			key = http.CanonicalHeaderKey(strings.TrimSpace(key))
+			key = http.CanonicalHeaderKey(textproto.TrimString(key))
 			switch key {
 			case "Transfer-Encoding", "Trailer", "Content-Length":
 				// Bogus. (copy of http1 rules)
@@ -2278,6 +2276,7 @@ func (sc *serverConn) sendWindowUpdate32(st *stream, n int32) {
 // requestBody is the Handler's Request.Body type.
 // Read and Close may be called concurrently.
 type requestBody struct {
+	_             incomparable
 	stream        *stream
 	conn          *serverConn
 	closed        bool  // for use by Close only

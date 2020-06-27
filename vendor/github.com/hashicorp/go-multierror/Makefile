@@ -18,7 +18,7 @@ testrace: generate
 
 # updatedeps installs all the dependencies needed to run and build.
 updatedeps:
-	@sh -c "'${CURDIR}/bin/deps.sh' '${NAME}'"
+	@sh -c "'${CURDIR}/scripts/deps.sh' '${NAME}'"
 
 # generate runs `go generate` to build the dynamically generated source files.
 generate:

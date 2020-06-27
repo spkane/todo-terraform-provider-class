@@ -55,14 +55,14 @@ func Walk(v interface{}, cb WalkFn) error {
 type interpolationWalker struct {
 	F WalkFn
 
-	key        []string
-	lastValue  reflect.Value
-	loc        reflectwalk.Location
-	cs         []reflect.Value
-	csKey      []reflect.Value
-	csData     interface{}
-	sliceIndex int
-	myuserKeys []string
+	key         []string
+	lastValue   reflect.Value
+	loc         reflectwalk.Location
+	cs          []reflect.Value
+	csKey       []reflect.Value
+	csData      interface{}
+	sliceIndex  int
+	unknownKeys []string
 }
 
 func (w *interpolationWalker) Enter(loc reflectwalk.Location) error {
@@ -191,8 +191,8 @@ func (w *interpolationWalker) Primitive(v reflect.Value) error {
 }
 
 func (w *interpolationWalker) removeCurrent() {
-	// Append the key to the myuser keys
-	w.myuserKeys = append(w.myuserKeys, strings.Join(w.key, "."))
+	// Append the key to the unknown keys
+	w.unknownKeys = append(w.unknownKeys, strings.Join(w.key, "."))
 
 	for i := 1; i <= len(w.cs); i++ {
 		c := w.cs[len(w.cs)-i]
@@ -233,7 +233,7 @@ func (w *interpolationWalker) splitSlice() {
 	case []map[string]interface{}:
 		return
 	default:
-		panic("myuser kind: " + raw.Kind().String())
+		panic("Unknown kind: " + raw.Kind().String())
 	}
 
 	// Check if we have any elements that we need to split. If not, then
