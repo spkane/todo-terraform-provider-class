@@ -7,8 +7,8 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 
 	// Terraform Libraries
-	"github.com/hashicorp/terraform/helper/schema"
-	"github.com/hashicorp/terraform/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 
 	// Todo API Libraries
 	"github.com/myuser/todo-terraform-provider-class/client"

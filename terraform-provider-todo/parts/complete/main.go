@@ -9,7 +9,7 @@ import (
 
 // main is the entrypoint to the terraform plugin
 func main() {
-	// see: https://github.com/hashicorp/terraform/blob/master/plugin/serve.go
+	// see: https://github.com/hashicorp/terraform-plugin-sdk/blob/master/plugin/serve.go
 	plugin.Serve(&plugin.ServeOpts{
 		ProviderFunc: todo.Provider})
 }

@@ -16,6 +16,7 @@ require (
 	github.com/hashicorp/logutils v1.0.0 // indirect
 	github.com/hashicorp/terraform v0.12.26
 	github.com/hashicorp/terraform-plugin-sdk v1.14.0
+	github.com/hashicorp/tf-sdk-migrator v1.2.0 // indirect
 	github.com/hashicorp/yamux v0.0.0-20200609203250-aecfd211c9ce // indirect
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/marstr/guid v1.1.0 // indirect
