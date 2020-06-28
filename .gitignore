@@ -2,6 +2,7 @@
 terraform-provider-todo
 terraform-provider-todo_v*
 todo-list-server
+*.exe
 
 # Ignore these directories
 bin/
