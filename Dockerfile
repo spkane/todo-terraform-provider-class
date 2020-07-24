@@ -14,6 +14,8 @@ RUN go build -mod=vendor --ldflags '-linkmode external -extldflags "-static"' ./
 
 FROM alpine:3.10 AS deploy
 
+RUN apk --no-cache add curl
+
 WORKDIR /
 COPY --from=build /go/src/github.com/myuser/todo-terraform-provider-class/todo-list-server /
 
