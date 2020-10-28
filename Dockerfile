@@ -1,4 +1,4 @@
-FROM golang:1.13-alpine3.10 AS build
+FROM golang:1.15-alpine3.12 AS build
 
 RUN apk --no-cache add \
     bash \
@@ -12,7 +12,7 @@ WORKDIR /go/src/github.com/myuser/todo-terraform-provider-class
 ADD . /go/src/github.com/myuser/todo-terraform-provider-class
 RUN go build -mod=vendor --ldflags '-linkmode external -extldflags "-static"' ./cmd/todo-list-server
 
-FROM alpine:3.10 AS deploy
+FROM alpine:3.12 AS deploy
 
 RUN apk --no-cache add curl
 

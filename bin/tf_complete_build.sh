@@ -2,12 +2,6 @@
 #
 # This script builds the application from source for multiple platforms.
 
-if [ -z "${1}" ]; then
-  app="server"
-else
-  app="${1}"
-fi
-
 set -eu -o pipefail
 
 # Get the parent directory of where this script is.
@@ -16,19 +10,12 @@ while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
 DIR="$( cd -P "$( dirname "$SOURCE" )/.." && pwd )"
 
 # Just force this for now...
-if [ "${app}" == "provider" ]; then
-  DIR1="${PWD}/terraform-provider-todo"
-elif [ "${app}" == "server" ]; then
-  DIR1="${PWD}/cmd/todo-list-server"
-else
-  echo "[WARN] Not building anything"
-  exit 0
-fi
-declare -a DIRS=("${DIR1}")
+DIR1="$DIR/provider-parts/08-complete"
+DIR2="$DIR/cmd/todo-list-server"
+declare -a DIRS=("${DIR1}" "${DIR2}")
 
 for DIR in "${DIRS[@]}"; do
     # Change into that directory
-    echo $DIR
     cd "$DIR"
     APP=$(basename "${DIR}")
     

@@ -16,6 +16,7 @@ class-terraform-provider.md
 terraform-provider-todo
 terraform-provider-todo_v*
 todo-list-server
+main
 
 # System Files
 .DS_Store
