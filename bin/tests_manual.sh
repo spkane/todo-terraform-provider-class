@@ -24,7 +24,7 @@ curl -i http://127.0.0.1:8080/ -X POST -H 'Content-Type: application/spkane.todo
 cd terraform-tests
 rm -f terraform-provider-todo
 mkdir -p ~/.terraform.d/plugins/terraform.spkane.org/spkane/todo/${VERSION}/${OS}_${ARCH}
-cp ../provider-parts/08-complete/bin/08-complete ~/.terraform.d/plugins/terraform.spkane.org/spkane/todo/${VERSION}/${OS}_${ARCH}/terraform-provider-todo
+cp ../terraform-provider-todo/bin/terraform-provider-todo ~/.terraform.d/plugins/terraform.spkane.org/spkane/todo/${VERSION}/${OS}_${ARCH}/terraform-provider-todo
 ${TF} init --get --upgrade=true
 TF_LOG=debug ${TF} apply
 curl -i http://127.0.0.1:8080/

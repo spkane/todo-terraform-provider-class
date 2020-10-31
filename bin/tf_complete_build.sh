@@ -9,10 +9,14 @@ SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
 DIR="$( cd -P "$( dirname "$SOURCE" )/.." && pwd )"
 
+cd "$DIR"
+
 # Just force this for now...
-DIR1="$DIR/provider-parts/08-complete"
+DIR1="$DIR/terraform-provider-todo"
 DIR2="$DIR/cmd/todo-list-server"
 declare -a DIRS=("${DIR1}" "${DIR2}")
+
+cp -a $DIR/provider-parts/08-complete/* ${DIR1}/
 
 for DIR in "${DIRS[@]}"; do
     # Change into that directory
